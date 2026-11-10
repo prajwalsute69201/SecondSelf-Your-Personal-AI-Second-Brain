@@ -60,6 +60,8 @@ __all__ = [
     "get_graph_html",
     "get_brain_stats",
     "capture_uploaded_file",
+    "save_edited_note",
+    "delete_wiki_note",
     "render_header",
     "render_ask_section",
     "render_graph_section",
@@ -417,6 +419,9 @@ def render_ask_section() -> None:
                                 if clean_tags:
                                     st.caption(f"Tags: {', '.join(clean_tags)}")
                             st.markdown(note_obj.body or "(Empty content)")
+                            if st.button(f"✏️ Edit [{src_id}] in Editor", key=f"btn_edit_src_{src_id}"):
+                                st.session_state["editing_note_id"] = src_id
+                                st.rerun()
         elif not is_no_notes:
             st.caption("No sources were cited for this response.")
 
@@ -434,6 +439,133 @@ def render_graph_section() -> None:
     versioned_html = f"<!-- refresh_version: {counter} -->\n{graph_html}"
 
     components.html(versioned_html, height=550, scrolling=False)
+
+
+def save_edited_note(
+    note_id: str,
+    new_para: str,
+    new_summary: str,
+    new_tags: list[str],
+    new_body: str,
+    root: Path | str | None = None,
+) -> WikiNote:
+    """Save modifications to an existing wiki note and refresh embeddings & graph.
+
+    Args:
+        note_id: Unique note identifier (e.g. 'cffaf460').
+        new_para: PARA category ('Projects', 'Areas', 'Resources', 'Archives').
+        new_summary: Single-line human readable summary / title.
+        new_tags: List of semantic tags.
+        new_body: Markdown body of the note.
+        root: Optional project root path override.
+
+    Returns:
+        WikiNote: Updated and persisted note instance.
+    """
+    proj_root = Path(root).resolve() if root else storage.get_project_root()
+    notes = storage.read_wiki_notes(root=proj_root)
+    existing = next((n for n in notes if n.id == note_id), None)
+    if not existing:
+        raise ValueError(f"Note '{note_id}' not found in knowledge base.")
+
+    old_para = existing.para
+
+    updated_note = WikiNote(
+        id=existing.id,
+        raw_id=existing.raw_id,
+        para=new_para,
+        tags=new_tags,
+        summary=new_summary.strip() or existing.summary,
+        created=existing.created,
+        links=existing.links,
+        body=new_body,
+    )
+
+    # If PARA category changed, remove the old file from the previous category directory
+    if old_para != new_para:
+        old_file = storage.get_wiki_dir(proj_root) / old_para / f"{note_id}.md"
+        if old_file.exists():
+            try:
+                old_file.unlink()
+            except OSError as e:
+                logger.warning(f"Failed to remove old file {old_file}: {e}")
+
+    # Persist updated note with frontmatter
+    storage.write_wiki_note(updated_note, root=proj_root)
+
+    # Re-embed updated note
+    try:
+        content_to_embed = f"{updated_note.summary}\n\n{updated_note.body}".strip()
+        if content_to_embed:
+            vec = emb.embed_text(content_to_embed, root=proj_root)
+            all_embeddings = emb.load_embeddings(root=proj_root)
+            all_embeddings[updated_note.id] = vec
+            emb.save_embeddings(all_embeddings, root=proj_root)
+    except Exception as e:
+        logger.warning(f"Failed to update embedding for note {note_id}: {e}")
+
+    # Rebuild graph
+    try:
+        build_graph.build_and_save_graph(root=proj_root)
+    except Exception as e:
+        logger.warning(f"Failed to rebuild graph after editing note {note_id}: {e}")
+
+    # Clear application caches so changes reflect immediately
+    load_graph.clear()
+    load_note_embeddings.clear()
+    load_embeddings.clear()
+
+    return updated_note
+
+
+def delete_wiki_note(
+    note_id: str,
+    root: Path | str | None = None,
+) -> bool:
+    """Delete a wiki note from disk, remove its embedding, and rebuild graph.
+
+    Args:
+        note_id: Identifier of the note to delete.
+        root: Optional project root path override.
+
+    Returns:
+        bool: True if note was deleted, False if note was not found.
+    """
+    proj_root = Path(root).resolve() if root else storage.get_project_root()
+    notes = storage.read_wiki_notes(root=proj_root)
+    target = next((n for n in notes if n.id == note_id), None)
+    if not target:
+        return False
+
+    # Remove markdown file from wiki/{para}/{id}.md
+    note_file = storage.get_wiki_dir(proj_root) / target.para / f"{note_id}.md"
+    if note_file.exists():
+        try:
+            note_file.unlink()
+        except OSError as e:
+            logger.warning(f"Failed to delete note file {note_file}: {e}")
+
+    # Remove from embeddings.pkl
+    try:
+        embeddings = emb.load_embeddings(root=proj_root)
+        if note_id in embeddings:
+            del embeddings[note_id]
+            emb.save_embeddings(embeddings, root=proj_root)
+    except Exception as e:
+        logger.warning(f"Failed to remove embedding for note {note_id}: {e}")
+
+    # Rebuild graph
+    try:
+        build_graph.build_and_save_graph(root=proj_root)
+    except Exception as e:
+        logger.warning(f"Failed to rebuild graph after deleting note {note_id}: {e}")
+
+    # Clear application caches
+    load_graph.clear()
+    load_note_embeddings.clear()
+    load_embeddings.clear()
+
+    return True
 
 
 def capture_uploaded_file(
@@ -671,6 +803,105 @@ def render_sidebar() -> None:
             with st.expander("Notes by PARA"):
                 for para_cat, count in stats["para_breakdown"].items():
                     st.write(f"- **{para_cat}**: {count}")
+
+        st.divider()
+
+        # Section 4: Note Editor & Delete (down side of Notes by PARA)
+        st.subheader("✏️ Note Editor")
+        all_notes = storage.read_wiki_notes()
+        if not all_notes:
+            st.caption("No notes in knowledge base yet.")
+        else:
+            all_notes.sort(key=lambda n: (n.para, n.summary))
+            notes_by_id = {n.id: n for n in all_notes}
+            note_options = list(notes_by_id.keys())
+
+            current_edit_id = st.session_state.get("editing_note_id")
+            default_idx = note_options.index(current_edit_id) if current_edit_id in note_options else 0
+
+            selected_note_id = st.selectbox(
+                "Select Note:",
+                options=note_options,
+                index=default_idx,
+                format_func=lambda nid: f"[{nid}] ({notes_by_id[nid].para}) {notes_by_id[nid].summary[:35]}",
+                key="sidebar_note_select",
+            )
+            note = notes_by_id[selected_note_id]
+
+            valid_paras = ["Projects", "Areas", "Resources", "Archives"]
+            current_para_idx = valid_paras.index(note.para) if note.para in valid_paras else 0
+            new_para = st.selectbox(
+                "Category",
+                valid_paras,
+                index=current_para_idx,
+                key=f"sb_para_{note.id}",
+            )
+
+            new_summary = st.text_input(
+                "Title / Summary",
+                value=note.summary,
+                key=f"sb_sum_{note.id}",
+            )
+
+            tags_str = ", ".join(note.tags) if note.tags else ""
+            new_tags_str = st.text_input(
+                "Tags (comma-separated)",
+                value=tags_str,
+                key=f"sb_tags_{note.id}",
+            )
+
+            new_body = st.text_area(
+                "Content",
+                value=note.body,
+                height=140,
+                key=f"sb_body_{note.id}",
+            )
+
+            col_save, col_del = st.columns(2)
+            with col_save:
+                if st.button("💾 Save", type="primary", use_container_width=True, key=f"btn_save_sb_{note.id}"):
+                    clean_summary = new_summary.strip()
+                    if not clean_summary:
+                        st.warning("Title cannot be empty.")
+                    else:
+                        clean_tags = [t.strip() for t in new_tags_str.split(",") if t.strip()]
+                        try:
+                            save_edited_note(
+                                note_id=note.id,
+                                new_para=new_para,
+                                new_summary=clean_summary,
+                                new_tags=clean_tags,
+                                new_body=new_body,
+                            )
+                            st.session_state["graph_refresh_counter"] = st.session_state.get("graph_refresh_counter", 0) + 1
+                            st.session_state["sidebar_note_msg"] = f"✅ Saved [{note.id}]"
+                            st.rerun()
+                        except Exception as e:
+                            st.error(f"Save failed: {sanitize_error_message(e)}")
+
+            with col_del:
+                if st.button("🗑️ Delete", type="secondary", use_container_width=True, key=f"btn_del_sb_{note.id}"):
+                    st.session_state[f"confirm_delete_{note.id}"] = True
+
+            if st.session_state.get(f"confirm_delete_{note.id}"):
+                st.warning(f"Delete note `[{note.id}]` permanently?")
+                col_c1, col_c2 = st.columns(2)
+                with col_c1:
+                    if st.button("Confirm", type="primary", use_container_width=True, key=f"btn_confirm_del_{note.id}"):
+                        delete_wiki_note(note.id)
+                        st.session_state[f"confirm_delete_{note.id}"] = False
+                        st.session_state["editing_note_id"] = None
+                        st.session_state["graph_refresh_counter"] = st.session_state.get("graph_refresh_counter", 0) + 1
+                        st.session_state["sidebar_note_msg"] = f"🗑️ Deleted [{note.id}]"
+                        st.rerun()
+                with col_c2:
+                    if st.button("Cancel", use_container_width=True, key=f"btn_cancel_del_{note.id}"):
+                        st.session_state[f"confirm_delete_{note.id}"] = False
+                        st.rerun()
+
+        if st.session_state.get("sidebar_note_msg"):
+            st.success(st.session_state["sidebar_note_msg"])
+            st.session_state["sidebar_note_msg"] = None
 
 
 def main() -> None:

@@ -31,6 +31,7 @@ import tempfile
 import unittest
 from unittest.mock import MagicMock, patch
 
+import numpy as np
 from streamlit.testing.v1 import AppTest
 
 # Ensure repository root is on sys.path
@@ -40,6 +41,7 @@ if str(_REPO_ROOT) not in sys.path:
 
 import app
 import ask
+import lib.embeddings as emb
 from lib.models import AskResult, CaptureResult, WikiNote
 import lib.storage as storage
 from pipeline import PipelineReport
@@ -187,6 +189,66 @@ class TestAppHelpers(unittest.TestCase):
         self.assertEqual(meta["original_filename"], "sample_document.pdf")
         self.assertEqual(meta["type"], "file")
 
+    def test_save_edited_note_updates_content_and_para(self) -> None:
+        """Verify save_edited_note updates content and moves file if PARA changes."""
+        initial_note = WikiNote(
+            id="edit01",
+            raw_id="raw_edit01",
+            para="Projects",
+            tags=["v1"],
+            summary="Original Project Note",
+            created="2026-11-09T10:00:00Z",
+            links=[],
+            body="Initial note body",
+        )
+        storage.write_wiki_note(initial_note, root=self.root)
+        self.assertTrue((self.root / "wiki" / "Projects" / "edit01.md").exists())
+
+        with patch("lib.embeddings.embed_text", return_value=np.zeros(384, dtype=np.float32)), \
+             patch("build_graph.build_and_save_graph"):
+            updated = app.save_edited_note(
+                note_id="edit01",
+                new_para="Areas",
+                new_summary="Updated Area Note",
+                new_tags=["v2", "updated"],
+                new_body="Updated note body with new details",
+                root=self.root,
+            )
+
+        self.assertEqual(updated.para, "Areas")
+        self.assertEqual(updated.summary, "Updated Area Note")
+        self.assertEqual(updated.tags, ["v2", "updated"])
+        self.assertEqual(updated.body, "Updated note body with new details")
+
+        # Verify old file was deleted and new file was created in Areas/
+        self.assertFalse((self.root / "wiki" / "Projects" / "edit01.md").exists())
+        self.assertTrue((self.root / "wiki" / "Areas" / "edit01.md").exists())
+
+    def test_delete_wiki_note_removes_file_and_embedding(self) -> None:
+        """Verify delete_wiki_note deletes markdown file and removes from embeddings."""
+        note = WikiNote(
+            id="del01",
+            raw_id="raw_del01",
+            para="Resources",
+            tags=["temp"],
+            summary="Temporary Note",
+            created="2026-11-09T10:00:00Z",
+            links=[],
+            body="To be deleted",
+        )
+        storage.write_wiki_note(note, root=self.root)
+        self.assertTrue((self.root / "wiki" / "Resources" / "del01.md").exists())
+
+        emb.save_embeddings({"del01": np.zeros(384, dtype=np.float32)}, root=self.root)
+
+        with patch("build_graph.build_and_save_graph"):
+            res = app.delete_wiki_note("del01", root=self.root)
+
+        self.assertTrue(res)
+        self.assertFalse((self.root / "wiki" / "Resources" / "del01.md").exists())
+        loaded_embs = emb.load_embeddings(root=self.root)
+        self.assertNotIn("del01", loaded_embs)
+
 
 class TestAppLayoutAndInteractions(unittest.TestCase):
     """Integration test suite using streamlit.testing.v1.AppTest."""
@@ -226,11 +288,12 @@ class TestAppLayoutAndInteractions(unittest.TestCase):
         subheader_values = [sh.value for sh in at.subheader]
         self.assertIn("Interactive Knowledge Graph", subheader_values)
 
-        # 4. Sidebar: Capture, Process, Stats
+        # 4. Sidebar: Capture, Process, Stats, Note Editor
         sidebar_subheaders = [sh.value for sh in at.sidebar.subheader]
         self.assertTrue(any("Capture" in sh for sh in sidebar_subheaders))
         self.assertTrue(any("Process" in sh for sh in sidebar_subheaders))
         self.assertTrue(any("Stats" in sh for sh in sidebar_subheaders))
+        self.assertTrue(any("Note Editor" in sh for sh in sidebar_subheaders))
 
         self.assertIn("Capture Note", [b.label for b in at.sidebar.button])
         self.assertIn("🚀 Process New Captures", [b.label for b in at.sidebar.button])
