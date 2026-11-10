@@ -1,0 +1,947 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SecondSelf — Knowledge Graph</title>
+  <!-- vis-network v9.1.9 standalone bundle (includes vis-data) -->
+  <script type="text/javascript" src="https://unpkg.com/vis-network@9.1.9/standalone/umd/vis-network.min.js"></script>
+  <style>
+    :root {
+      --bg-primary: #0b0f19;
+      --bg-surface: #111827;
+      --bg-panel: rgba(17, 24, 39, 0.94);
+      --border-color: #1f2937;
+      --border-focus: #38bdf8;
+      --text-main: #f3f4f6;
+      --text-muted: #9ca3af;
+      --text-dim: #6b7280;
+
+      --para-projects: #3b82f6;
+      --para-projects-border: #1d4ed8;
+      --para-areas: #10b981;
+      --para-areas-border: #047857;
+      --para-resources: #f59e0b;
+      --para-resources-border: #b45309;
+      --para-archives: #64748b;
+      --para-archives-border: #334155;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      background-color: var(--bg-primary);
+      color: var(--text-main);
+      overflow: hidden;
+      width: 100vw;
+      height: 100vh;
+      position: relative;
+    }
+
+    /* Full-viewport Network Canvas */
+    #network-container {
+      width: 100%;
+      height: 100%;
+      position: absolute;
+      top: 0;
+      left: 0;
+      z-index: 1;
+    }
+
+    /* Top Floating HUD */
+    .hud-header {
+      position: absolute;
+      top: 16px;
+      left: 16px;
+      z-index: 10;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      pointer-events: none;
+    }
+
+    .hud-panel {
+      background: var(--bg-panel);
+      backdrop-filter: blur(12px);
+      border: 1px solid var(--border-color);
+      border-radius: 10px;
+      padding: 10px 16px;
+      box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.5);
+      pointer-events: auto;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .brand-title {
+      font-size: 15px;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      color: #fff;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .brand-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: #38bdf8;
+      box-shadow: 0 0 8px #38bdf8;
+    }
+
+    .metrics-chip {
+      font-size: 12px;
+      color: var(--text-muted);
+      border-left: 1px solid var(--border-color);
+      padding-left: 12px;
+      display: flex;
+      gap: 12px;
+    }
+
+    .metrics-chip span strong {
+      color: var(--text-main);
+      font-weight: 600;
+    }
+
+    /* PARA Legend */
+    .legend-panel {
+      background: var(--bg-panel);
+      backdrop-filter: blur(12px);
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      padding: 8px 14px;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
+      display: flex;
+      gap: 14px;
+      font-size: 12px;
+      pointer-events: auto;
+    }
+
+    .legend-item {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      color: var(--text-muted);
+      font-weight: 500;
+    }
+
+    .legend-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+    }
+    .dot-projects { background: var(--para-projects); }
+    .dot-areas { background: var(--para-areas); }
+    .dot-resources { background: var(--para-resources); }
+    .dot-archives { background: var(--para-archives); }
+
+    /* Top-Right Quick Controls */
+    .hud-controls {
+      position: absolute;
+      top: 16px;
+      right: 16px;
+      z-index: 10;
+      display: flex;
+      gap: 8px;
+    }
+
+    .btn-action {
+      background: var(--bg-panel);
+      backdrop-filter: blur(8px);
+      border: 1px solid var(--border-color);
+      color: var(--text-main);
+      font-size: 12px;
+      font-weight: 500;
+      padding: 8px 12px;
+      border-radius: 6px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      transition: background 0.15s, border-color 0.15s;
+    }
+
+    .btn-action:hover {
+      background: #1f2937;
+      border-color: #374151;
+    }
+
+    /* Side Detail Panel */
+    .detail-drawer {
+      position: absolute;
+      top: 16px;
+      right: 16px;
+      bottom: 16px;
+      width: 380px;
+      max-width: calc(100vw - 32px);
+      background: var(--bg-panel);
+      backdrop-filter: blur(16px);
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      box-shadow: -10px 0 30px rgba(0, 0, 0, 0.6);
+      z-index: 20;
+      display: none;
+      flex-direction: column;
+      overflow: hidden;
+      transition: transform 0.25s ease;
+    }
+
+    .detail-drawer.open {
+      display: flex;
+    }
+
+    .drawer-header {
+      padding: 16px 20px;
+      border-bottom: 1px solid var(--border-color);
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 12px;
+    }
+
+    .drawer-title-area {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .para-badge {
+      display: inline-block;
+      font-size: 10px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      padding: 2px 8px;
+      border-radius: 4px;
+      margin-bottom: 6px;
+    }
+    .badge-projects { background: rgba(59, 130, 246, 0.2); color: #60a5fa; border: 1px solid #1d4ed8; }
+    .badge-areas { background: rgba(16, 185, 129, 0.2); color: #34d399; border: 1px solid #047857; }
+    .badge-resources { background: rgba(245, 158, 11, 0.2); color: #fbbf24; border: 1px solid #b45309; }
+    .badge-archives { background: rgba(100, 116, 139, 0.2); color: #94a3b8; border: 1px solid #334155; }
+
+    .node-title {
+      font-size: 15px;
+      font-weight: 600;
+      color: #fff;
+      line-height: 1.35;
+      word-break: break-word;
+    }
+
+    .btn-close {
+      background: none;
+      border: none;
+      color: var(--text-muted);
+      font-size: 20px;
+      line-height: 1;
+      cursor: pointer;
+      padding: 4px;
+      border-radius: 4px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .btn-close:hover {
+      color: #fff;
+      background: rgba(255, 255, 255, 0.08);
+    }
+
+    .drawer-body {
+      padding: 20px;
+      overflow-y: auto;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+      font-size: 13px;
+    }
+
+    .detail-section {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .section-label {
+      font-size: 11px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--text-dim);
+    }
+
+    .node-id-chip {
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+      font-size: 12px;
+      color: #38bdf8;
+      background: rgba(56, 189, 248, 0.1);
+      padding: 4px 8px;
+      border-radius: 4px;
+      display: inline-block;
+      width: fit-content;
+      border: 1px solid rgba(56, 189, 248, 0.2);
+    }
+
+    .tags-container {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+
+    .tag-chip {
+      font-size: 11px;
+      background: #1f2937;
+      color: #d1d5db;
+      padding: 3px 8px;
+      border-radius: 4px;
+      border: 1px solid #374151;
+    }
+
+    .content-box {
+      background: #0f172a;
+      border: 1px solid var(--border-color);
+      border-radius: 6px;
+      padding: 12px;
+      color: #d1d5db;
+      line-height: 1.5;
+      font-size: 12px;
+      white-space: pre-wrap;
+      word-break: break-word;
+      max-height: 220px;
+      overflow-y: auto;
+    }
+
+    .neighbors-list {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .neighbor-item {
+      padding: 8px 10px;
+      background: #1f2937;
+      border: 1px solid #374151;
+      border-radius: 6px;
+      font-size: 12px;
+      cursor: pointer;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      transition: background 0.15s, border-color 0.15s;
+    }
+
+    .neighbor-item:hover {
+      background: #283548;
+      border-color: #38bdf8;
+    }
+
+    .neighbor-label {
+      color: #f3f4f6;
+      font-weight: 500;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      flex: 1;
+      margin-right: 8px;
+    }
+
+    .neighbor-meta {
+      font-size: 10px;
+      color: var(--text-dim);
+    }
+
+    /* Modal / Overlay Message Center */
+    .center-overlay {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      z-index: 100;
+      background: var(--bg-panel);
+      backdrop-filter: blur(16px);
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      padding: 32px;
+      max-width: 480px;
+      width: 90%;
+      text-align: center;
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      gap: 14px;
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.7);
+    }
+
+    .overlay-icon {
+      font-size: 36px;
+      line-height: 1;
+      margin-bottom: 4px;
+    }
+
+    .overlay-title {
+      font-size: 18px;
+      font-weight: 700;
+      color: #fff;
+    }
+
+    .overlay-msg {
+      font-size: 13px;
+      color: var(--text-muted);
+      line-height: 1.5;
+    }
+
+    .overlay-code {
+      font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+      font-size: 11px;
+      background: #0f172a;
+      border: 1px solid var(--border-color);
+      padding: 10px 14px;
+      border-radius: 6px;
+      color: #38bdf8;
+      text-align: left;
+      width: 100%;
+      overflow-x: auto;
+      white-space: pre-wrap;
+    }
+
+    /* Loading Spinner */
+    .spinner {
+      width: 32px;
+      height: 32px;
+      border: 3px solid rgba(56, 189, 248, 0.2);
+      border-top-color: #38bdf8;
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    /* Custom vis-network navigation button styling override */
+    .vis-network div.vis-navigation div.vis-button {
+      background-color: var(--bg-panel) !important;
+      border: 1px solid var(--border-color) !important;
+      border-radius: 6px !important;
+      backdrop-filter: blur(8px) !important;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Vis-network canvas container -->
+  <div id="network-container"></div>
+
+  <!-- Top-left Branding & Metrics HUD -->
+  <header class="hud-header">
+    <div class="hud-panel">
+      <div class="brand-title">
+        <span class="brand-dot"></span>
+        SecondSelf Brain
+      </div>
+      <div class="metrics-chip">
+        <span>Nodes: <strong id="metric-nodes">0</strong></span>
+        <span>Edges: <strong id="metric-edges">0</strong></span>
+      </div>
+    </div>
+
+    <!-- PARA Classification Legend -->
+    <div class="legend-panel">
+      <div class="legend-item"><span class="legend-dot dot-projects"></span>Projects</div>
+      <div class="legend-item"><span class="legend-dot dot-areas"></span>Areas</div>
+      <div class="legend-item"><span class="legend-dot dot-resources"></span>Resources</div>
+      <div class="legend-item"><span class="legend-dot dot-archives"></span>Archives</div>
+    </div>
+  </header>
+
+  <!-- Top-right Actions HUD -->
+  <nav class="hud-controls">
+    <button id="btn-fit" class="btn-action" title="Fit whole graph to screen">Reset View</button>
+    <button id="btn-reload" class="btn-action" title="Reload graph data from data/graph.json">Reload</button>
+  </nav>
+
+  <!-- Node Detail Drawer -->
+  <aside id="detail-drawer" class="detail-drawer" aria-label="Node Details">
+    <div class="drawer-header">
+      <div class="drawer-title-area">
+        <span id="detail-para-badge" class="para-badge"></span>
+        <h2 id="detail-label" class="node-title"></h2>
+      </div>
+      <button id="btn-close-drawer" class="btn-close" title="Close details">&times;</button>
+    </div>
+    <div class="drawer-body">
+      <div class="detail-section">
+        <span class="section-label">Note ID</span>
+        <span id="detail-id" class="node-id-chip"></span>
+      </div>
+      <div class="detail-section">
+        <span class="section-label">Summary</span>
+        <p id="detail-summary" style="line-height: 1.4; color: #f3f4f6;"></p>
+      </div>
+      <div class="detail-section" id="section-tags">
+        <span class="section-label">Tags</span>
+        <div id="detail-tags" class="tags-container"></div>
+      </div>
+      <div class="detail-section" id="section-preview">
+        <span class="section-label">Content Preview</span>
+        <div id="detail-preview" class="content-box"></div>
+      </div>
+      <div class="detail-section" id="section-neighbors">
+        <span class="section-label">Connected Notes (<span id="detail-conn-count">0</span>)</span>
+        <div id="detail-neighbors" class="neighbors-list"></div>
+      </div>
+    </div>
+  </aside>
+
+  <!-- Center Loading & Status Overlay -->
+  <div id="status-overlay" class="center-overlay">
+    <div id="overlay-icon" class="overlay-icon"></div>
+    <h3 id="overlay-title" class="overlay-title"></h3>
+    <p id="overlay-msg" class="overlay-msg"></p>
+    <div id="overlay-code" class="overlay-code" style="display: none;"></div>
+  </div>
+
+  <script type="text/javascript">
+    (function () {
+      "use strict";
+
+      // 1. Centralized PARA Color Palette per Design System
+      const PARA_PALETTE = {
+        Projects: {
+          background: "#3b82f6",
+          border: "#1d4ed8",
+          highlight: { background: "#60a5fa", border: "#2563eb" },
+          badgeClass: "badge-projects"
+        },
+        Areas: {
+          background: "#10b981",
+          border: "#047857",
+          highlight: { background: "#34d399", border: "#059669" },
+          badgeClass: "badge-areas"
+        },
+        Resources: {
+          background: "#f59e0b",
+          border: "#b45309",
+          highlight: { background: "#fbbf24", border: "#d97706" },
+          badgeClass: "badge-resources"
+        },
+        Archives: {
+          background: "#64748b",
+          border: "#334155",
+          highlight: { background: "#94a3b8", border: "#475569" },
+          badgeClass: "badge-archives"
+        }
+      };
+
+      const DEFAULT_COLOR = {
+        background: "#8b5cf6",
+        border: "#6d28d9",
+        highlight: { background: "#a78bfa", border: "#7c3aed" },
+        badgeClass: "badge-projects"
+      };
+
+      // State
+      let networkInstance = null;
+      let rawGraphData = null;
+      const nodeMap = new Map(); // id -> raw node object
+      const adjacencyMap = new Map(); // id -> set of neighboring node ids
+
+      // DOM Elements
+      const container = document.getElementById("network-container");
+      const metricNodes = document.getElementById("metric-nodes");
+      const metricEdges = document.getElementById("metric-edges");
+      const detailDrawer = document.getElementById("detail-drawer");
+      const btnCloseDrawer = document.getElementById("btn-close-drawer");
+      const btnFit = document.getElementById("btn-fit");
+      const btnReload = document.getElementById("btn-reload");
+
+      const detailParaBadge = document.getElementById("detail-para-badge");
+      const detailLabel = document.getElementById("detail-label");
+      const detailId = document.getElementById("detail-id");
+      const detailSummary = document.getElementById("detail-summary");
+      const detailTags = document.getElementById("detail-tags");
+      const detailPreview = document.getElementById("detail-preview");
+      const detailConnCount = document.getElementById("detail-conn-count");
+      const detailNeighbors = document.getElementById("detail-neighbors");
+
+      const statusOverlay = document.getElementById("status-overlay");
+      const overlayIcon = document.getElementById("overlay-icon");
+      const overlayTitle = document.getElementById("overlay-title");
+      const overlayMsg = document.getElementById("overlay-msg");
+      const overlayCode = document.getElementById("overlay-code");
+
+      // UI Helpers
+      function showOverlay(icon, title, message, codeText) {
+        statusOverlay.style.display = "flex";
+        overlayIcon.textContent = icon;
+        overlayTitle.textContent = title;
+        overlayMsg.textContent = message;
+        if (codeText) {
+          overlayCode.textContent = codeText;
+          overlayCode.style.display = "block";
+        } else {
+          overlayCode.style.display = "none";
+        }
+      }
+
+      function hideOverlay() {
+        statusOverlay.style.display = "none";
+      }
+
+      function truncateText(str, maxLen) {
+        if (!str) return "";
+        return str.length > maxLen ? str.slice(0, maxLen) + "…" : str;
+      }
+
+      // Safe DOM text node helper
+      function setSafeText(el, text) {
+        el.textContent = text || "";
+      }
+
+      // 2. Fetch Graph Data
+      async function loadGraphData() {
+        showOverlay("⏳", "Loading Brain Graph", "Reading data/graph.json...", null);
+
+        // Verify vis-network library loaded
+        if (typeof vis === "undefined" || !vis.Network) {
+          showOverlay(
+            "⚠️",
+            "Library Loading Error",
+            "Could not load the vis-network graph library from CDN.",
+            "Verify your internet connection or inspect network tools."
+          );
+          return;
+        }
+
+        try {
+          // Resolve relative to static/graph.html: ../data/graph.json
+          const response = await fetch("../data/graph.json", { cache: "no-store" });
+          if (!response.ok) {
+            throw new Error(`HTTP ${response.status} (${response.statusText})`);
+          }
+
+          const graph = await response.json();
+          rawGraphData = graph;
+          renderGraph(graph);
+        } catch (err) {
+          console.error("Failed to load graph data:", err);
+
+          if (window.location.protocol === "file:") {
+            showOverlay(
+              "🔒",
+              "Local CORS Restriction Detected",
+              "Browsers block fetching JSON via file:// protocol for security.",
+              "Run local HTTP server:\npython -m http.server 8000\nThen open: http://localhost:8000/static/graph.html"
+            );
+          } else {
+            showOverlay(
+              "❌",
+              "Graph Data Unavailable",
+              "Failed to load or parse ../data/graph.json.",
+              err.message || String(err)
+            );
+          }
+        }
+      }
+
+      // 3. Transform and Render Vis-Network Graph
+      function renderGraph(graph) {
+        nodeMap.clear();
+        adjacencyMap.clear();
+
+        const nodesRaw = Array.isArray(graph.nodes) ? graph.nodes : [];
+        const edgesRaw = Array.isArray(graph.edges) ? graph.edges : [];
+
+        // Update top metrics
+        metricNodes.textContent = String(nodesRaw.length);
+        metricEdges.textContent = String(edgesRaw.length);
+
+        // Handle Empty Graph State
+        if (nodesRaw.length === 0) {
+          showOverlay(
+            "🌱",
+            "Knowledge Brain is Empty",
+            "No knowledge notes have been materialized in data/graph.json yet.",
+            "To populate your graph:\n1. Capture items:   python capture.py note \"...\"\n2. Run pipeline:    python pipeline.py process\n3. Build graph:     python build_graph.py"
+          );
+          if (networkInstance) {
+            networkInstance.destroy();
+            networkInstance = null;
+          }
+          return;
+        }
+
+        hideOverlay();
+
+        // Populate Node Cache & Vis Nodes
+        const visNodes = [];
+        for (const n of nodesRaw) {
+          if (!n || !n.id) continue;
+          nodeMap.set(n.id, n);
+          adjacencyMap.set(n.id, new Set());
+
+          const paraCat = n.para || n.group || "Resources";
+          const palette = PARA_PALETTE[paraCat] || DEFAULT_COLOR;
+
+          // Multi-line tooltip constructed safely
+          const tooltip = [
+            `[${paraCat}] ${n.label || n.id}`,
+            n.summary ? `Summary: ${n.summary}` : "",
+            n.tags && n.tags.length ? `Tags: #${n.tags.join(" #")}` : "",
+            n.content_preview ? `\n"${truncateText(n.content_preview, 140)}"` : ""
+          ].filter(Boolean).join("\n");
+
+          visNodes.push({
+            id: n.id,
+            label: truncateText(n.label || n.summary || n.id, 28),
+            title: tooltip,
+            group: paraCat,
+            color: {
+              background: palette.background,
+              border: palette.border,
+              highlight: palette.highlight
+            },
+            font: {
+              color: "#f8fafc",
+              size: 13,
+              face: "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif",
+              strokeWidth: 3,
+              strokeColor: "#0b0f19"
+            },
+            shape: "dot",
+            size: 16,
+            borderWidth: 2,
+            shadow: {
+              enabled: true,
+              color: "rgba(0,0,0,0.5)",
+              size: 8,
+              x: 0,
+              y: 4
+            }
+          });
+        }
+
+        // Populate Vis Edges
+        const visEdges = [];
+        const validNodeIds = new Set(nodeMap.keys());
+
+        for (const e of edgesRaw) {
+          if (!e || !e.source || !e.target) continue;
+          if (!validNodeIds.has(e.source) || !validNodeIds.has(e.target)) {
+            console.warn("Skipping edge with non-existent node endpoint:", e);
+            continue;
+          }
+
+          // Build adjacency graph for neighbor drill-down
+          adjacencyMap.get(e.source).add(e.target);
+          adjacencyMap.get(e.target).add(e.source);
+
+          const isSemantic = e.type === "semantic";
+          const weight = typeof e.weight === "number" ? Math.max(0.1, Math.min(1.0, e.weight)) : 1.0;
+          const edgeWidth = Math.max(1, Math.round(weight * 3.5));
+
+          visEdges.push({
+            from: e.source,
+            to: e.target,
+            width: edgeWidth,
+            title: `Type: ${e.type || "explicit"} | Weight: ${weight.toFixed(3)}`,
+            color: {
+              color: isSemantic ? "#60a5fa" : "#64748b",
+              highlight: "#38bdf8",
+              hover: "#94a3b8",
+              opacity: isSemantic ? 0.8 : 0.6
+            },
+            dashes: isSemantic,
+            smooth: {
+              type: "continuous",
+              roundness: 0.2
+            }
+          });
+        }
+
+        // 4. Vis-Network Physics Configuration (Task 3.2.2 ForceAtlas2-based Tuning)
+        const data = {
+          nodes: new vis.DataSet(visNodes),
+          edges: new vis.DataSet(visEdges)
+        };
+
+        const options = {
+          physics: {
+            enabled: true,
+            solver: "forceAtlas2Based",
+            forceAtlas2Based: {
+              gravitationalConstant: -50,
+              centralGravity: 0.01,
+              springLength: 120,
+              springConstant: 0.08,
+              damping: 0.4,
+              avoidOverlap: 0.5
+            },
+            stabilization: {
+              enabled: true,
+              iterations: 1000,
+              updateInterval: 50,
+              fit: true
+            }
+          },
+          interaction: {
+            hover: true,
+            tooltipDelay: 150,
+            navigationButtons: true,
+            keyboard: true,
+            zoomView: true,
+            dragView: true,
+            dragNodes: true,
+            selectConnectedEdges: true
+          }
+        };
+
+        if (networkInstance) {
+          networkInstance.destroy();
+        }
+
+        networkInstance = new vis.Network(container, data, options);
+
+        // 5. Interaction Event Handlers
+        networkInstance.on("selectNode", function (params) {
+          if (params.nodes && params.nodes.length > 0) {
+            const selectedId = params.nodes[0];
+            showNodeDetails(selectedId);
+          }
+        });
+
+        networkInstance.on("deselectNode", function () {
+          closeDetails();
+        });
+
+        networkInstance.on("click", function (params) {
+          if (!params.nodes || params.nodes.length === 0) {
+            closeDetails();
+          }
+        });
+      }
+
+      // 6. Node Details Drawer Logic
+      function showNodeDetails(nodeId) {
+        const node = nodeMap.get(nodeId);
+        if (!node) return;
+
+        const paraCat = node.para || node.group || "Resources";
+        const palette = PARA_PALETTE[paraCat] || DEFAULT_COLOR;
+
+        // Header info
+        setSafeText(detailParaBadge, paraCat);
+        detailParaBadge.className = "para-badge " + palette.badgeClass;
+        setSafeText(detailLabel, node.label || node.summary || node.id);
+        setSafeText(detailId, node.id);
+
+        // Summary
+        setSafeText(detailSummary, node.summary || "No summary provided.");
+
+        // Tags
+        detailTags.textContent = "";
+        const tags = Array.isArray(node.tags) ? node.tags : [];
+        if (tags.length > 0) {
+          document.getElementById("section-tags").style.display = "flex";
+          for (const tag of tags) {
+            const chip = document.createElement("span");
+            chip.className = "tag-chip";
+            chip.textContent = "#" + tag;
+            detailTags.appendChild(chip);
+          }
+        } else {
+          document.getElementById("section-tags").style.display = "none";
+        }
+
+        // Content Preview
+        const previewText = node.content_preview || "";
+        if (previewText) {
+          document.getElementById("section-preview").style.display = "flex";
+          setSafeText(detailPreview, previewText);
+        } else {
+          document.getElementById("section-preview").style.display = "none";
+        }
+
+        // Neighbors / Connected Notes
+        const neighborIds = Array.from(adjacencyMap.get(nodeId) || []);
+        setSafeText(detailConnCount, String(neighborIds.length));
+        detailNeighbors.textContent = "";
+
+        if (neighborIds.length > 0) {
+          document.getElementById("section-neighbors").style.display = "flex";
+          for (const neighborId of neighborIds) {
+            const neighborNode = nodeMap.get(neighborId);
+            const item = document.createElement("div");
+            item.className = "neighbor-item";
+
+            const labelSpan = document.createElement("span");
+            labelSpan.className = "neighbor-label";
+            labelSpan.textContent = neighborNode ? (neighborNode.label || neighborNode.summary || neighborId) : neighborId;
+
+            const metaSpan = document.createElement("span");
+            metaSpan.className = "neighbor-meta";
+            metaSpan.textContent = neighborNode ? (neighborNode.para || "") : "";
+
+            item.appendChild(labelSpan);
+            item.appendChild(metaSpan);
+
+            // Click neighbor to focus and inspect
+            item.addEventListener("click", function () {
+              if (networkInstance) {
+                networkInstance.selectNodes([neighborId]);
+                networkInstance.focus(neighborId, { scale: 1.2, animation: true });
+                showNodeDetails(neighborId);
+              }
+            });
+
+            detailNeighbors.appendChild(item);
+          }
+        } else {
+          const emptyMsg = document.createElement("span");
+          emptyMsg.style.color = "var(--text-dim)";
+          emptyMsg.style.fontStyle = "italic";
+          emptyMsg.textContent = "No connected notes.";
+          detailNeighbors.appendChild(emptyMsg);
+        }
+
+        detailDrawer.classList.add("open");
+      }
+
+      function closeDetails() {
+        detailDrawer.classList.remove("open");
+      }
+
+      // 7. Action Button Listeners
+      btnCloseDrawer.addEventListener("click", closeDetails);
+
+      btnFit.addEventListener("click", function () {
+        if (networkInstance) {
+          networkInstance.fit({ animation: { duration: 600, easingFunction: "easeInOutQuad" } });
+        }
+      });
+
+      btnReload.addEventListener("click", function () {
+        loadGraphData();
+      });
+
+      // Escape key to close details
+      window.addEventListener("keydown", function (e) {
+        if (e.key === "Escape") {
+          closeDetails();
+        }
+      });
+
+      // Initial Load
+      loadGraphData();
+    })();
+  </script>
+</body>
+</html>
+

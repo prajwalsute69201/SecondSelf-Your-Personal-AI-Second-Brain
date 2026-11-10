@@ -1,0 +1,44 @@
+# Virtual environment
+.venv/
+venv/
+ENV/
+
+# Environment secrets & local config
+.env
+*.env
+.env.local
+.streamlit/secrets.toml
+.streamlit/credentials.toml
+
+# Personal knowledge-base captures & notes (Private Data)
+raw/*
+!raw/.gitkeep
+
+wiki/Projects/*
+!wiki/Projects/.gitkeep
+wiki/Areas/*
+!wiki/Areas/.gitkeep
+wiki/Resources/*
+!wiki/Resources/.gitkeep
+wiki/Archives/*
+!wiki/Archives/.gitkeep
+
+# Generated embeddings and index state
+data/embeddings.pkl
+data/index.json
+data/graph.json
+!data/.gitkeep
+
+# Python cache & bytecode
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+
+# Operating system & IDE files
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+*.swp
+*.swo
