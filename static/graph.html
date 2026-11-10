@@ -427,10 +427,82 @@
 
     /* Custom vis-network navigation button styling override */
     .vis-network div.vis-navigation div.vis-button {
-      background-color: var(--bg-panel) !important;
-      border: 1px solid var(--border-color) !important;
-      border-radius: 6px !important;
+      width: 36px !important;
+      height: 36px !important;
+      background-color: rgba(17, 24, 39, 0.92) !important;
+      border: 1px solid rgba(255, 255, 255, 0.16) !important;
+      border-radius: 8px !important;
       backdrop-filter: blur(8px) !important;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.45) !important;
+      background-size: 18px 18px !important;
+      background-position: center center !important;
+      background-repeat: no-repeat !important;
+      transition: all 0.18s cubic-bezier(0.4, 0, 0.2, 1) !important;
+      cursor: pointer !important;
+    }
+
+    .vis-network div.vis-navigation div.vis-button:hover {
+      background-color: rgba(30, 41, 59, 0.98) !important;
+      border-color: #38bdf8 !important;
+      box-shadow: 0 0 12px rgba(56, 189, 248, 0.4) !important;
+      transform: translateY(-1px) scale(1.05) !important;
+    }
+
+    .vis-network div.vis-navigation div.vis-button:active {
+      transform: translateY(1px) scale(0.96) !important;
+      background-color: #0f172a !important;
+      border-color: #0284c7 !important;
+      box-shadow: 0 0 6px rgba(2, 132, 199, 0.4) !important;
+    }
+
+    /* Crisp, clean, modern SVGs in bright white/light-slate for each control */
+    .vis-network div.vis-navigation div.vis-button.vis-up {
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='20' height='20' viewBox='0 0 24 24' fill='none' stroke='%23f3f4f6' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M12 19V5M5 12l7-7 7 7'/%3E%3C/svg%3E") !important;
+    }
+    .vis-network div.vis-navigation div.vis-button.vis-up:hover {
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='20' height='20' viewBox='0 0 24 24' fill='none' stroke='%2338bdf8' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M12 19V5M5 12l7-7 7 7'/%3E%3C/svg%3E") !important;
+    }
+
+    .vis-network div.vis-navigation div.vis-button.vis-down {
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='20' height='20' viewBox='0 0 24 24' fill='none' stroke='%23f3f4f6' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M12 5v14M19 12l-7 7-7-7'/%3E%3C/svg%3E") !important;
+    }
+    .vis-network div.vis-navigation div.vis-button.vis-down:hover {
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='20' height='20' viewBox='0 0 24 24' fill='none' stroke='%2338bdf8' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M12 5v14M19 12l-7 7-7-7'/%3E%3C/svg%3E") !important;
+    }
+
+    .vis-network div.vis-navigation div.vis-button.vis-left {
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='20' height='20' viewBox='0 0 24 24' fill='none' stroke='%23f3f4f6' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M19 12H5M12 19l-7-7 7-7'/%3E%3C/svg%3E") !important;
+    }
+    .vis-network div.vis-navigation div.vis-button.vis-left:hover {
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='20' height='20' viewBox='0 0 24 24' fill='none' stroke='%2338bdf8' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M19 12H5M12 19l-7-7 7-7'/%3E%3C/svg%3E") !important;
+    }
+
+    .vis-network div.vis-navigation div.vis-button.vis-right {
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='20' height='20' viewBox='0 0 24 24' fill='none' stroke='%23f3f4f6' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M5 12h14M12 5l7 7-7 7'/%3E%3C/svg%3E") !important;
+    }
+    .vis-network div.vis-navigation div.vis-button.vis-right:hover {
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='20' height='20' viewBox='0 0 24 24' fill='none' stroke='%2338bdf8' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M5 12h14M12 5l7 7-7 7'/%3E%3C/svg%3E") !important;
+    }
+
+    .vis-network div.vis-navigation div.vis-button.vis-zoomIn {
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='20' height='20' viewBox='0 0 24 24' fill='none' stroke='%23f3f4f6' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cline x1='12' y1='5' x2='12' y2='19'/%3E%3Cline x1='5' y1='12' x2='19' y2='12'/%3E%3C/svg%3E") !important;
+    }
+    .vis-network div.vis-navigation div.vis-button.vis-zoomIn:hover {
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='20' height='20' viewBox='0 0 24 24' fill='none' stroke='%2338bdf8' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cline x1='12' y1='5' x2='12' y2='19'/%3E%3Cline x1='5' y1='12' x2='19' y2='12'/%3E%3C/svg%3E") !important;
+    }
+
+    .vis-network div.vis-navigation div.vis-button.vis-zoomOut {
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='20' height='20' viewBox='0 0 24 24' fill='none' stroke='%23f3f4f6' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cline x1='5' y1='12' x2='19' y2='12'/%3E%3C/svg%3E") !important;
+    }
+    .vis-network div.vis-navigation div.vis-button.vis-zoomOut:hover {
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='20' height='20' viewBox='0 0 24 24' fill='none' stroke='%2338bdf8' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cline x1='5' y1='12' x2='19' y2='12'/%3E%3C/svg%3E") !important;
+    }
+
+    .vis-network div.vis-navigation div.vis-button.vis-zoomExtends {
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='20' height='20' viewBox='0 0 24 24' fill='none' stroke='%23f3f4f6' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M3 9V3h6M21 9V3h-6M3 15v6h6M21 15v6h-6'/%3E%3C/svg%3E") !important;
+    }
+    .vis-network div.vis-navigation div.vis-button.vis-zoomExtends:hover {
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='20' height='20' viewBox='0 0 24 24' fill='none' stroke='%2338bdf8' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M3 9V3h6M21 9V3h-6M3 15v6h6M21 15v6h-6'/%3E%3C/svg%3E") !important;
     }
   </style>
 </head>
