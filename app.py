@@ -11,11 +11,13 @@ Wired user-facing web application for SecondSelf:
 from __future__ import annotations
 
 from dataclasses import asdict
+from datetime import datetime, timezone
 import json
 import logging
 import os
 from pathlib import Path
 import re
+import shutil
 import sys
 from typing import Any
 
@@ -31,7 +33,7 @@ import ask
 import build_graph
 import capture
 import lib.embeddings as emb
-from lib.models import AskResult, CaptureResult, WikiNote
+from lib.models import AskResult, CaptureMeta, CaptureResult, WikiNote
 import lib.storage as storage
 import pipeline
 
@@ -57,6 +59,7 @@ __all__ = [
     "load_graph_data",
     "get_graph_html",
     "get_brain_stats",
+    "capture_uploaded_file",
     "render_header",
     "render_ask_section",
     "render_graph_section",
@@ -433,34 +436,189 @@ def render_graph_section() -> None:
     components.html(versioned_html, height=550, scrolling=False)
 
 
+def capture_uploaded_file(
+    uploaded_file: Any,
+    root: Path | str | None = None,
+) -> CaptureResult:
+    """Capture an uploaded file from Streamlit into raw/ capture store.
+
+    Preserves original file bytes, records metadata with content hash,
+    and stores the file in raw/{capture_id}/content.{ext}.
+
+    Args:
+        uploaded_file: Streamlit UploadedFile object.
+        root: Optional project root path override.
+
+    Returns:
+        CaptureResult: Result dataclass describing the capture.
+
+    Raises:
+        ValueError: If uploaded_file is None or empty.
+    """
+    if uploaded_file is None:
+        raise ValueError("No file provided for capture.")
+
+    file_name = getattr(uploaded_file, "name", "uploaded_file.bin")
+    orig_name = Path(file_name).name
+    content_bytes = (
+        uploaded_file.getvalue()
+        if hasattr(uploaded_file, "getvalue")
+        else uploaded_file.read()
+    )
+
+    if not content_bytes:
+        raise ValueError(f"Uploaded file '{orig_name}' is empty.")
+
+    capture_id = storage.generate_capture_id()
+    now_iso = datetime.now(timezone.utc).isoformat()
+    c_hash = storage.content_hash(content_bytes)
+
+    existing_id = capture.find_duplicate_capture(c_hash)
+    if existing_id:
+        logger.warning(
+            f"Content with hash {c_hash} was already captured at raw/{existing_id}"
+        )
+
+    meta = CaptureMeta(
+        id=capture_id,
+        timestamp=now_iso,
+        type="file",
+        source=f"upload:{orig_name}",
+        original_filename=orig_name,
+        content_hash=c_hash,
+    )
+
+    try:
+        saved_path = storage.write_raw_capture(meta, content_bytes, root=root)
+    except Exception:
+        raw_dir = storage.get_raw_dir(root)
+        partial_dir = raw_dir / capture_id
+        if partial_dir.exists():
+            shutil.rmtree(partial_dir, ignore_errors=True)
+        raise
+
+    return CaptureResult(
+        id=capture_id,
+        path=str(saved_path),
+        type="file",
+    )
+
+
 def render_sidebar() -> None:
     """Render the Sidebar containing Capture, Process, and Stats sections."""
     with st.sidebar:
+        # Custom CSS for modern tab appearance matching SecondSelf design
+        st.markdown(
+            """
+            <style>
+            [data-testid="stSidebar"] [data-baseweb="tab-list"] {
+                gap: 12px;
+                border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+                margin-bottom: 12px;
+            }
+            [data-testid="stSidebar"] [data-baseweb="tab"] {
+                padding: 6px 10px;
+                font-size: 14px;
+                font-weight: 500;
+                color: #9ca3af;
+                background-color: transparent;
+                border: none;
+            }
+            [data-testid="stSidebar"] [data-baseweb="tab"][aria-selected="true"] {
+                color: #a855f7 !important;
+                font-weight: 600;
+            }
+            [data-testid="stSidebar"] [data-baseweb="tab-highlight"] {
+                background-color: #a855f7 !important;
+                height: 2px;
+            }
+            [data-testid="stSidebar"] [data-baseweb="tab-border"] {
+                display: none !important;
+            }
+            </style>
+            """,
+            unsafe_allow_html=True,
+        )
+
         st.header("Brain Controls")
         st.divider()
 
-        # Section 1: Capture
-        st.subheader("📝 Capture")
-        with st.form(key="quick_capture_form", clear_on_submit=True):
-            note_text = st.text_area(
-                "Quick Note Capture",
-                placeholder="Type a thought, meeting note, or idea...",
-                height=100,
-                help="Captures raw note text to the raw/ captures store.",
-            )
-            capture_btn = st.form_submit_button("Capture Note")
+        # Section 1: Capture (Tabbed: Note, Link, File)
+        st.subheader("📥 Capture")
+        tab_note, tab_link, tab_file = st.tabs(["Note", "Link", "File"])
 
-        if capture_btn:
-            clean_note = note_text.strip()
-            if not clean_note:
-                st.warning("Note text cannot be empty.")
-            else:
-                try:
-                    cap_res: CaptureResult = capture.capture_note(clean_note)
-                    st.session_state["capture_message"] = f"Captured note to `raw/{cap_res.id}`"
-                    st.rerun()
-                except Exception as e:
-                    st.error(f"Capture failed: {sanitize_error_message(e)}")
+        with tab_note:
+            with st.form(key="note_capture_form", clear_on_submit=True):
+                note_text = st.text_area(
+                    "Note Content",
+                    placeholder="Type your note here...",
+                    height=120,
+                    label_visibility="collapsed",
+                    help="Captures raw note text to the raw/ captures store.",
+                )
+                capture_note_btn = st.form_submit_button("Capture Note", use_container_width=True)
+
+            if capture_note_btn:
+                clean_note = note_text.strip()
+                if not clean_note:
+                    st.warning("Note text cannot be empty.")
+                else:
+                    try:
+                        cap_res: CaptureResult = capture.capture_note(clean_note)
+                        st.session_state["capture_message"] = f"Captured note to `raw/{cap_res.id}`"
+                        st.rerun()
+                    except Exception as e:
+                        st.error(f"Capture failed: {sanitize_error_message(e)}")
+
+        with tab_link:
+            with st.form(key="link_capture_form", clear_on_submit=True):
+                link_url = st.text_input(
+                    "URL",
+                    placeholder="https://...",
+                    label_visibility="collapsed",
+                    help="Web link or bookmark to capture.",
+                )
+                link_context = st.text_input(
+                    "Context",
+                    placeholder="Brief context...",
+                    label_visibility="collapsed",
+                    help="Optional context or annotation for this link.",
+                )
+                capture_link_btn = st.form_submit_button("Capture Link", use_container_width=True)
+
+            if capture_link_btn:
+                clean_url = link_url.strip()
+                clean_context = link_context.strip()
+                if not clean_url:
+                    st.warning("URL cannot be empty.")
+                else:
+                    try:
+                        cap_res: CaptureResult = capture.capture_link(clean_url, notes=clean_context)
+                        st.session_state["capture_message"] = f"Captured link to `raw/{cap_res.id}`"
+                        st.rerun()
+                    except Exception as e:
+                        st.error(f"Capture failed: {sanitize_error_message(e)}")
+
+        with tab_file:
+            with st.form(key="file_capture_form", clear_on_submit=True):
+                uploaded_file = st.file_uploader(
+                    "File Upload",
+                    type=["pdf", "txt", "md", "csv", "json", "py", "doc", "docx"],
+                    help="200MB per file",
+                    label_visibility="collapsed",
+                )
+                capture_file_btn = st.form_submit_button("Capture File", use_container_width=True)
+
+            if capture_file_btn:
+                if uploaded_file is None:
+                    st.warning("Please select a file to upload.")
+                else:
+                    try:
+                        cap_res = capture_uploaded_file(uploaded_file)
+                        st.session_state["capture_message"] = f"Captured file `{uploaded_file.name}` to `raw/{cap_res.id}`"
+                        st.rerun()
+                    except Exception as e:
+                        st.error(f"Capture failed: {sanitize_error_message(e)}")
 
         if st.session_state.get("capture_message"):
             st.success(st.session_state["capture_message"])

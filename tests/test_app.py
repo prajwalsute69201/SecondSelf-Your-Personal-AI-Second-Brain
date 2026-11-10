@@ -166,6 +166,27 @@ class TestAppHelpers(unittest.TestCase):
         self.assertEqual(stats["graph_nodes"], 1)
         self.assertEqual(stats["graph_edges"], 0)
 
+    def test_capture_uploaded_file_saves_to_raw(self) -> None:
+        """Verify capture_uploaded_file correctly extracts content and writes metadata."""
+        mock_file = MagicMock()
+        mock_file.name = "sample_document.pdf"
+        mock_file.getvalue.return_value = b"%PDF-1.4 sample content"
+
+        cap_res = app.capture_uploaded_file(mock_file, root=self.root)
+        self.assertIsInstance(cap_res, CaptureResult)
+        self.assertEqual(cap_res.type, "file")
+
+        # Verify created folder and files
+        cap_dir = self.root / "raw" / cap_res.id
+        self.assertTrue(cap_dir.exists())
+        self.assertTrue((cap_dir / "meta.json").exists())
+        self.assertTrue((cap_dir / "content.pdf").exists())
+
+        with open(cap_dir / "meta.json", "r", encoding="utf-8") as f:
+            meta = json.load(f)
+        self.assertEqual(meta["original_filename"], "sample_document.pdf")
+        self.assertEqual(meta["type"], "file")
+
 
 class TestAppLayoutAndInteractions(unittest.TestCase):
     """Integration test suite using streamlit.testing.v1.AppTest."""
@@ -391,7 +412,8 @@ class TestAppLayoutAndInteractions(unittest.TestCase):
         )
 
         with patch("pipeline.process", return_value=mock_report) as mock_proc:
-            at.sidebar.button[1].click().run()
+            proc_btn = next((b for b in at.sidebar.button if "Process" in b.label), at.sidebar.button[-1])
+            proc_btn.click().run()
 
             mock_proc.assert_called_once()
             sidebar_success = [s.value for s in at.sidebar.success]
