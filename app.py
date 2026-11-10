@@ -65,6 +65,16 @@ __all__ = [
 ]
 
 
+def get_active_groq_model() -> str:
+    """Retrieve configured Groq model identifier from st.secrets, env, or default."""
+    try:
+        if hasattr(st, "secrets") and "GROQ_MODEL" in st.secrets:
+            return str(st.secrets["GROQ_MODEL"]).strip()
+    except Exception:
+        pass
+    return os.getenv("GROQ_MODEL", "qwen/qwen3.8-27b")
+
+
 def sanitize_error_message(exc: Exception | str) -> str:
     """Format and sanitize error messages for safe user-facing display.
 
@@ -336,7 +346,7 @@ def render_ask_section() -> None:
                 try:
                     # Pass cached embedding model resource to avoid reloading per query (Task 4.2.3)
                     cached_model = load_embeddings()
-                    groq_model = os.getenv("GROQ_MODEL", "qwen/qwen3.8-27b")
+                    groq_model = get_active_groq_model()
                     result: AskResult = ask.ask(clean_question, model=cached_model, llm_model=groq_model)
                     st.session_state["current_question"] = clean_question
                     st.session_state["current_result"] = result
@@ -464,7 +474,7 @@ def render_sidebar() -> None:
         if st.button("🚀 Process New Captures", key="btn_run_pipeline"):
             try:
                 with st.spinner("Running classification & linking pipeline..."):
-                    groq_model = os.getenv("GROQ_MODEL", "qwen/qwen3.8-27b")
+                    groq_model = get_active_groq_model()
                     report = pipeline.process(llm_model=groq_model)
                 load_graph.clear()
                 load_embeddings.clear()

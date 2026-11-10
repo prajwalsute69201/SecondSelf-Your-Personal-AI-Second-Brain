@@ -116,6 +116,17 @@ def _load_env() -> None:
     else:
         load_dotenv(override=False)
 
+    # Fallback to Streamlit Community Cloud secrets if present (Task 4.2.7)
+    try:
+        import streamlit as st
+        if hasattr(st, "secrets"):
+            if "GROQ_API_KEY" in st.secrets and not os.getenv("GROQ_API_KEY"):
+                os.environ["GROQ_API_KEY"] = str(st.secrets["GROQ_API_KEY"]).strip()
+            if "GROQ_MODEL" in st.secrets and not os.getenv("GROQ_MODEL"):
+                os.environ["GROQ_MODEL"] = str(st.secrets["GROQ_MODEL"]).strip()
+    except Exception:
+        pass
+
 
 def _sanitize_error_message(msg: str) -> str:
     """Sanitize error messages to prevent accidental API key or secret leakage.
@@ -196,6 +207,13 @@ def get_client(api_key: str | None = None, force_reload: bool = False) -> Groq:
 
     _load_env()
     key = api_key or os.getenv("GROQ_API_KEY")
+    if not key:
+        try:
+            import streamlit as st
+            if hasattr(st, "secrets") and "GROQ_API_KEY" in st.secrets:
+                key = str(st.secrets["GROQ_API_KEY"]).strip()
+        except Exception:
+            pass
 
     if not key or not key.strip():
         raise ValueError(
