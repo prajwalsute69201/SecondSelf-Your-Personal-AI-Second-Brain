@@ -165,10 +165,11 @@ def load_note_embeddings(root: str | None = None) -> dict[str, Any]:
 
 @st.cache_data(show_spinner=False)
 def load_graph(root: str | None = None) -> dict[str, Any]:
-    """Load data/graph.json from disk with caching (Implementationplan 4.2.3).
+    """Load data/graph.json from disk or persistent SQLite with caching (Implementationplan 4.2.3).
 
     Uses Streamlit's @st.cache_data to cache parsed graph nodes, edges, and metadata,
     avoiding repeated filesystem reads and JSON deserialization across reruns.
+    Automatically restores from SQLite or rebuilds graph if records exist but file is missing.
 
     Args:
         root: Optional project root path override.
@@ -179,16 +180,44 @@ def load_graph(root: str | None = None) -> dict[str, Any]:
     proj_root = Path(root).resolve() if root else storage.get_project_root()
     graph_path = build_graph.get_graph_path(root=proj_root)
 
-    if not graph_path.exists():
-        return dict(DEFAULT_GRAPH_DATA)
+    # 1. If graph.json exists and is valid, load it
+    if graph_path.exists():
+        try:
+            with open(graph_path, "r", encoding="utf-8") as f:
+                data = json.load(f)
+                if isinstance(data, dict) and "nodes" in data and "edges" in data:
+                    if len(data.get("nodes", [])) > 0:
+                        return data
+                    # If nodes are empty, try auto-restoring from notes
+                    try:
+                        from lib import startup
+                        if startup.ensure_graph_populated(root=proj_root):
+                            with open(graph_path, "r", encoding="utf-8") as f2:
+                                return json.load(f2)
+                    except Exception:
+                        pass
+                    return data
+        except Exception as e:
+            logger.warning(f"Failed to read graph.json: {e}")
 
+    # 2. Try loading persisted graph records directly from SQLite database
     try:
-        with open(graph_path, "r", encoding="utf-8") as f:
-            data = json.load(f)
-            if isinstance(data, dict) and "nodes" in data and "edges" in data:
-                return data
-    except Exception as e:
-        logger.warning(f"Failed to read graph.json: {e}")
+        from lib import database as db
+        db_graph = db.load_graph_records(root=proj_root)
+        if db_graph and db_graph.get("nodes"):
+            return db_graph
+    except Exception:
+        pass
+
+    # 3. Try automatic rebuilding from persistent notes
+    try:
+        from lib import startup
+        if startup.ensure_graph_populated(root=proj_root):
+            if graph_path.exists():
+                with open(graph_path, "r", encoding="utf-8") as f3:
+                    return json.load(f3)
+    except Exception:
+        pass
 
     return dict(DEFAULT_GRAPH_DATA)
 
@@ -257,15 +286,19 @@ def get_graph_html(graph_data: dict[str, Any], root: Path | str | None = None) -
 def get_brain_stats(root: Path | str | None = None) -> dict[str, Any]:
     """Compute knowledge base statistics for the sidebar display.
 
+    Retrieves counts from persisted notes, raw captures store, and SQLite database.
+
     Args:
         root: Optional project root path override.
 
     Returns:
-        dict: Counts of notes, raw captures, graph nodes, edges, and PARA categories.
+        dict: Counts of notes, raw captures, pending captures, graph nodes, edges, and PARA categories.
     """
+    proj_root = Path(root).resolve() if root else storage.get_project_root()
     stats: dict[str, Any] = {
         "total_notes": 0,
         "raw_captures": 0,
+        "pending_captures": 0,
         "graph_nodes": 0,
         "graph_edges": 0,
         "last_graph_build": None,
@@ -273,7 +306,7 @@ def get_brain_stats(root: Path | str | None = None) -> dict[str, Any]:
     }
 
     try:
-        notes = storage.read_wiki_notes(root=root)
+        notes = storage.read_wiki_notes(root=proj_root)
         stats["total_notes"] = len(notes)
         for note in notes:
             category = note.para if note.para in stats["para_breakdown"] else "Other"
@@ -282,13 +315,15 @@ def get_brain_stats(root: Path | str | None = None) -> dict[str, Any]:
         logger.debug(f"Error reading wiki notes for stats: {e}")
 
     try:
-        raw_items = storage.read_raw_captures(root=root)
-        stats["raw_captures"] = len(raw_items)
+        all_raw = storage.read_all_raw_captures(root=proj_root)
+        pending_raw = storage.read_raw_captures(root=proj_root)
+        stats["raw_captures"] = len(all_raw)
+        stats["pending_captures"] = len(pending_raw)
     except Exception as e:
         logger.debug(f"Error reading raw captures for stats: {e}")
 
     try:
-        graph = load_graph(root=str(root) if root else None)
+        graph = load_graph(root=str(proj_root) if proj_root else None)
         metadata = graph.get("metadata", {})
         nodes = graph.get("nodes", [])
         edges = graph.get("edges", [])
@@ -297,6 +332,23 @@ def get_brain_stats(root: Path | str | None = None) -> dict[str, Any]:
         stats["last_graph_build"] = metadata.get("generated_at")
     except Exception as e:
         logger.debug(f"Error reading graph for stats: {e}")
+
+    # Fallback to SQLite database if filesystem lists are empty or out of sync
+    try:
+        from lib import database as db
+        db_stats = db.get_stats_summary(root=proj_root)
+        if stats["total_notes"] == 0 and db_stats["total_notes"] > 0:
+            stats["total_notes"] = db_stats["total_notes"]
+            stats["para_breakdown"] = db_stats["para_breakdown"]
+        if stats["raw_captures"] == 0 and db_stats["raw_captures"] > 0:
+            stats["raw_captures"] = db_stats["raw_captures"]
+        if stats["graph_nodes"] == 0 and db_stats["graph_nodes"] > 0:
+            stats["graph_nodes"] = db_stats["graph_nodes"]
+            stats["graph_edges"] = db_stats["graph_edges"]
+        if not stats["last_graph_build"] and db_stats["last_graph_build"]:
+            stats["last_graph_build"] = db_stats["last_graph_build"]
+    except Exception:
+        pass
 
     return stats
 
@@ -554,6 +606,13 @@ def delete_wiki_note(
     except Exception as e:
         logger.warning(f"Failed to remove embedding for note {note_id}: {e}")
 
+    # Delete from SQLite persistent database
+    try:
+        from lib import database as db
+        db.delete_note(note_id, root=proj_root)
+    except Exception as e:
+        logger.warning(f"Failed to delete note {note_id} from SQLite: {e}")
+
     # Rebuild graph
     try:
         build_graph.build_and_save_graph(root=proj_root)
@@ -795,6 +854,9 @@ def render_sidebar() -> None:
             st.metric("Raw Captures", stats["raw_captures"])
             st.metric("Connections", stats["graph_edges"])
 
+        if stats.get("pending_captures", 0) > 0:
+            st.caption(f"⏳ **{stats['pending_captures']}** capture(s) pending processing")
+
         if stats.get("last_graph_build"):
             ts_clean = str(stats["last_graph_build"])[:19].replace("T", " ")
             st.caption(f"Last Graph Build: {ts_clean}")
@@ -912,6 +974,13 @@ def main() -> None:
         layout="wide",
         initial_sidebar_state="expanded",
     )
+
+    # Ensure durable startup recovery and persistent data restoration
+    try:
+        from lib import startup
+        startup.ensure_data_restored()
+    except Exception as e:
+        logger.warning(f"Startup restoration encountered non-fatal error: {e}")
 
     # Initialize session state keys
     if "current_question" not in st.session_state:

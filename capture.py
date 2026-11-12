@@ -82,6 +82,20 @@ def find_duplicate_capture(target_hash: str) -> str | None:
     except Exception:
         pass
 
+    # Check SQLite database for existing content hash
+    try:
+        from lib import database as db
+        clean_target = target_hash.removeprefix("sha256:")
+        with db.db_session() as conn:
+            row = conn.execute(
+                "SELECT id FROM captures WHERE content_hash = ? OR content_hash = ? LIMIT 1;",
+                (target_hash, clean_target),
+            ).fetchone()
+            if row:
+                return str(row["id"])
+    except Exception:
+        pass
+
     return None
 
 

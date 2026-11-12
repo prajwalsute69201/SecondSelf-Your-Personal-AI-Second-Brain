@@ -85,6 +85,13 @@ def classify_capture(
     if isinstance(raw_processed, dict) and meta.id in raw_processed:
         raise ValueError(f"Capture {meta.id} has already been processed.")
 
+    if not dry_run:
+        try:
+            from lib import database as db
+            db.update_capture_status(meta.id, "processing", root=root)
+        except Exception:
+            pass
+
     # 2. Extract readable text using lib.extract
     try:
         content_text = extract_text(meta, root=root)
@@ -168,7 +175,19 @@ def classify_all(
         try:
             note = classify_capture(meta, root=root, model=model, dry_run=dry_run)
             successful.append(note)
+            if not dry_run:
+                try:
+                    from lib import database as db
+                    db.update_capture_status(meta.id, "completed", root=root)
+                except Exception:
+                    pass
         except Exception as e:
+            if not dry_run:
+                try:
+                    from lib import database as db
+                    db.update_capture_status(meta.id, "failed", error_message=str(e), root=root)
+                except Exception:
+                    pass
             failed.append((meta.id, str(e)))
 
     return successful, failed

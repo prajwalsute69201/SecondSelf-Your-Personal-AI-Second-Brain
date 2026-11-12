@@ -8,6 +8,7 @@ from dataclasses import asdict
 from datetime import datetime, timezone
 import hashlib
 import json
+import logging
 import os
 from pathlib import Path
 import tempfile
@@ -15,6 +16,8 @@ from typing import Any
 import uuid
 
 import yaml
+
+logger = logging.getLogger(__name__)
 
 try:
     from lib.models import CaptureMeta, WikiNote
@@ -32,6 +35,7 @@ __all__ = [
     "generate_capture_id",
     "write_raw_capture",
     "read_raw_captures",
+    "read_all_raw_captures",
     "write_wiki_note",
     "read_wiki_notes",
     "load_index",
@@ -39,8 +43,35 @@ __all__ = [
     "content_hash",
 ]
 
+def _detect_default_project_root() -> Path:
+    """Detect the canonical SecondSelf project root.
+
+    Supports SECONDSELF_ROOT / SECONDSELF_DATA_DIR environment variables,
+    defaults to the repository directory (parent of lib/), and handles parent workspace runners.
+    """
+    env_root = os.getenv("SECONDSELF_ROOT")
+    if env_root and Path(env_root).resolve().exists():
+        return Path(env_root).resolve()
+
+    env_data = os.getenv("SECONDSELF_DATA_DIR")
+    if env_data and Path(env_data).resolve().exists():
+        p = Path(env_data).resolve()
+        if p.name == "data":
+            return p.parent
+        return p
+
+    repo_dir = Path(__file__).resolve().parent.parent
+    if (repo_dir / "wiki").exists() or (repo_dir / "data").exists():
+        return repo_dir
+
+    if (repo_dir / "secondself" / "wiki").exists():
+        return (repo_dir / "secondself").resolve()
+
+    return repo_dir
+
+
 # Project root: defaults to the repository root directory (parent of lib/)
-PROJECT_ROOT = Path(__file__).resolve().parent.parent
+PROJECT_ROOT = _detect_default_project_root()
 _project_root = PROJECT_ROOT
 
 DEFAULT_INDEX: dict[str, Any] = {
@@ -59,7 +90,7 @@ def set_project_root(root: Path | str | None) -> None:
     """Override the project root directory (useful for testing in temp dirs)."""
     global _project_root
     if root is None:
-        _project_root = PROJECT_ROOT
+        _project_root = _detect_default_project_root()
     else:
         _project_root = Path(root).resolve()
 
@@ -190,7 +221,84 @@ def write_raw_capture(
         with content_file.open("w", encoding="utf-8") as f:
             f.write(content)
 
+    # Durable persistence: dual-write capture record into SQLite database
+    try:
+        from . import database as db
+        db.upsert_capture(
+            meta=meta,
+            content=content,
+            content_path=str(content_file),
+            status="pending",
+            root=root,
+        )
+    except Exception as e:
+        logger.warning(f"Dual-write to SQLite failed for capture {meta.id}: {e}")
+
     return capture_dir
+
+
+def read_all_raw_captures(root: Path | str | None = None) -> list[CaptureMeta]:
+    """Read all raw captures (both processed and unprocessed).
+
+    Args:
+        root: Optional root directory override (for testing).
+
+    Returns:
+        List of all CaptureMeta instances found on filesystem or SQLite.
+    """
+    raw_dir = get_raw_dir(root)
+    captures: list[CaptureMeta] = []
+    seen_ids: set[str] = set()
+
+    if raw_dir.exists():
+        for item in sorted(raw_dir.iterdir()):
+            if not item.is_dir() or item.name.startswith("."):
+                continue
+            meta_file = item / "meta.json"
+            if not meta_file.exists():
+                continue
+            try:
+                with meta_file.open("r", encoding="utf-8") as f:
+                    data = json.load(f)
+                meta = CaptureMeta(
+                    id=str(data["id"]),
+                    timestamp=str(data["timestamp"]),
+                    type=str(data["type"]),
+                    source=str(data["source"]),
+                    original_filename=(
+                        str(data["original_filename"])
+                        if data.get("original_filename") is not None
+                        else None
+                    ),
+                    content_hash=str(data["content_hash"]),
+                )
+                captures.append(meta)
+                seen_ids.add(meta.id)
+            except Exception:
+                continue
+
+    # Augment with captures stored in SQLite if not already on filesystem
+    try:
+        from . import database as db
+        db_captures = db.list_captures(root=root)
+        for row in db_captures:
+            cid = row["id"]
+            if cid not in seen_ids:
+                captures.append(
+                    CaptureMeta(
+                        id=cid,
+                        timestamp=row["timestamp"],
+                        type=row["type"],
+                        source=row["source"],
+                        original_filename=row["original_filename"],
+                        content_hash=row["content_hash"],
+                    )
+                )
+                seen_ids.add(cid)
+    except Exception:
+        pass
+
+    return captures
 
 
 def read_raw_captures(root: Path | str | None = None) -> list[CaptureMeta]:
@@ -319,6 +427,13 @@ def write_wiki_note(note: WikiNote, root: Path | str | None = None) -> Path:
     with note_file.open("w", encoding="utf-8") as f:
         f.write(content)
 
+    # Durable persistence: dual-write wiki note into SQLite database
+    try:
+        from . import database as db
+        db.upsert_note(note, root=root)
+    except Exception as e:
+        logger.warning(f"Dual-write to SQLite failed for note {note.id}: {e}")
+
     return note_file
 
 
@@ -333,7 +448,11 @@ def read_wiki_notes(root: Path | str | None = None) -> list[WikiNote]:
     """
     wiki_dir = get_wiki_dir(root)
     if not wiki_dir.exists():
-        return []
+        try:
+            from . import database as db
+            return db.list_notes(root=root)
+        except Exception:
+            return []
 
     notes: list[WikiNote] = []
     required_fields = {
@@ -430,6 +549,14 @@ def read_wiki_notes(root: Path | str | None = None) -> list[WikiNote]:
         )
         notes.append(note)
 
+    # If no notes discovered on disk, query SQLite persistent database
+    if not notes:
+        try:
+            from . import database as db
+            notes = db.list_notes(root=root)
+        except Exception:
+            pass
+
     return notes
 
 
@@ -504,6 +631,19 @@ def save_index(index: dict[str, Any], root: Path | str | None = None) -> Path:
             os.fsync(f.fileno())
 
         os.replace(tmp_file, index_path)
+
+        # Synchronize processed state with SQLite database
+        try:
+            from . import database as db
+            raw_proc = index.get("raw_processed", {})
+            if isinstance(raw_proc, dict):
+                for cap_id in raw_proc.keys():
+                    db.update_capture_status(str(cap_id), "completed", root=root)
+            if index.get("last_graph_build"):
+                db.set_system_metadata("last_graph_build", str(index["last_graph_build"]), root=root)
+        except Exception as e:
+            logger.debug(f"Non-fatal error updating SQLite from index: {e}")
+
         return index_path
     except Exception as e:
         if tmp_file and tmp_file.exists():

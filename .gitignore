@@ -29,6 +29,15 @@ data/index.json
 data/graph.json
 !data/.gitkeep
 
+# SQLite database files & backups
+*.db
+*.db-wal
+*.db-shm
+data/*.db
+data/*.db-wal
+data/*.db-shm
+backups/
+
 # Python cache & bytecode
 __pycache__/
 *.py[cod]

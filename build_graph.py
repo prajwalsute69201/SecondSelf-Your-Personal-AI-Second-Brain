@@ -417,6 +417,18 @@ def save_graph(
     except Exception as e:
         logger.warning(f"Failed to update last_graph_build in index.json: {e}")
 
+    # Persist graph nodes, edges, and metadata in SQLite database for durable restoration
+    try:
+        from lib import database as db
+        db.save_graph_records(
+            nodes=graph_data.get("nodes", []),
+            edges=graph_data.get("edges", []),
+            metadata=graph_data.get("metadata", {}),
+            root=root,
+        )
+    except Exception as e:
+        logger.warning(f"Failed to persist graph records to SQLite: {e}")
+
     return target_path
 
 

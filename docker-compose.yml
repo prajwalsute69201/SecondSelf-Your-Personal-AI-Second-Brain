@@ -1,0 +1,34 @@
+version: '3.8'
+
+services:
+  secondself:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: secondself-app
+    restart: unless-stopped
+    ports:
+      - "8501:8501"
+    environment:
+      - GROQ_API_KEY=${GROQ_API_KEY}
+      - GROQ_MODEL=${GROQ_MODEL:-qwen/qwen3.8-27b}
+      - SECONDSELF_ROOT=/app
+      - SECONDSELF_DATA_DIR=/app/data
+      - SECONDSELF_DB_PATH=/app/data/secondself.db
+    volumes:
+      # Named persistent volumes ensure captures, notes, and DB persist across restarts and updates
+      - secondself_data:/app/data
+      - secondself_wiki:/app/wiki
+      - secondself_raw:/app/raw
+      - secondself_backups:/app/backups
+
+volumes:
+  secondself_data:
+    name: secondself_persistent_data
+  secondself_wiki:
+    name: secondself_persistent_wiki
+  secondself_raw:
+    name: secondself_persistent_raw
+  secondself_backups:
+    name: secondself_persistent_backups
+
