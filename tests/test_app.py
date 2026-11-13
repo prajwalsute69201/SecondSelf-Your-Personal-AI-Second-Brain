@@ -503,6 +503,53 @@ class TestAppLayoutAndInteractions(unittest.TestCase):
             success_messages = [s.value for s in at.success]
             self.assertTrue(any("Graph refreshed successfully" in s for s in success_messages))
 
+    def test_sidebar_brain_controls_icon_and_header(self) -> None:
+        """Verify the Brain Controls sidebar header includes the polished Lucide brain icon."""
+        at = AppTest.from_file(self.app_path).run()
+        sidebar_md = [m.value for m in at.sidebar.markdown]
+        # Verify Brain Controls heading with Lucide icon SVG is present in the sidebar
+        self.assertTrue(any("Brain Controls" in m and "lucide-brain" in m for m in sidebar_md))
+
+    def test_note_editor_no_automatic_selection(self) -> None:
+        """Verify that Note Editor dropdown waits for manual selection and does not auto-select."""
+        fake_note = WikiNote(
+            id="test01",
+            raw_id="raw01",
+            para="Projects",
+            tags=["ai", "test"],
+            summary="Test Project Note",
+            created="2026-11-13T00:00:00Z",
+            links=[],
+            body="Test note content body",
+            user_id="00000000-0000-0000-0000-000000000001",
+        )
+        with patch("lib.storage.read_wiki_notes", return_value=[fake_note]):
+            at = AppTest.from_file(self.app_path).run()
+
+            # The selectbox must exist
+            select_boxes = [sb for sb in at.sidebar.selectbox if sb.key == "sidebar_note_select"]
+            self.assertEqual(len(select_boxes), 1)
+            sb = select_boxes[0]
+
+            # MUST NOT be automatically selected!
+            self.assertIsNone(sb.value)
+
+            # Informative hint must be shown instead of auto-populated inputs
+            captions = [c.value for c in at.sidebar.caption]
+            self.assertTrue(any("Select a note from the dropdown" in c for c in captions))
+
+            # Editor input fields should NOT be shown yet
+            self.assertFalse(any("sb_sum_test01" == ti.key for ti in at.sidebar.text_input))
+
+            # Now manually select the note
+            sb.select("test01").run()
+
+            # After manual selection, note is selected and editor fields appear
+            self.assertEqual(sb.value, "test01")
+            self.assertTrue(any("sb_sum_test01" == ti.key for ti in at.sidebar.text_input))
+            summary_input = next(ti for ti in at.sidebar.text_input if ti.key == "sb_sum_test01")
+            self.assertEqual(summary_input.value, "Test Project Note")
+
 
 if __name__ == "__main__":
     unittest.main()

@@ -494,6 +494,7 @@ def render_ask_section(user: User) -> None:
                             st.markdown(note_obj.body or "(Empty content)")
                             if st.button(f"✏️ Edit [{src_id}] in Editor", key=f"btn_edit_src_{src_id}"):
                                 st.session_state["editing_note_id"] = src_id
+                                st.session_state["sidebar_note_select"] = src_id
                                 st.rerun()
         elif not is_no_notes:
             st.caption("No sources were cited for this response.")
@@ -747,7 +748,21 @@ def render_sidebar(user: User) -> None:
             unsafe_allow_html=True,
         )
 
-        st.header("Brain Controls")
+        st.markdown(
+            """
+            <div style="display: flex; align-items: center; gap: 10px; margin-top: 0.2rem; margin-bottom: 0.8rem;">
+                <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#a855f7" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-brain" style="flex-shrink: 0;">
+                    <path d="M12 5a3 3 0 1 0-5.997.125 4 4 0 0 0-2.526 5.77 4 4 0 0 0 .556 6.588A4 4 0 1 0 12 18Z"/>
+                    <path d="M12 5a3 3 0 1 1 5.997.125 4 4 0 0 1 2.526 5.77 4 4 0 0 1-.556 6.588A4 4 0 1 1 12 18Z"/>
+                    <path d="M15 13a4.5 4.5 0 0 1-3-4 4.5 4.5 0 0 1-3 4"/>
+                    <path d="M12 18v4"/>
+                    <path d="M8 22h8"/>
+                </svg>
+                <h2 id="brain-controls" style="margin: 0; padding: 0; font-size: 1.45rem; font-weight: 700; color: #f9fafb; letter-spacing: -0.01em; line-height: 1.2;">Brain Controls</h2>
+            </div>
+            """,
+            unsafe_allow_html=True,
+        )
 
         # Section 1: Capture (Tabbed: Note, Link, File)
         st.subheader("📥 Capture")
@@ -899,88 +914,100 @@ def render_sidebar(user: User) -> None:
             note_options = list(notes_by_id.keys())
 
             current_edit_id = st.session_state.get("editing_note_id")
-            default_idx = note_options.index(current_edit_id) if current_edit_id in note_options else 0
+            default_idx = (
+                note_options.index(current_edit_id)
+                if (current_edit_id and current_edit_id in note_options)
+                else None
+            )
 
             selected_note_id = st.selectbox(
                 "Select Note:",
                 options=note_options,
                 index=default_idx,
+                placeholder="Choose a note to edit...",
                 format_func=lambda nid: f"[{nid}] ({notes_by_id[nid].para}) {notes_by_id[nid].summary[:35]}",
                 key="sidebar_note_select",
             )
-            note = notes_by_id[selected_note_id]
 
-            valid_paras = ["Projects", "Areas", "Resources", "Archives"]
-            current_para_idx = valid_paras.index(note.para) if note.para in valid_paras else 0
-            new_para = st.selectbox(
-                "Category",
-                valid_paras,
-                index=current_para_idx,
-                key=f"sb_para_{note.id}",
-            )
+            if not selected_note_id or selected_note_id not in notes_by_id:
+                st.session_state["editing_note_id"] = None
+                st.caption("Select a note from the dropdown above to view or edit its details.")
+            else:
+                note = notes_by_id[selected_note_id]
+                st.session_state["editing_note_id"] = selected_note_id
 
-            new_summary = st.text_input(
-                "Title / Summary",
-                value=note.summary,
-                key=f"sb_sum_{note.id}",
-            )
+                valid_paras = ["Projects", "Areas", "Resources", "Archives"]
+                current_para_idx = valid_paras.index(note.para) if note.para in valid_paras else 0
+                new_para = st.selectbox(
+                    "Category",
+                    valid_paras,
+                    index=current_para_idx,
+                    key=f"sb_para_{note.id}",
+                )
 
-            tags_str = ", ".join(note.tags) if note.tags else ""
-            new_tags_str = st.text_input(
-                "Tags (comma-separated)",
-                value=tags_str,
-                key=f"sb_tags_{note.id}",
-            )
+                new_summary = st.text_input(
+                    "Title / Summary",
+                    value=note.summary,
+                    key=f"sb_sum_{note.id}",
+                )
 
-            new_body = st.text_area(
-                "Content",
-                value=note.body,
-                height=140,
-                key=f"sb_body_{note.id}",
-            )
+                tags_str = ", ".join(note.tags) if note.tags else ""
+                new_tags_str = st.text_input(
+                    "Tags (comma-separated)",
+                    value=tags_str,
+                    key=f"sb_tags_{note.id}",
+                )
 
-            col_save, col_del = st.columns(2)
-            with col_save:
-                if st.button("💾 Save", type="primary", use_container_width=True, key=f"btn_save_sb_{note.id}"):
-                    clean_summary = new_summary.strip()
-                    if not clean_summary:
-                        st.warning("Title cannot be empty.")
-                    else:
-                        clean_tags = [t.strip() for t in new_tags_str.split(",") if t.strip()]
-                        try:
-                            save_edited_note(
-                                note_id=note.id,
-                                new_para=new_para,
-                                new_summary=clean_summary,
-                                new_tags=clean_tags,
-                                new_body=new_body,
-                                user_id=user.id,
-                            )
+                new_body = st.text_area(
+                    "Content",
+                    value=note.body,
+                    height=140,
+                    key=f"sb_body_{note.id}",
+                )
+
+                col_save, col_del = st.columns(2)
+                with col_save:
+                    if st.button("💾 Save", type="primary", use_container_width=True, key=f"btn_save_sb_{note.id}"):
+                        clean_summary = new_summary.strip()
+                        if not clean_summary:
+                            st.warning("Title cannot be empty.")
+                        else:
+                            clean_tags = [t.strip() for t in new_tags_str.split(",") if t.strip()]
+                            try:
+                                save_edited_note(
+                                    note_id=note.id,
+                                    new_para=new_para,
+                                    new_summary=clean_summary,
+                                    new_tags=clean_tags,
+                                    new_body=new_body,
+                                    user_id=user.id,
+                                )
+                                st.session_state["graph_refresh_counter"] = st.session_state.get("graph_refresh_counter", 0) + 1
+                                st.session_state["sidebar_note_msg"] = f"✅ Saved [{note.id}]"
+                                st.rerun()
+                            except Exception as e:
+                                st.error(f"Save failed: {sanitize_error_message(e)}")
+
+                with col_del:
+                    if st.button("🗑️ Delete", type="secondary", use_container_width=True, key=f"btn_del_sb_{note.id}"):
+                        st.session_state[f"confirm_delete_{note.id}"] = True
+
+                if st.session_state.get(f"confirm_delete_{note.id}"):
+                    st.warning(f"Delete note `[{note.id}]` permanently?")
+                    col_c1, col_c2 = st.columns(2)
+                    with col_c1:
+                        if st.button("Confirm", type="primary", use_container_width=True, key=f"btn_confirm_del_{note.id}"):
+                            delete_wiki_note(note.id, user_id=user.id)
+                            st.session_state[f"confirm_delete_{note.id}"] = False
+                            st.session_state["editing_note_id"] = None
+                            st.session_state["sidebar_note_select"] = None
                             st.session_state["graph_refresh_counter"] = st.session_state.get("graph_refresh_counter", 0) + 1
-                            st.session_state["sidebar_note_msg"] = f"✅ Saved [{note.id}]"
+                            st.session_state["sidebar_note_msg"] = f"🗑️ Deleted [{note.id}]"
                             st.rerun()
-                        except Exception as e:
-                            st.error(f"Save failed: {sanitize_error_message(e)}")
-
-            with col_del:
-                if st.button("🗑️ Delete", type="secondary", use_container_width=True, key=f"btn_del_sb_{note.id}"):
-                    st.session_state[f"confirm_delete_{note.id}"] = True
-
-            if st.session_state.get(f"confirm_delete_{note.id}"):
-                st.warning(f"Delete note `[{note.id}]` permanently?")
-                col_c1, col_c2 = st.columns(2)
-                with col_c1:
-                    if st.button("Confirm", type="primary", use_container_width=True, key=f"btn_confirm_del_{note.id}"):
-                        delete_wiki_note(note.id, user_id=user.id)
-                        st.session_state[f"confirm_delete_{note.id}"] = False
-                        st.session_state["editing_note_id"] = None
-                        st.session_state["graph_refresh_counter"] = st.session_state.get("graph_refresh_counter", 0) + 1
-                        st.session_state["sidebar_note_msg"] = f"🗑️ Deleted [{note.id}]"
-                        st.rerun()
-                with col_c2:
-                    if st.button("Cancel", use_container_width=True, key=f"btn_cancel_del_{note.id}"):
-                        st.session_state[f"confirm_delete_{note.id}"] = False
-                        st.rerun()
+                    with col_c2:
+                        if st.button("Cancel", use_container_width=True, key=f"btn_cancel_del_{note.id}"):
+                            st.session_state[f"confirm_delete_{note.id}"] = False
+                            st.rerun()
 
         if st.session_state.get("sidebar_note_msg"):
             st.success(st.session_state["sidebar_note_msg"])

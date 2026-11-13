@@ -14,8 +14,23 @@ import logging
 import os
 from pathlib import Path
 import sqlite3
+import sys
 from typing import Any, Generator, Sequence
 import uuid
+
+# Ensure project root is in sys.path
+_PROJECT_ROOT = Path(__file__).resolve().parent.parent
+if str(_PROJECT_ROOT) not in sys.path:
+    sys.path.insert(0, str(_PROJECT_ROOT))
+
+try:
+    from lib.constants import DEFAULT_ADMIN_EMAIL, DEFAULT_USER_ID
+except ImportError:
+    try:
+        from .constants import DEFAULT_ADMIN_EMAIL, DEFAULT_USER_ID
+    except ImportError:
+        DEFAULT_USER_ID = "00000000-0000-0000-0000-000000000001"
+        DEFAULT_ADMIN_EMAIL = "admin@secondself.ai"
 
 try:
     from lib.models import (
@@ -37,9 +52,6 @@ except ImportError:
     )
 
 logger = logging.getLogger(__name__)
-
-DEFAULT_USER_ID = "00000000-0000-0000-0000-000000000001"
-DEFAULT_ADMIN_EMAIL = "admin@secondself.ai"
 
 __all__ = [
     "DEFAULT_USER_ID",

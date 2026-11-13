@@ -11,19 +11,34 @@ import json
 import logging
 import os
 from pathlib import Path
+import sys
 import tempfile
 from typing import Any
 import uuid
 
 import yaml
 
+# Ensure project root is in sys.path
+_SYS_PROJECT_ROOT = Path(__file__).resolve().parent.parent
+if str(_SYS_PROJECT_ROOT) not in sys.path:
+    sys.path.insert(0, str(_SYS_PROJECT_ROOT))
+
 logger = logging.getLogger(__name__)
 
 try:
-    from lib.database import DEFAULT_USER_ID
+    from lib.constants import DEFAULT_USER_ID
+except ImportError:
+    try:
+        from .constants import DEFAULT_USER_ID
+    except ImportError:
+        try:
+            from lib.database import DEFAULT_USER_ID
+        except ImportError:
+            DEFAULT_USER_ID = "00000000-0000-0000-0000-000000000001"
+
+try:
     from lib.models import CaptureMeta, WikiNote
 except ImportError:
-    from .database import DEFAULT_USER_ID
     from .models import CaptureMeta, WikiNote
 
 __all__ = [

@@ -14,42 +14,35 @@ import os
 from pathlib import Path
 import re
 import secrets
+import sys
 from typing import Any
 
+# Ensure project root is in sys.path
+_PROJECT_ROOT = Path(__file__).resolve().parent.parent
+if str(_PROJECT_ROOT) not in sys.path:
+    sys.path.insert(0, str(_PROJECT_ROOT))
+
 try:
-    from lib.database import (
-        DEFAULT_ADMIN_EMAIL,
-        DEFAULT_USER_ID,
-        create_password_reset,
-        create_session,
-        create_user,
-        delete_session,
-        get_password_reset,
-        get_session,
-        get_user_by_email,
-        get_user_by_id,
-        list_all_users,
-        mark_password_reset_used,
-        update_user,
-    )
+    from lib import database as db
+    from lib.constants import DEFAULT_ADMIN_EMAIL, DEFAULT_USER_ID
     from lib.models import User, UserSession
 except ImportError:
-    from .database import (
-        DEFAULT_ADMIN_EMAIL,
-        DEFAULT_USER_ID,
-        create_password_reset,
-        create_session,
-        create_user,
-        delete_session,
-        get_password_reset,
-        get_session,
-        get_user_by_email,
-        get_user_by_id,
-        list_all_users,
-        mark_password_reset_used,
-        update_user,
-    )
+    from . import database as db
+    from .constants import DEFAULT_ADMIN_EMAIL, DEFAULT_USER_ID
     from .models import User, UserSession
+
+# Expose database helper bindings for auth flows
+create_password_reset = db.create_password_reset
+create_session = db.create_session
+create_user = db.create_user
+delete_session = db.delete_session
+get_password_reset = db.get_password_reset
+get_session = db.get_session
+get_user_by_email = db.get_user_by_email
+get_user_by_id = db.get_user_by_id
+list_all_users = db.list_all_users
+mark_password_reset_used = db.mark_password_reset_used
+update_user = db.update_user
 
 logger = logging.getLogger(__name__)
 
