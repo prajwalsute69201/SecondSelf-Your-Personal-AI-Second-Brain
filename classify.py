@@ -80,7 +80,7 @@ def classify_capture(
         RuntimeError: If Groq API request fails (network, rate limit, auth).
     """
     # 1. Idempotency check: verify not already processed
-    index = storage.load_index(root=root)
+    index = storage.load_index(root=root, user_id=meta.user_id)
     raw_processed = index.get("raw_processed", {})
     if isinstance(raw_processed, dict) and meta.id in raw_processed:
         raise ValueError(f"Capture {meta.id} has already been processed.")
@@ -88,7 +88,7 @@ def classify_capture(
     if not dry_run:
         try:
             from lib import database as db
-            db.update_capture_status(meta.id, "processing", root=root)
+            db.update_capture_status(meta.id, "processing", user_id=meta.user_id, root=root)
         except Exception:
             pass
 
@@ -121,6 +121,7 @@ def classify_capture(
         created=meta.timestamp,
         links=[],
         body=content_text,
+        user_id=meta.user_id,
     )
 
     if dry_run:
@@ -140,7 +141,7 @@ def classify_capture(
         "classified_at": now_iso,
         "content_hash": meta.content_hash,
     }
-    storage.save_index(index, root=root)
+    storage.save_index(index, root=root, user_id=meta.user_id)
 
     return note
 
@@ -150,6 +151,7 @@ def classify_all(
     model: str | None = None,
     capture_ids: list[str] | None = None,
     dry_run: bool = False,
+    user_id: str | None = None,
 ) -> tuple[list[WikiNote], list[tuple[str, str]]]:
     """Discover and classify all unprocessed raw captures.
 
@@ -158,11 +160,12 @@ def classify_all(
         model: Optional Groq model identifier override.
         capture_ids: Optional list of capture IDs to restrict processing to.
         dry_run: If True, classifies without writing files or updating index.
+        user_id: Optional user ID to isolate capture processing.
 
     Returns:
         tuple: (list of successful WikiNote instances, list of (capture_id, error_message) tuples).
     """
-    unprocessed = storage.read_raw_captures(root=root)
+    unprocessed = storage.read_raw_captures(root=root, user_id=user_id)
 
     if capture_ids:
         target_set = set(capture_ids)
@@ -178,14 +181,14 @@ def classify_all(
             if not dry_run:
                 try:
                     from lib import database as db
-                    db.update_capture_status(meta.id, "completed", root=root)
+                    db.update_capture_status(meta.id, "completed", user_id=meta.user_id, root=root)
                 except Exception:
                     pass
         except Exception as e:
             if not dry_run:
                 try:
                     from lib import database as db
-                    db.update_capture_status(meta.id, "failed", error_message=str(e), root=root)
+                    db.update_capture_status(meta.id, "failed", error_message=str(e), user_id=meta.user_id, root=root)
                 except Exception:
                     pass
             failed.append((meta.id, str(e)))

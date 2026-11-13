@@ -25,6 +25,7 @@ Validates:
 from __future__ import annotations
 
 import json
+import os
 from pathlib import Path
 import sys
 import tempfile
@@ -256,6 +257,11 @@ class TestAppLayoutAndInteractions(unittest.TestCase):
     @classmethod
     def setUpClass(cls) -> None:
         cls.app_path = str((_REPO_ROOT / "app.py").resolve())
+        os.environ["SECONDSELF_AUTO_LOGIN_ADMIN"] = "1"
+
+    @classmethod
+    def tearDownClass(cls) -> None:
+        os.environ.pop("SECONDSELF_AUTO_LOGIN_ADMIN", None)
 
     def setUp(self) -> None:
         # Clear Streamlit caches before each integration test

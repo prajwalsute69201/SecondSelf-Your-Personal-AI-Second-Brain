@@ -156,10 +156,11 @@ def retrieve_relevant_notes(
     threshold: float | None = DEFAULT_SIMILARITY_THRESHOLD,
     root: Path | str | None = None,
     model: Any | None = None,
+    user_id: str | None = None,
 ) -> list[tuple[WikiNote, float]]:
-    """Retrieve top-K most semantically relevant WikiNotes for a question.
+    """Retrieve top-K most semantically relevant WikiNotes for a question scoped to user_id.
 
-    Loads embeddings from `data/embeddings.pkl` and full note bodies from `wiki/`,
+    Loads embeddings and full note bodies scoped to user_id,
     computes cosine similarity between the embedded query and each note vector,
     filters by similarity threshold, and returns the top-K matches sorted descending.
 
@@ -169,6 +170,7 @@ def retrieve_relevant_notes(
         threshold: Minimum similarity score threshold. If None, no score filtering is applied.
         root: Optional project root directory override.
         model: Optional pre-loaded sentence-transformers model instance.
+        user_id: Optional user ID to isolate notes search to.
 
     Returns:
         list[tuple[WikiNote, float]]: Retrieved notes paired with their cosine similarity scores.
@@ -189,9 +191,9 @@ def retrieve_relevant_notes(
     if not embeddings:
         return []
 
-    # Load existing wiki notes
+    # Load existing wiki notes scoped to user_id
     try:
-        notes_list = storage.read_wiki_notes(root=root)
+        notes_list = storage.read_wiki_notes(root=root, user_id=user_id)
     except Exception as e:
         logger.warning(f"Failed to read wiki notes: {e}")
         return []
@@ -277,6 +279,7 @@ def ask(
     llm_model: str | None = None,
     client: Any | None = None,
     similarity_threshold: float | None = DEFAULT_SIMILARITY_THRESHOLD,
+    user_id: str | None = None,
 ) -> AskResult:
     """Ask a question against the SecondSelf personal knowledge base (Task 4.1.1).
 
@@ -296,6 +299,7 @@ def ask(
         llm_model: Optional Groq model override (defaults to DEFAULT_MODEL).
         client: Optional Groq client instance.
         similarity_threshold: Minimum cosine similarity to consider a note relevant.
+        user_id: Optional user ID to isolate notes search to.
 
     Returns:
         AskResult: Dataclass containing the synthesized answer and source citations.
@@ -315,6 +319,7 @@ def ask(
         threshold=similarity_threshold,
         root=root,
         model=model,
+        user_id=user_id,
     )
 
     if not retrieved:

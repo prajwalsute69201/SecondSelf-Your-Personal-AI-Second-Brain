@@ -248,99 +248,118 @@ def link_pair(source: WikiNote, target_id: str) -> bool:
 
 def safe_read_wiki_notes(
     root: Path | str | None = None,
+    user_id: str | None = None,
 ) -> tuple[list[WikiNote], list[str]]:
     """Discover and parse all wiki markdown notes, isolating per-file read errors.
 
     Args:
         root: Optional root directory override.
+        user_id: Optional user ID to scope notes to.
 
     Returns:
         tuple: (list of valid WikiNote instances, list of error strings for bad files).
     """
     wiki_dir = storage.get_wiki_dir(root)
-    if not wiki_dir.exists():
-        return [], []
-
     valid_notes: list[WikiNote] = []
     errors: list[str] = []
+    seen_ids: set[str] = set()
 
-    required_fields = {
-        "id",
-        "raw_id",
-        "para",
-        "tags",
-        "summary",
-        "created",
-        "links",
-    }
+    if wiki_dir.exists():
+        required_fields = {
+            "id",
+            "raw_id",
+            "para",
+            "tags",
+            "summary",
+            "created",
+            "links",
+        }
 
-    for note_path in sorted(wiki_dir.rglob("*.md")):
-        try:
-            with note_path.open("r", encoding="utf-8") as f:
-                text = f.read()
-        except Exception as e:
-            errors.append(f"Failed to read wiki note at {note_path}: {e}")
-            continue
+        for note_path in sorted(wiki_dir.rglob("*.md")):
+            try:
+                with note_path.open("r", encoding="utf-8") as f:
+                    text = f.read()
+            except Exception as e:
+                errors.append(f"Failed to read wiki note at {note_path}: {e}")
+                continue
 
-        text = text.lstrip("\ufeff")
-        lines = text.splitlines(keepends=True)
-        if not lines or lines[0].strip() != "---":
-            errors.append(f"Malformed note at {note_path}: missing opening '---' delimiter")
-            continue
+            text = text.lstrip("\ufeff")
+            lines = text.splitlines(keepends=True)
+            if not lines or lines[0].strip() != "---":
+                errors.append(f"Malformed note at {note_path}: missing opening '---' delimiter")
+                continue
 
-        closing_idx = -1
-        for i in range(1, len(lines)):
-            if lines[i].strip() == "---":
-                closing_idx = i
-                break
+            closing_idx = -1
+            for i in range(1, len(lines)):
+                if lines[i].strip() == "---":
+                    closing_idx = i
+                    break
 
-        if closing_idx == -1:
-            errors.append(f"Malformed note at {note_path}: missing closing '---' delimiter")
-            continue
+            if closing_idx == -1:
+                errors.append(f"Malformed note at {note_path}: missing closing '---' delimiter")
+                continue
 
-        fm_text = "".join(lines[1:closing_idx])
-        body_lines = lines[closing_idx + 1 :]
-        body_text = "".join(body_lines)
+            fm_text = "".join(lines[1:closing_idx])
+            body_lines = lines[closing_idx + 1 :]
+            body_text = "".join(body_lines)
 
-        if body_text.startswith("\r\n"):
-            body_text = body_text[2:]
-        elif body_text.startswith("\n"):
-            body_text = body_text[1:]
+            if body_text.startswith("\r\n"):
+                body_text = body_text[2:]
+            elif body_text.startswith("\n"):
+                body_text = body_text[1:]
 
-        try:
-            fm_data = yaml.safe_load(fm_text)
-        except Exception as e:
-            errors.append(f"YAML parsing error in {note_path}: {e}")
-            continue
+            try:
+                fm_data = yaml.safe_load(fm_text)
+            except Exception as e:
+                errors.append(f"YAML parsing error in {note_path}: {e}")
+                continue
 
-        if not isinstance(fm_data, dict):
-            errors.append(f"Frontmatter in {note_path} is not a YAML dictionary")
-            continue
+            if not isinstance(fm_data, dict):
+                errors.append(f"Frontmatter in {note_path} is not a YAML dictionary")
+                continue
 
-        missing = required_fields - set(fm_data.keys())
-        if missing:
-            errors.append(
-                f"Note {note_path} missing required frontmatter fields: {sorted(missing)}"
+            missing = required_fields - set(fm_data.keys())
+            if missing:
+                errors.append(
+                    f"Note {note_path} missing required frontmatter fields: {sorted(missing)}"
+                )
+                continue
+
+            note_owner = str(fm_data.get("user_id") or "00000000-0000-0000-0000-000000000001")
+            if user_id is not None and note_owner != user_id:
+                continue
+
+            raw_tags = fm_data.get("tags") or []
+            tags = [str(t) for t in raw_tags] if isinstance(raw_tags, list) else []
+
+            raw_links = fm_data.get("links") or []
+            links = [str(l) for l in raw_links] if isinstance(raw_links, list) else []
+
+            nid = str(fm_data["id"])
+            note = WikiNote(
+                id=nid,
+                raw_id=str(fm_data["raw_id"]),
+                para=str(fm_data["para"]),
+                tags=tags,
+                summary=str(fm_data["summary"]),
+                created=str(fm_data["created"]),
+                links=links,
+                body=body_text,
+                user_id=note_owner,
             )
-            continue
+            valid_notes.append(note)
+            seen_ids.add(nid)
 
-        raw_tags = fm_data.get("tags") or []
-        tags = [str(t) for t in raw_tags] if isinstance(raw_tags, list) else []
-
-        raw_links = fm_data.get("links") or []
-        links = [str(l) for l in raw_links] if isinstance(raw_links, list) else []
-
-        note = WikiNote(
-            id=str(fm_data["id"]),
-            raw_id=str(fm_data["raw_id"]),
-            para=str(fm_data["para"]),
-            tags=tags,
-            summary=str(fm_data["summary"]),
-            created=str(fm_data["created"]),
-            links=links,
-            body=body_text,
-        )
-        valid_notes.append(note)
+    # Augment with notes from database for this user
+    try:
+        from lib import database as db
+        db_notes = db.list_notes(user_id=user_id, root=root)
+        for dn in db_notes:
+            if dn.id not in seen_ids:
+                valid_notes.append(dn)
+                seen_ids.add(dn.id)
+    except Exception:
+        pass
 
     return valid_notes, errors
 

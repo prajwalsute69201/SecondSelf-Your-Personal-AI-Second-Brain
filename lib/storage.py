@@ -20,8 +20,10 @@ import yaml
 logger = logging.getLogger(__name__)
 
 try:
+    from lib.database import DEFAULT_USER_ID
     from lib.models import CaptureMeta, WikiNote
 except ImportError:
+    from .database import DEFAULT_USER_ID
     from .models import CaptureMeta, WikiNote
 
 __all__ = [
@@ -38,6 +40,7 @@ __all__ = [
     "read_all_raw_captures",
     "write_wiki_note",
     "read_wiki_notes",
+    "delete_wiki_note",
     "load_index",
     "save_index",
     "content_hash",
@@ -113,9 +116,14 @@ def get_data_dir(root: Path | str | None = None) -> Path:
     return base / "data"
 
 
-def get_index_path(root: Path | str | None = None) -> Path:
-    """Return path to data/index.json."""
-    return get_data_dir(root) / "index.json"
+def get_index_path(root: Path | str | None = None, user_id: str | None = None) -> Path:
+    """Return path to data/index.json, or data/{user_id}/index.json for scoped users."""
+    base_data = get_data_dir(root)
+    if user_id and user_id != DEFAULT_USER_ID:
+        scoped_dir = base_data / user_id
+        scoped_dir.mkdir(parents=True, exist_ok=True)
+        return scoped_dir / "index.json"
+    return base_data / "index.json"
 
 
 def generate_capture_id() -> str:
@@ -237,14 +245,18 @@ def write_raw_capture(
     return capture_dir
 
 
-def read_all_raw_captures(root: Path | str | None = None) -> list[CaptureMeta]:
-    """Read all raw captures (both processed and unprocessed).
+def read_all_raw_captures(
+    root: Path | str | None = None,
+    user_id: str | None = None,
+) -> list[CaptureMeta]:
+    """Read all raw captures (both processed and unprocessed) optionally filtered by user_id.
 
     Args:
         root: Optional root directory override (for testing).
+        user_id: Optional user ID to scope captures to.
 
     Returns:
-        List of all CaptureMeta instances found on filesystem or SQLite.
+        List of all CaptureMeta instances found on filesystem or SQLite for the user.
     """
     raw_dir = get_raw_dir(root)
     captures: list[CaptureMeta] = []
@@ -260,6 +272,9 @@ def read_all_raw_captures(root: Path | str | None = None) -> list[CaptureMeta]:
             try:
                 with meta_file.open("r", encoding="utf-8") as f:
                     data = json.load(f)
+                cap_user = str(data.get("user_id") or DEFAULT_USER_ID)
+                if user_id is not None and cap_user != user_id:
+                    continue
                 meta = CaptureMeta(
                     id=str(data["id"]),
                     timestamp=str(data["timestamp"]),
@@ -271,6 +286,7 @@ def read_all_raw_captures(root: Path | str | None = None) -> list[CaptureMeta]:
                         else None
                     ),
                     content_hash=str(data["content_hash"]),
+                    user_id=cap_user,
                 )
                 captures.append(meta)
                 seen_ids.add(meta.id)
@@ -280,7 +296,7 @@ def read_all_raw_captures(root: Path | str | None = None) -> list[CaptureMeta]:
     # Augment with captures stored in SQLite if not already on filesystem
     try:
         from . import database as db
-        db_captures = db.list_captures(root=root)
+        db_captures = db.list_captures(user_id=user_id, root=root)
         for row in db_captures:
             cid = row["id"]
             if cid not in seen_ids:
@@ -292,6 +308,7 @@ def read_all_raw_captures(root: Path | str | None = None) -> list[CaptureMeta]:
                         source=row["source"],
                         original_filename=row["original_filename"],
                         content_hash=row["content_hash"],
+                        user_id=row.get("user_id", user_id or DEFAULT_USER_ID),
                     )
                 )
                 seen_ids.add(cid)
@@ -301,25 +318,28 @@ def read_all_raw_captures(root: Path | str | None = None) -> list[CaptureMeta]:
     return captures
 
 
-def read_raw_captures(root: Path | str | None = None) -> list[CaptureMeta]:
-    """Read unprocessed raw captures from raw/{id}/meta.json.
+def read_raw_captures(
+    root: Path | str | None = None,
+    user_id: str | None = None,
+) -> list[CaptureMeta]:
+    """Read unprocessed raw captures from raw/{id}/meta.json optionally filtered by user_id.
 
     Args:
         root: Optional root directory override (for testing).
+        user_id: Optional user ID to scope captures to.
 
     Returns:
         List of CaptureMeta instances for items not present in raw_processed.
     """
-    index = load_index(root=root)
+    index = load_index(root=root, user_id=user_id)
     raw_processed = index.get("raw_processed", {})
     if not isinstance(raw_processed, dict):
         raw_processed = {}
 
     raw_dir = get_raw_dir(root)
-    if not raw_dir.exists():
-        return []
-
     captures: list[CaptureMeta] = []
+    seen_ids: set[str] = set()
+
     required_fields = {
         "id",
         "timestamp",
@@ -329,48 +349,71 @@ def read_raw_captures(root: Path | str | None = None) -> list[CaptureMeta]:
         "content_hash",
     }
 
-    for item in sorted(raw_dir.iterdir()):
-        if not item.is_dir() or item.name.startswith("."):
-            continue
+    if raw_dir.exists():
+        for item in sorted(raw_dir.iterdir()):
+            if not item.is_dir() or item.name.startswith("."):
+                continue
 
-        meta_file = item / "meta.json"
-        if not meta_file.exists():
-            raise FileNotFoundError(
-                f"Missing meta.json in raw capture directory: {item}"
+            meta_file = item / "meta.json"
+            if not meta_file.exists():
+                continue
+
+            try:
+                with meta_file.open("r", encoding="utf-8") as f:
+                    data = json.load(f)
+            except Exception:
+                continue
+
+            if not isinstance(data, dict):
+                continue
+
+            missing = required_fields - set(data.keys())
+            if missing:
+                continue
+
+            cap_user = str(data.get("user_id") or DEFAULT_USER_ID)
+            if user_id is not None and cap_user != user_id:
+                continue
+
+            meta = CaptureMeta(
+                id=str(data["id"]),
+                timestamp=str(data["timestamp"]),
+                type=str(data["type"]),
+                source=str(data["source"]),
+                original_filename=(
+                    str(data["original_filename"])
+                    if data["original_filename"] is not None
+                    else None
+                ),
+                content_hash=str(data["content_hash"]),
+                user_id=cap_user,
             )
 
-        try:
-            with meta_file.open("r", encoding="utf-8") as f:
-                data = json.load(f)
-        except Exception as e:
-            raise ValueError(f"Malformed JSON in {meta_file}: {e}") from e
+            if meta.id not in raw_processed and item.name not in raw_processed:
+                captures.append(meta)
+                seen_ids.add(meta.id)
 
-        if not isinstance(data, dict):
-            raise ValueError(
-                f"Metadata in {meta_file} must be a JSON object, got {type(data).__name__}"
-            )
-
-        missing = required_fields - set(data.keys())
-        if missing:
-            raise ValueError(
-                f"Metadata in {meta_file} missing required fields: {sorted(missing)}"
-            )
-
-        meta = CaptureMeta(
-            id=str(data["id"]),
-            timestamp=str(data["timestamp"]),
-            type=str(data["type"]),
-            source=str(data["source"]),
-            original_filename=(
-                str(data["original_filename"])
-                if data["original_filename"] is not None
-                else None
-            ),
-            content_hash=str(data["content_hash"]),
-        )
-
-        if meta.id not in raw_processed and item.name not in raw_processed:
-            captures.append(meta)
+    # Augment with pending captures from SQLite for this user
+    try:
+        from . import database as db
+        pending_db = db.list_captures(status="pending", user_id=user_id, root=root)
+        for row in pending_db:
+            cid = row["id"]
+            if cid not in seen_ids and cid not in raw_processed:
+                captures.append(
+                    CaptureMeta(
+                        id=cid,
+                        timestamp=row["timestamp"],
+                        type=row["type"],
+                        source=row["source"],
+                        original_filename=row["original_filename"],
+                        content_hash=row["content_hash"],
+                        user_id=row.get("user_id", user_id or DEFAULT_USER_ID),
+                    )
+                )
+                seen_ids.add(cid)
+    except Exception:
+        pass
 
     return captures
 
@@ -401,6 +444,7 @@ def write_wiki_note(note: WikiNote, root: Path | str | None = None) -> Path:
     target_dir.mkdir(parents=True, exist_ok=True)
     note_file = target_dir / f"{clean_id}.md"
 
+    note_user = note.user_id or DEFAULT_USER_ID
     frontmatter = {
         "id": note.id,
         "raw_id": note.raw_id,
@@ -409,6 +453,7 @@ def write_wiki_note(note: WikiNote, root: Path | str | None = None) -> Path:
         "summary": note.summary,
         "created": note.created,
         "links": list(note.links) if note.links is not None else [],
+        "user_id": note_user,
     }
     fm_yaml = yaml.safe_dump(frontmatter, sort_keys=False, allow_unicode=True)
 
@@ -437,24 +482,22 @@ def write_wiki_note(note: WikiNote, root: Path | str | None = None) -> Path:
     return note_file
 
 
-def read_wiki_notes(root: Path | str | None = None) -> list[WikiNote]:
-    """Discover, parse, and return all WikiNote markdown files under wiki/.
+def read_wiki_notes(
+    root: Path | str | None = None,
+    user_id: str | None = None,
+) -> list[WikiNote]:
+    """Discover, parse, and return all WikiNote markdown files under wiki/ scoped to user_id.
 
     Args:
         root: Optional root directory override (for testing).
+        user_id: Optional user ID to filter notes by.
 
     Returns:
         List of parsed WikiNote instances.
     """
     wiki_dir = get_wiki_dir(root)
-    if not wiki_dir.exists():
-        try:
-            from . import database as db
-            return db.list_notes(root=root)
-        except Exception:
-            return []
-
     notes: list[WikiNote] = []
+    seen_ids: set[str] = set()
     required_fields = {
         "id",
         "raw_id",
@@ -465,111 +508,170 @@ def read_wiki_notes(root: Path | str | None = None) -> list[WikiNote]:
         "links",
     }
 
-    for note_path in sorted(wiki_dir.rglob("*.md")):
-        try:
-            with note_path.open("r", encoding="utf-8") as f:
-                text = f.read()
-        except Exception as e:
-            raise ValueError(f"Failed to read wiki note at {note_path}: {e}") from e
+    if wiki_dir.exists():
+        for note_path in sorted(wiki_dir.rglob("*.md")):
+            try:
+                with note_path.open("r", encoding="utf-8") as f:
+                    text = f.read()
+            except Exception as e:
+                raise ValueError(f"Failed to read wiki note at {note_path}: {e}") from e
 
-        text = text.lstrip("\ufeff")
-        lines = text.splitlines(keepends=True)
-        if not lines or lines[0].strip() != "---":
-            raise ValueError(
-                f"Malformed wiki note at {note_path}: missing opening '---' delimiter"
+            text = text.lstrip("\ufeff")
+            lines = text.splitlines(keepends=True)
+            if not lines or lines[0].strip() != "---":
+                raise ValueError(
+                    f"Malformed wiki note at {note_path}: missing opening '---' delimiter"
+                )
+
+            closing_idx = -1
+            for i in range(1, len(lines)):
+                if lines[i].strip() == "---":
+                    closing_idx = i
+                    break
+
+            if closing_idx == -1:
+                raise ValueError(
+                    f"Malformed wiki note at {note_path}: missing closing '---' delimiter"
+                )
+
+            fm_text = "".join(lines[1:closing_idx])
+            body_lines = lines[closing_idx + 1 :]
+            body_text = "".join(body_lines)
+
+            if body_text.startswith("\r\n"):
+                body_text = body_text[2:]
+            elif body_text.startswith("\n"):
+                body_text = body_text[1:]
+
+            try:
+                fm_data = yaml.safe_load(fm_text)
+            except Exception as e:
+                raise ValueError(
+                    f"Failed to parse YAML frontmatter in {note_path}: {e}"
+                ) from e
+
+            if not isinstance(fm_data, dict):
+                raise ValueError(
+                    f"Frontmatter in {note_path} must be a mapping, got {type(fm_data).__name__}"
+                )
+
+            missing = required_fields - set(fm_data.keys())
+            if missing:
+                raise ValueError(
+                    f"Wiki note {note_path} missing required frontmatter fields: {sorted(missing)}"
+                )
+
+            note_owner = str(fm_data.get("user_id") or DEFAULT_USER_ID)
+            if user_id is not None and note_owner != user_id:
+                continue
+
+            raw_tags = fm_data.get("tags")
+            if raw_tags is None:
+                tags = []
+            elif isinstance(raw_tags, list):
+                tags = [str(t) for t in raw_tags]
+            else:
+                raise ValueError(
+                    f"Frontmatter 'tags' in {note_path} must be a list, got {type(raw_tags).__name__}"
+                )
+
+            raw_links = fm_data.get("links")
+            if raw_links is None:
+                links = []
+            elif isinstance(raw_links, list):
+                links = [str(l) for l in raw_links]
+            else:
+                raise ValueError(
+                    f"Frontmatter 'links' in {note_path} must be a list, got {type(raw_links).__name__}"
+                )
+
+            nid = str(fm_data["id"])
+            note = WikiNote(
+                id=nid,
+                raw_id=str(fm_data["raw_id"]),
+                para=str(fm_data["para"]),
+                tags=tags,
+                summary=str(fm_data["summary"]),
+                created=str(fm_data["created"]),
+                links=links,
+                body=body_text,
+                user_id=note_owner,
             )
+            notes.append(note)
+            seen_ids.add(nid)
 
-        closing_idx = -1
-        for i in range(1, len(lines)):
-            if lines[i].strip() == "---":
-                closing_idx = i
-                break
-
-        if closing_idx == -1:
-            raise ValueError(
-                f"Malformed wiki note at {note_path}: missing closing '---' delimiter"
-            )
-
-        fm_text = "".join(lines[1:closing_idx])
-        body_lines = lines[closing_idx + 1 :]
-        body_text = "".join(body_lines)
-
-        if body_text.startswith("\r\n"):
-            body_text = body_text[2:]
-        elif body_text.startswith("\n"):
-            body_text = body_text[1:]
-
-        try:
-            fm_data = yaml.safe_load(fm_text)
-        except Exception as e:
-            raise ValueError(
-                f"Failed to parse YAML frontmatter in {note_path}: {e}"
-            ) from e
-
-        if not isinstance(fm_data, dict):
-            raise ValueError(
-                f"Frontmatter in {note_path} must be a mapping, got {type(fm_data).__name__}"
-            )
-
-        missing = required_fields - set(fm_data.keys())
-        if missing:
-            raise ValueError(
-                f"Wiki note {note_path} missing required frontmatter fields: {sorted(missing)}"
-            )
-
-        raw_tags = fm_data.get("tags")
-        if raw_tags is None:
-            tags = []
-        elif isinstance(raw_tags, list):
-            tags = [str(t) for t in raw_tags]
-        else:
-            raise ValueError(
-                f"Frontmatter 'tags' in {note_path} must be a list, got {type(raw_tags).__name__}"
-            )
-
-        raw_links = fm_data.get("links")
-        if raw_links is None:
-            links = []
-        elif isinstance(raw_links, list):
-            links = [str(l) for l in raw_links]
-        else:
-            raise ValueError(
-                f"Frontmatter 'links' in {note_path} must be a list, got {type(raw_links).__name__}"
-            )
-
-        note = WikiNote(
-            id=str(fm_data["id"]),
-            raw_id=str(fm_data["raw_id"]),
-            para=str(fm_data["para"]),
-            tags=tags,
-            summary=str(fm_data["summary"]),
-            created=str(fm_data["created"]),
-            links=links,
-            body=body_text,
-        )
-        notes.append(note)
-
-    # If no notes discovered on disk, query SQLite persistent database
-    if not notes:
-        try:
-            from . import database as db
-            notes = db.list_notes(root=root)
-        except Exception:
-            pass
+    # Augment with notes persisted in SQLite for this user
+    try:
+        from . import database as db
+        db_notes = db.list_notes(user_id=user_id, root=root)
+        for dn in db_notes:
+            if dn.id not in seen_ids:
+                notes.append(dn)
+                seen_ids.add(dn.id)
+    except Exception:
+        pass
 
     return notes
 
 
-def load_index(root: Path | str | None = None) -> dict[str, Any]:
+def delete_wiki_note(
+    note_id: str,
+    user_id: str | None = None,
+    root: Path | str | None = None,
+) -> bool:
+    """Delete a wiki note from disk and SQLite scoped to user_id."""
+    effective_user_id = user_id or DEFAULT_USER_ID
+    wiki_dir = get_wiki_dir(root)
+    deleted_from_disk = False
+
+    if wiki_dir.exists():
+        for note_file in wiki_dir.rglob(f"{note_id}.md"):
+            try:
+                with note_file.open("r", encoding="utf-8") as f:
+                    text = f.read()
+                lines = text.splitlines()
+                fm_lines = []
+                in_fm = False
+                for line in lines:
+                    if line.strip() == "---":
+                        if not in_fm:
+                            in_fm = True
+                            continue
+                        else:
+                            break
+                    if in_fm:
+                        fm_lines.append(line)
+                fm_data = yaml.safe_load("\n".join(fm_lines)) or {}
+                owner = fm_data.get("user_id", DEFAULT_USER_ID)
+                if user_id is None or owner == effective_user_id:
+                    note_file.unlink(missing_ok=True)
+                    deleted_from_disk = True
+            except Exception as e:
+                logger.warning(f"Failed to delete disk note {note_file}: {e}")
+
+    try:
+        from . import database as db
+        db_deleted = db.delete_note(note_id, user_id=effective_user_id, root=root)
+        return deleted_from_disk or db_deleted
+    except Exception as e:
+        logger.warning(f"Failed to delete note {note_id} from SQLite: {e}")
+        return deleted_from_disk
+
+
+def load_index(
+    root: Path | str | None = None,
+    user_id: str | None = None,
+) -> dict[str, Any]:
     """Load data/index.json if present; otherwise return the default template.
 
     Args:
         root: Optional root directory override (for testing).
+        user_id: Optional user ID for scoped index.
 
     Returns:
         Index dictionary with raw_processed, embeddings_version, and last_graph_build.
     """
-    index_path = get_index_path(root)
+    index_path = get_index_path(root, user_id=user_id)
     if not index_path.exists():
         return {
             "raw_processed": {},
@@ -598,12 +700,17 @@ def load_index(root: Path | str | None = None) -> dict[str, Any]:
     return data
 
 
-def save_index(index: dict[str, Any], root: Path | str | None = None) -> Path:
-    """Save the supplied index mapping atomically to data/index.json.
+def save_index(
+    index: dict[str, Any],
+    root: Path | str | None = None,
+    user_id: str | None = None,
+) -> Path:
+    """Save the supplied index mapping atomically to data/index.json (or scoped user index).
 
     Args:
         index: Full index mapping to serialize.
         root: Optional root directory override (for testing).
+        user_id: Optional user ID for scoped index.
 
     Returns:
         Path to the saved index.json file.
@@ -613,7 +720,7 @@ def save_index(index: dict[str, Any], root: Path | str | None = None) -> Path:
             f"index must be an instance of dict, got {type(index).__name__}"
         )
 
-    index_path = get_index_path(root)
+    index_path = get_index_path(root, user_id=user_id)
     index_path.parent.mkdir(parents=True, exist_ok=True)
 
     tmp_file = None
@@ -638,7 +745,7 @@ def save_index(index: dict[str, Any], root: Path | str | None = None) -> Path:
             raw_proc = index.get("raw_processed", {})
             if isinstance(raw_proc, dict):
                 for cap_id in raw_proc.keys():
-                    db.update_capture_status(str(cap_id), "completed", root=root)
+                    db.update_capture_status(str(cap_id), "completed", user_id=user_id, root=root)
             if index.get("last_graph_build"):
                 db.set_system_metadata("last_graph_build", str(index["last_graph_build"]), root=root)
         except Exception as e:

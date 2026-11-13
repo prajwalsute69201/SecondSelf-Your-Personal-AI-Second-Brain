@@ -164,6 +164,7 @@ def run_classify_stage(
     model: str | None = None,
     dry_run: bool = False,
     capture_ids: list[str] | None = None,
+    user_id: str | None = None,
 ) -> tuple[list[WikiNote], list[StageFailure], int]:
     """Execute classification stage on unprocessed raw captures.
 
@@ -175,13 +176,14 @@ def run_classify_stage(
         model: Optional Groq LLM model override.
         dry_run: If True, previews classification without writing files.
         capture_ids: Optional list of specific capture IDs to classify.
+        user_id: Optional user ID to isolate capture discovery and classification.
 
     Returns:
         tuple: (successful_notes, stage_failures, discovered_count).
     """
     # 1. Discover pending captures
     try:
-        pending = storage.read_raw_captures(root=root)
+        pending = storage.read_raw_captures(root=root, user_id=user_id)
         if capture_ids:
             target_set = set(capture_ids)
             pending = [m for m in pending if m.id in target_set]
@@ -207,6 +209,7 @@ def run_classify_stage(
             model=model,
             capture_ids=capture_ids,
             dry_run=dry_run,
+            user_id=user_id,
         )
     except Exception as e:
         failure = StageFailure(
@@ -245,6 +248,7 @@ def run_link_stage(
     dry_run: bool = False,
     force_reembed: bool = False,
     note_id: str | None = None,
+    user_id: str | None = None,
 ) -> tuple[LinkReport, list[StageFailure]]:
     """Execute linking stage across wiki notes using semantic embeddings.
 
@@ -259,13 +263,18 @@ def run_link_stage(
         dry_run: If True, previews linking without writing files.
         force_reembed: If True, recomputes embeddings even if cached.
         note_id: Optional ID to restrict linking focus to a single note.
+        user_id: Optional user ID to isolate linking to that user's notes.
 
     Returns:
         tuple: (LinkReport, list of StageFailure objects).
     """
     try:
+        scoped_notes = notes
+        if scoped_notes is None:
+            scoped_notes = storage.read_wiki_notes(root=root, user_id=user_id)
+
         report = link.link_notes(
-            notes=notes,
+            notes=scoped_notes,
             root=root,
             threshold=threshold,
             model=model,
@@ -325,6 +334,7 @@ def _categorize_graph_error(err_str: str) -> tuple[str, bool]:
 def run_graph_stage(
     root: Path | str | None = None,
     dry_run: bool = False,
+    user_id: str | None = None,
 ) -> tuple[dict[str, Any] | None, list[StageFailure], list[str]]:
     """Execute knowledge graph construction stage (Task 3.2.5).
 
@@ -334,12 +344,17 @@ def run_graph_stage(
     Args:
         root: Optional project root path override.
         dry_run: If True, previews graph build without writing files.
+        user_id: Optional user ID to isolate knowledge graph construction.
 
     Returns:
         tuple: (graph_data_or_None, list of StageFailure objects, list of diagnostic messages).
     """
     try:
-        graph_data, messages = build_graph.build_and_save_graph(root=root, dry_run=dry_run)
+        graph_data, messages = build_graph.build_and_save_graph(
+            root=root,
+            dry_run=dry_run,
+            user_id=user_id,
+        )
     except Exception as e:
         cat, retryable = _categorize_graph_error(str(e))
         failure = StageFailure(
@@ -380,6 +395,7 @@ def run_pipeline(
     force_reembed: bool = False,
     capture_ids: list[str] | None = None,
     note_id: str | None = None,
+    user_id: str | None = None,
 ) -> PipelineReport:
     """Coordinate SecondSelf pipeline execution for classify, link, or process.
 
@@ -404,6 +420,7 @@ def run_pipeline(
         force_reembed: If True, forces re-embedding of notes.
         capture_ids: Optional list of capture IDs to restrict classification to.
         note_id: Optional wiki note ID to restrict linking to.
+        user_id: Optional user ID to isolate pipeline execution.
 
     Returns:
         PipelineReport: Comprehensive report of execution counts and failures.
@@ -429,6 +446,7 @@ def run_pipeline(
             model=llm_model,
             dry_run=dry_run,
             capture_ids=capture_ids,
+            user_id=user_id,
         )
         report.captures_discovered = discovered_count
         report.captures_classified = len(notes)
@@ -450,6 +468,7 @@ def run_pipeline(
             dry_run=dry_run,
             force_reembed=force_reembed,
             note_id=note_id,
+            user_id=user_id,
         )
         report.link_report = link_report
         report.notes_examined = link_report.notes_examined
@@ -469,6 +488,7 @@ def run_pipeline(
             graph_data, graph_failures, graph_messages = run_graph_stage(
                 root=root,
                 dry_run=dry_run,
+                user_id=user_id,
             )
             report.failures.extend(graph_failures)
             if graph_data:
@@ -487,6 +507,7 @@ def process(
     llm_model: str | None = None,
     dry_run: bool = False,
     force_reembed: bool = False,
+    user_id: str | None = None,
 ) -> PipelineReport:
     """Convenience function: classify all pending captures and link all wiki notes."""
     return run_pipeline(
@@ -497,6 +518,7 @@ def process(
         llm_model=llm_model,
         dry_run=dry_run,
         force_reembed=force_reembed,
+        user_id=user_id,
     )
 
 

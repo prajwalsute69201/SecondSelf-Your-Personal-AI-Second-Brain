@@ -177,15 +177,15 @@ def sync_db_to_filesystem(root: Path | str | None = None) -> dict[str, int]:
     return {"restored_notes": restored_notes, "restored_graph": restored_graph}
 
 
-def ensure_graph_populated(root: Path | str | None = None) -> bool:
+def ensure_graph_populated(root: Path | str | None = None, user_id: str | None = None) -> bool:
     """Ensure that the knowledge graph is materialized and non-empty if notes exist.
 
-    If data/graph.json is missing or has 0 nodes, but notes exist (in DB or wiki/),
-    automatically rebuilds the graph from persisted records so the user never sees
-    an empty graph when knowledge is available.
+    If graph.json is missing or has 0 nodes, but notes exist (in DB or wiki/),
+    automatically rebuilds the graph from persisted records scoped to user_id.
     """
     proj_root = Path(root).resolve() if root else storage.get_project_root()
-    graph_path = proj_root / "data" / "graph.json"
+    import build_graph
+    graph_path = build_graph.get_graph_path(root=proj_root, user_id=user_id)
 
     needs_rebuild = False
 
@@ -202,20 +202,20 @@ def ensure_graph_populated(root: Path | str | None = None) -> bool:
             needs_rebuild = True
 
     if needs_rebuild:
-        # Check if we have notes to build from
-        notes = storage.read_wiki_notes(root=proj_root)
+        # Check if we have notes to build from for this user
+        notes = storage.read_wiki_notes(root=proj_root, user_id=user_id)
         if not notes:
-            notes = db.list_notes(root=proj_root)
+            notes = db.list_notes(user_id=user_id, root=proj_root)
 
         if notes:
             logger.info(f"Rebuilding knowledge graph from {len(notes)} persisted notes on startup...")
             try:
-                import build_graph
-                graph_data, _ = build_graph.build_and_save_graph(root=proj_root)
+                graph_data, _ = build_graph.build_and_save_graph(root=proj_root, user_id=user_id)
                 db.save_graph_records(
                     nodes=graph_data.get("nodes", []),
                     edges=graph_data.get("edges", []),
                     metadata=graph_data.get("metadata", {}),
+                    user_id=user_id,
                     root=proj_root,
                 )
                 return True

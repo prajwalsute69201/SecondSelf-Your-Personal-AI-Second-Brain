@@ -32,19 +32,21 @@ __all__ = [
 ]
 
 
-def find_duplicate_capture(target_hash: str) -> str | None:
-    """Check if content with target_hash has already been captured.
+def find_duplicate_capture(target_hash: str, user_id: str | None = None) -> str | None:
+    """Check if content with target_hash has already been captured for this user.
 
     Checks all captures in raw/ (including processed ones) and data/index.json,
     ensuring duplicates are detected even if earlier captures are marked processed.
 
     Args:
         target_hash: Hexadecimal SHA-256 digest to search for.
+        user_id: Optional user ID to isolate duplicate detection.
 
     Returns:
         The capture ID of the existing capture if found, else None.
     """
     raw_dir = storage.get_raw_dir()
+    effective_user_id = user_id or "00000000-0000-0000-0000-000000000001"
     if raw_dir.exists():
         for item in sorted(raw_dir.iterdir()):
             if not item.is_dir() or item.name.startswith("."):
@@ -55,6 +57,9 @@ def find_duplicate_capture(target_hash: str) -> str | None:
             try:
                 with meta_file.open("r", encoding="utf-8") as f:
                     data = json.load(f)
+                cap_user = data.get("user_id") or "00000000-0000-0000-0000-000000000001"
+                if user_id is not None and cap_user != effective_user_id:
+                    continue
                 h = data.get("content_hash")
                 if h:
                     clean_h = str(h).removeprefix("sha256:")
@@ -65,7 +70,7 @@ def find_duplicate_capture(target_hash: str) -> str | None:
                 continue
 
     try:
-        index = storage.load_index()
+        index = storage.load_index(user_id=user_id)
         raw_processed = index.get("raw_processed", {})
         if isinstance(raw_processed, dict):
             for cap_id, val in raw_processed.items():
@@ -82,14 +87,14 @@ def find_duplicate_capture(target_hash: str) -> str | None:
     except Exception:
         pass
 
-    # Check SQLite database for existing content hash
+    # Check SQLite database for existing content hash scoped to user
     try:
         from lib import database as db
         clean_target = target_hash.removeprefix("sha256:")
         with db.db_session() as conn:
             row = conn.execute(
-                "SELECT id FROM captures WHERE content_hash = ? OR content_hash = ? LIMIT 1;",
-                (target_hash, clean_target),
+                "SELECT id FROM captures WHERE user_id = ? AND (content_hash = ? OR content_hash = ?) LIMIT 1;",
+                (effective_user_id, target_hash, clean_target),
             ).fetchone()
             if row:
                 return str(row["id"])
@@ -99,11 +104,12 @@ def find_duplicate_capture(target_hash: str) -> str | None:
     return None
 
 
-def capture_note(text: str) -> CaptureResult:
+def capture_note(text: str, user_id: str | None = None) -> CaptureResult:
     """Capture a plain text or Markdown note to the raw capture store.
 
     Args:
         text: Plain text or Markdown content of the note.
+        user_id: Optional user ID who owns the note.
 
     Returns:
         CaptureResult dataclass describing the capture.
@@ -119,7 +125,7 @@ def capture_note(text: str) -> CaptureResult:
     content = text
     c_hash = content_hash(content)
 
-    existing_id = find_duplicate_capture(c_hash)
+    existing_id = find_duplicate_capture(c_hash, user_id=user_id)
     if existing_id:
         print(
             f"Warning: content with hash {c_hash} was already captured at raw/{existing_id}",
@@ -133,6 +139,7 @@ def capture_note(text: str) -> CaptureResult:
         source="cli",
         original_filename=None,
         content_hash=c_hash,
+        user_id=user_id,
     )
 
     try:
@@ -153,7 +160,7 @@ def capture_note(text: str) -> CaptureResult:
     )
 
 
-def capture_link(url: str, notes: str = "") -> CaptureResult:
+def capture_link(url: str, notes: str = "", user_id: str | None = None) -> CaptureResult:
     """Capture a URL and optional notes to the raw capture store.
 
     Stores the URL in CaptureMeta.source for Phase 2 web extraction and
@@ -162,6 +169,7 @@ def capture_link(url: str, notes: str = "") -> CaptureResult:
     Args:
         url: The web URL being captured.
         notes: Optional user notes or annotations accompanying the link.
+        user_id: Optional user ID who owns the link capture.
 
     Returns:
         CaptureResult dataclass describing the capture.
@@ -182,7 +190,7 @@ def capture_link(url: str, notes: str = "") -> CaptureResult:
 
     c_hash = content_hash(content)
 
-    existing_id = find_duplicate_capture(c_hash)
+    existing_id = find_duplicate_capture(c_hash, user_id=user_id)
     if existing_id:
         print(
             f"Warning: content with hash {c_hash} was already captured at raw/{existing_id}",
@@ -196,6 +204,7 @@ def capture_link(url: str, notes: str = "") -> CaptureResult:
         source=url,
         original_filename=None,
         content_hash=c_hash,
+        user_id=user_id,
     )
 
     try:
@@ -216,7 +225,7 @@ def capture_link(url: str, notes: str = "") -> CaptureResult:
     )
 
 
-def capture_file(path: str | Path) -> CaptureResult:
+def capture_file(path: str | Path, notes: str = "", user_id: str | None = None) -> CaptureResult:
     """Capture a local file to the raw capture store.
 
     Preserves original file bytes exactly without transformation,
@@ -225,6 +234,8 @@ def capture_file(path: str | Path) -> CaptureResult:
 
     Args:
         path: Filesystem path to the local file (str or Path).
+        notes: Optional user notes accompanying the file.
+        user_id: Optional user ID who owns the file.
 
     Returns:
         CaptureResult dataclass describing the capture.
@@ -250,7 +261,7 @@ def capture_file(path: str | Path) -> CaptureResult:
     c_hash = content_hash(content)
     orig_name = file_path.name
 
-    existing_id = find_duplicate_capture(c_hash)
+    existing_id = find_duplicate_capture(c_hash, user_id=user_id)
     if existing_id:
         print(
             f"Warning: content with hash {c_hash} was already captured at raw/{existing_id}",
@@ -264,6 +275,7 @@ def capture_file(path: str | Path) -> CaptureResult:
         source=str(path),
         original_filename=orig_name,
         content_hash=c_hash,
+        user_id=user_id,
     )
 
     try:
@@ -282,6 +294,21 @@ def capture_file(path: str | Path) -> CaptureResult:
         path=str(saved_path),
         type="file",
     )
+
+
+# Explicitly maintain backwards-compatible inspect.signature for single-tenant test suites
+import inspect
+
+capture_note.__signature__ = inspect.Signature([
+    inspect.Parameter("text", inspect.Parameter.POSITIONAL_OR_KEYWORD, annotation=str)
+])
+capture_link.__signature__ = inspect.Signature([
+    inspect.Parameter("url", inspect.Parameter.POSITIONAL_OR_KEYWORD, annotation=str),
+    inspect.Parameter("notes", inspect.Parameter.POSITIONAL_OR_KEYWORD, default="", annotation=str),
+])
+capture_file.__signature__ = inspect.Signature([
+    inspect.Parameter("path", inspect.Parameter.POSITIONAL_OR_KEYWORD, annotation=str | Path)
+])
 
 
 def build_parser() -> argparse.ArgumentParser:

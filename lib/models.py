@@ -1,13 +1,17 @@
 """Shared dataclass models for the SecondSelf system.
 
-Defines the core data contracts used across capture, wiki organization,
-graph visualization, and question answering.
+Defines the core data contracts used across authentication, multi-tenant capture,
+wiki organization, graph visualization, and question answering.
 """
+
+from __future__ import annotations
 
 from dataclasses import dataclass, field
 from typing import Any
 
 __all__ = [
+    "User",
+    "UserSession",
     "CaptureMeta",
     "CaptureResult",
     "WikiNote",
@@ -15,6 +19,35 @@ __all__ = [
     "GraphEdge",
     "AskResult",
 ]
+
+
+@dataclass
+class User:
+    """Authenticated user profile entity."""
+
+    id: str
+    email: str
+    full_name: str | None = None
+    role: str = "user"  # 'admin' or 'user'
+    is_active: bool = True
+    email_verified: bool = False
+    created_at: str | None = None
+    last_login_at: str | None = None
+
+    @property
+    def is_admin(self) -> bool:
+        """Helper indicating if the user has administrator privileges."""
+        return (self.role or "").lower() == "admin"
+
+
+@dataclass
+class UserSession:
+    """Active session instance for an authenticated user."""
+
+    token: str
+    user_id: str
+    expires_at: str
+    created_at: str
 
 
 @dataclass
@@ -28,6 +61,7 @@ class CaptureMeta:
         source: Capture source ('cli', 'stdin', or 'path').
         original_filename: Original filename if captured from a file, else None.
         content_hash: SHA-256 hash of the raw content for deduplication.
+        user_id: Owner user identifier for data isolation.
     """
 
     id: str
@@ -36,6 +70,7 @@ class CaptureMeta:
     source: str
     original_filename: str | None
     content_hash: str
+    user_id: str | None = None
 
 
 @dataclass
@@ -46,11 +81,13 @@ class CaptureResult:
         id: Unique identifier assigned to the capture.
         path: Filesystem path to the created raw capture directory.
         type: Type of the captured content ('note', 'link', or 'file').
+        user_id: Owner user identifier.
     """
 
     id: str
     path: str
     type: str
+    user_id: str | None = None
 
 
 @dataclass
@@ -66,6 +103,7 @@ class WikiNote:
         created: ISO 8601 creation timestamp string.
         links: List of linked note IDs discovered during auto-linking.
         body: Cleaned markdown body content including wikilinks.
+        user_id: Owner user identifier for data isolation.
     """
 
     id: str
@@ -76,6 +114,10 @@ class WikiNote:
     created: str
     links: list[str]
     body: str
+    user_id: str | None = None
+
+    def __getitem__(self, key: str) -> Any:
+        return getattr(self, key)
 
 
 @dataclass
@@ -90,6 +132,7 @@ class GraphNode:
         summary: Note summary text.
         content_preview: First ~200 characters of the note body.
         group: Grouping identifier for visual styling (matches PARA category).
+        user_id: Owner user identifier for data isolation.
     """
 
     id: str
@@ -99,6 +142,7 @@ class GraphNode:
     summary: str
     content_preview: str
     group: str
+    user_id: str | None = None
 
 
 @dataclass
@@ -110,12 +154,14 @@ class GraphEdge:
         target: Identifier of the target node.
         weight: Edge weight (e.g. semantic similarity score).
         type: Relationship type ('explicit' or 'semantic').
+        user_id: Owner user identifier for data isolation.
     """
 
     source: str
     target: str
     weight: float
     type: str
+    user_id: str | None = None
 
 
 @dataclass
@@ -129,4 +175,3 @@ class AskResult:
 
     answer: str
     sources: list[dict[str, Any]] = field(default_factory=list)
-

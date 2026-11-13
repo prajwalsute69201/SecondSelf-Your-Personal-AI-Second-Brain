@@ -55,16 +55,25 @@ __all__ = [
 ]
 
 
-def get_graph_path(root: Path | str | None = None) -> Path:
-    """Return the filesystem path to data/graph.json.
+def get_graph_path(
+    root: Path | str | None = None,
+    user_id: str | None = None,
+) -> Path:
+    """Return the filesystem path to data/graph.json, optionally scoped to user_id.
 
     Args:
         root: Optional project root path override.
+        user_id: Optional user ID to scope the graph file.
 
     Returns:
-        Path: Absolute or resolved path to data/graph.json.
+        Path: Absolute or resolved path to data/graph.json or data/{user_id}/graph.json.
     """
-    return storage.get_data_dir(root) / "graph.json"
+    base_data = storage.get_data_dir(root)
+    if user_id and user_id != "00000000-0000-0000-0000-000000000001":
+        scoped_dir = base_data / user_id
+        scoped_dir.mkdir(parents=True, exist_ok=True)
+        return scoped_dir / "graph.json"
+    return base_data / "graph.json"
 
 
 def extract_node_preview(body: str, max_chars: int = 200) -> str:
@@ -357,9 +366,19 @@ def build_graph_data(
 
     now_iso = datetime.now(timezone.utc).isoformat()
 
+    def _clean_node(n: GraphNode) -> dict[str, Any]:
+        d = asdict(n)
+        d.pop("user_id", None)
+        return d
+
+    def _clean_edge(e: GraphEdge) -> dict[str, Any]:
+        d = asdict(e)
+        d.pop("user_id", None)
+        return d
+
     graph_data: dict[str, Any] = {
-        "nodes": [asdict(n) for n in nodes],
-        "edges": [asdict(e) for e in edges],
+        "nodes": [_clean_node(n) for n in nodes],
+        "edges": [_clean_edge(e) for e in edges],
         "metadata": {
             "generated_at": now_iso,
             "node_count": len(nodes),
@@ -373,20 +392,22 @@ def build_graph_data(
 def save_graph(
     graph_data: dict[str, Any],
     root: Path | str | None = None,
+    user_id: str | None = None,
 ) -> Path:
-    """Atomically write graph JSON to data/graph.json and update data/index.json.
+    """Atomically write graph JSON to data/graph.json (or user scoped) and update index.json.
 
     Args:
         graph_data: Dictionary structure matching graph.json schema.
         root: Optional project root path override.
+        user_id: Optional user ID to scope the graph persistence.
 
     Returns:
-        Path: Path to the written data/graph.json file.
+        Path: Path to the written graph.json file.
 
     Raises:
         OSError: If filesystem operations fail.
     """
-    target_path = get_graph_path(root)
+    target_path = get_graph_path(root, user_id=user_id)
     target_path.parent.mkdir(parents=True, exist_ok=True)
 
     temp_file: Path | None = None
@@ -411,9 +432,9 @@ def save_graph(
 
     # Update data/index.json last_graph_build timestamp
     try:
-        index_data = storage.load_index(root=root)
+        index_data = storage.load_index(root=root, user_id=user_id)
         index_data["last_graph_build"] = graph_data["metadata"]["generated_at"]
-        storage.save_index(index_data, root=root)
+        storage.save_index(index_data, root=root, user_id=user_id)
     except Exception as e:
         logger.warning(f"Failed to update last_graph_build in index.json: {e}")
 
@@ -424,6 +445,7 @@ def save_graph(
             nodes=graph_data.get("nodes", []),
             edges=graph_data.get("edges", []),
             metadata=graph_data.get("metadata", {}),
+            user_id=user_id,
             root=root,
         )
     except Exception as e:
@@ -435,18 +457,20 @@ def save_graph(
 def build_and_save_graph(
     root: Path | str | None = None,
     dry_run: bool = False,
+    user_id: str | None = None,
 ) -> tuple[dict[str, Any], list[str]]:
     """Discover wiki notes, build knowledge graph, validate, and persist.
 
     Args:
         root: Optional project root path override.
         dry_run: If True, builds graph without writing files or updating index.
+        user_id: Optional user ID to isolate the knowledge graph.
 
     Returns:
         tuple: (graph_data_dict, messages_and_warnings_list).
     """
-    # 1. Load notes safely
-    notes, read_errors = link.safe_read_wiki_notes(root=root)
+    # 1. Load notes safely scoped to user
+    notes, read_errors = link.safe_read_wiki_notes(root=root, user_id=user_id)
 
     # 2. Load embeddings if available (optional, for edge weights)
     embeddings = {}
@@ -461,7 +485,7 @@ def build_and_save_graph(
 
     # 4. Save if not dry-run
     if not dry_run:
-        save_graph(graph_data, root=root)
+        save_graph(graph_data, root=root, user_id=user_id)
 
     return graph_data, all_messages
 

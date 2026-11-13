@@ -32,8 +32,18 @@ import streamlit.components.v1 as components
 import ask
 import build_graph
 import capture
+from lib import auth
+import lib.database as db
+from lib.database import DEFAULT_USER_ID, get_all_system_stats
 import lib.embeddings as emb
-from lib.models import AskResult, CaptureMeta, CaptureResult, WikiNote
+from lib.models import (
+    AskResult,
+    CaptureMeta,
+    CaptureResult,
+    User,
+    UserSession,
+    WikiNote,
+)
 import lib.storage as storage
 import pipeline
 
@@ -66,6 +76,8 @@ __all__ = [
     "render_ask_section",
     "render_graph_section",
     "render_sidebar",
+    "render_auth_page",
+    "render_admin_portal",
     "main",
 ]
 
@@ -164,7 +176,7 @@ def load_note_embeddings(root: str | None = None) -> dict[str, Any]:
 
 
 @st.cache_data(show_spinner=False)
-def load_graph(root: str | None = None) -> dict[str, Any]:
+def load_graph(root: str | None = None, user_id: str | None = None) -> dict[str, Any]:
     """Load data/graph.json from disk or persistent SQLite with caching (Implementationplan 4.2.3).
 
     Uses Streamlit's @st.cache_data to cache parsed graph nodes, edges, and metadata,
@@ -173,12 +185,14 @@ def load_graph(root: str | None = None) -> dict[str, Any]:
 
     Args:
         root: Optional project root path override.
+        user_id: Optional user ID to isolate the knowledge graph.
 
     Returns:
         dict: Parsed graph data containing nodes, edges, and metadata.
     """
     proj_root = Path(root).resolve() if root else storage.get_project_root()
-    graph_path = build_graph.get_graph_path(root=proj_root)
+    effective_user_id = user_id or DEFAULT_USER_ID
+    graph_path = build_graph.get_graph_path(root=proj_root, user_id=effective_user_id)
 
     # 1. If graph.json exists and is valid, load it
     if graph_path.exists():
@@ -191,7 +205,7 @@ def load_graph(root: str | None = None) -> dict[str, Any]:
                     # If nodes are empty, try auto-restoring from notes
                     try:
                         from lib import startup
-                        if startup.ensure_graph_populated(root=proj_root):
+                        if startup.ensure_graph_populated(root=proj_root, user_id=effective_user_id):
                             with open(graph_path, "r", encoding="utf-8") as f2:
                                 return json.load(f2)
                     except Exception:
@@ -203,7 +217,7 @@ def load_graph(root: str | None = None) -> dict[str, Any]:
     # 2. Try loading persisted graph records directly from SQLite database
     try:
         from lib import database as db
-        db_graph = db.load_graph_records(root=proj_root)
+        db_graph = db.load_graph_records(root=proj_root, user_id=effective_user_id)
         if db_graph and db_graph.get("nodes"):
             return db_graph
     except Exception:
@@ -212,7 +226,7 @@ def load_graph(root: str | None = None) -> dict[str, Any]:
     # 3. Try automatic rebuilding from persistent notes
     try:
         from lib import startup
-        if startup.ensure_graph_populated(root=proj_root):
+        if startup.ensure_graph_populated(root=proj_root, user_id=effective_user_id):
             if graph_path.exists():
                 with open(graph_path, "r", encoding="utf-8") as f3:
                     return json.load(f3)
@@ -283,18 +297,20 @@ def get_graph_html(graph_data: dict[str, Any], root: Path | str | None = None) -
     return modified_html
 
 
-def get_brain_stats(root: Path | str | None = None) -> dict[str, Any]:
+def get_brain_stats(root: Path | str | None = None, user_id: str | None = None) -> dict[str, Any]:
     """Compute knowledge base statistics for the sidebar display.
 
     Retrieves counts from persisted notes, raw captures store, and SQLite database.
 
     Args:
         root: Optional project root path override.
+        user_id: Optional user ID to isolate statistics.
 
     Returns:
         dict: Counts of notes, raw captures, pending captures, graph nodes, edges, and PARA categories.
     """
     proj_root = Path(root).resolve() if root else storage.get_project_root()
+    effective_user_id = user_id or DEFAULT_USER_ID
     stats: dict[str, Any] = {
         "total_notes": 0,
         "raw_captures": 0,
@@ -306,7 +322,7 @@ def get_brain_stats(root: Path | str | None = None) -> dict[str, Any]:
     }
 
     try:
-        notes = storage.read_wiki_notes(root=proj_root)
+        notes = storage.read_wiki_notes(root=proj_root, user_id=effective_user_id)
         stats["total_notes"] = len(notes)
         for note in notes:
             category = note.para if note.para in stats["para_breakdown"] else "Other"
@@ -315,15 +331,15 @@ def get_brain_stats(root: Path | str | None = None) -> dict[str, Any]:
         logger.debug(f"Error reading wiki notes for stats: {e}")
 
     try:
-        all_raw = storage.read_all_raw_captures(root=proj_root)
-        pending_raw = storage.read_raw_captures(root=proj_root)
+        all_raw = storage.read_all_raw_captures(root=proj_root, user_id=effective_user_id)
+        pending_raw = storage.read_raw_captures(root=proj_root, user_id=effective_user_id)
         stats["raw_captures"] = len(all_raw)
         stats["pending_captures"] = len(pending_raw)
     except Exception as e:
         logger.debug(f"Error reading raw captures for stats: {e}")
 
     try:
-        graph = load_graph(root=str(proj_root) if proj_root else None)
+        graph = load_graph(root=str(proj_root) if proj_root else None, user_id=effective_user_id)
         metadata = graph.get("metadata", {})
         nodes = graph.get("nodes", [])
         edges = graph.get("edges", [])
@@ -336,7 +352,7 @@ def get_brain_stats(root: Path | str | None = None) -> dict[str, Any]:
     # Fallback to SQLite database if filesystem lists are empty or out of sync
     try:
         from lib import database as db
-        db_stats = db.get_stats_summary(root=proj_root)
+        db_stats = db.get_stats_summary(root=proj_root, user_id=effective_user_id)
         if stats["total_notes"] == 0 and db_stats["total_notes"] > 0:
             stats["total_notes"] = db_stats["total_notes"]
             stats["para_breakdown"] = db_stats["para_breakdown"]
@@ -353,18 +369,18 @@ def get_brain_stats(root: Path | str | None = None) -> dict[str, Any]:
     return stats
 
 
-def render_header() -> None:
+def render_header(user: User) -> None:
     """Render top application header and Refresh Graph control."""
     col_title, col_btn = st.columns([4, 1])
     with col_title:
         st.title("🧠 SecondSelf")
-        st.caption("Personal AI Knowledge Brain — Grounded RAG & Semantic Graph")
+        st.caption(f"Personal AI Knowledge Brain — Workspace for **{user.full_name or user.email}**")
     with col_btn:
         st.write("")  # Vertical spacing to align with title
         if st.button("🔄 Refresh Graph", key="btn_refresh_graph", help="Rebuild and reload the knowledge graph"):
             try:
                 with st.spinner("Rebuilding knowledge graph..."):
-                    build_graph.build_and_save_graph()
+                    build_graph.build_and_save_graph(user_id=user.id)
                 load_graph.clear()
                 st.session_state["graph_refresh_counter"] = st.session_state.get("graph_refresh_counter", 0) + 1
                 st.session_state["refresh_message"] = "Graph refreshed successfully!"
@@ -377,7 +393,7 @@ def render_header() -> None:
         st.session_state["refresh_message"] = None
 
 
-def render_ask_section() -> None:
+def render_ask_section(user: User) -> None:
     """Render 'Ask your brain' input controls, answer panel, and source citations."""
     st.markdown("### Ask your brain")
 
@@ -404,7 +420,12 @@ def render_ask_section() -> None:
                     # Pass cached embedding model resource to avoid reloading per query (Task 4.2.3)
                     cached_model = load_embeddings()
                     groq_model = get_active_groq_model()
-                    result: AskResult = ask.ask(clean_question, model=cached_model, llm_model=groq_model)
+                    result: AskResult = ask.ask(
+                        clean_question,
+                        model=cached_model,
+                        llm_model=groq_model,
+                        user_id=user.id,
+                    )
                     st.session_state["current_question"] = clean_question
                     st.session_state["current_result"] = result
                     st.session_state["current_error"] = None
@@ -444,10 +465,10 @@ def render_ask_section() -> None:
             with st.container(border=True):
                 st.markdown(f"#### Sources ({len(result.sources)})")
 
-                # Cache notes lookup for content inspection
+                # Cache notes lookup for content inspection scoped to current user
                 notes_by_id: dict[str, WikiNote] = {}
                 try:
-                    all_notes = storage.read_wiki_notes()
+                    all_notes = storage.read_wiki_notes(user_id=user.id)
                     notes_by_id = {n.id: n for n in all_notes}
                 except Exception:
                     pass
@@ -478,13 +499,13 @@ def render_ask_section() -> None:
             st.caption("No sources were cited for this response.")
 
 
-def render_graph_section() -> None:
+def render_graph_section(user: User) -> None:
     """Render the Interactive Knowledge Graph (vis-network) section."""
     st.divider()
     st.subheader("Interactive Knowledge Graph")
     st.caption("Explore relationships across your notes. Hover to preview content, drag to reposition, and scroll to zoom.")
 
-    graph_data = load_graph()
+    graph_data = load_graph(user_id=user.id)
     counter = st.session_state.get("graph_refresh_counter", 0)
     graph_html = get_graph_html(graph_data)
     # Append dynamic version tag to ensure iframe reloads on refresh
@@ -500,6 +521,7 @@ def save_edited_note(
     new_tags: list[str],
     new_body: str,
     root: Path | str | None = None,
+    user_id: str | None = None,
 ) -> WikiNote:
     """Save modifications to an existing wiki note and refresh embeddings & graph.
 
@@ -510,12 +532,14 @@ def save_edited_note(
         new_tags: List of semantic tags.
         new_body: Markdown body of the note.
         root: Optional project root path override.
+        user_id: Optional user ID to isolate note updates.
 
     Returns:
         WikiNote: Updated and persisted note instance.
     """
     proj_root = Path(root).resolve() if root else storage.get_project_root()
-    notes = storage.read_wiki_notes(root=proj_root)
+    effective_user_id = user_id or DEFAULT_USER_ID
+    notes = storage.read_wiki_notes(root=proj_root, user_id=effective_user_id)
     existing = next((n for n in notes if n.id == note_id), None)
     if not existing:
         raise ValueError(f"Note '{note_id}' not found in knowledge base.")
@@ -531,6 +555,7 @@ def save_edited_note(
         created=existing.created,
         links=existing.links,
         body=new_body,
+        user_id=effective_user_id,
     )
 
     # If PARA category changed, remove the old file from the previous category directory
@@ -556,9 +581,9 @@ def save_edited_note(
     except Exception as e:
         logger.warning(f"Failed to update embedding for note {note_id}: {e}")
 
-    # Rebuild graph
+    # Rebuild graph for user
     try:
-        build_graph.build_and_save_graph(root=proj_root)
+        build_graph.build_and_save_graph(root=proj_root, user_id=effective_user_id)
     except Exception as e:
         logger.warning(f"Failed to rebuild graph after editing note {note_id}: {e}")
 
@@ -573,29 +598,23 @@ def save_edited_note(
 def delete_wiki_note(
     note_id: str,
     root: Path | str | None = None,
+    user_id: str | None = None,
 ) -> bool:
     """Delete a wiki note from disk, remove its embedding, and rebuild graph.
 
     Args:
         note_id: Identifier of the note to delete.
         root: Optional project root path override.
+        user_id: Optional user ID to isolate note deletion.
 
     Returns:
         bool: True if note was deleted, False if note was not found.
     """
     proj_root = Path(root).resolve() if root else storage.get_project_root()
-    notes = storage.read_wiki_notes(root=proj_root)
-    target = next((n for n in notes if n.id == note_id), None)
-    if not target:
+    effective_user_id = user_id or DEFAULT_USER_ID
+    deleted = storage.delete_wiki_note(note_id, user_id=effective_user_id, root=proj_root)
+    if not deleted:
         return False
-
-    # Remove markdown file from wiki/{para}/{id}.md
-    note_file = storage.get_wiki_dir(proj_root) / target.para / f"{note_id}.md"
-    if note_file.exists():
-        try:
-            note_file.unlink()
-        except OSError as e:
-            logger.warning(f"Failed to delete note file {note_file}: {e}")
 
     # Remove from embeddings.pkl
     try:
@@ -606,16 +625,9 @@ def delete_wiki_note(
     except Exception as e:
         logger.warning(f"Failed to remove embedding for note {note_id}: {e}")
 
-    # Delete from SQLite persistent database
+    # Rebuild graph for user
     try:
-        from lib import database as db
-        db.delete_note(note_id, root=proj_root)
-    except Exception as e:
-        logger.warning(f"Failed to delete note {note_id} from SQLite: {e}")
-
-    # Rebuild graph
-    try:
-        build_graph.build_and_save_graph(root=proj_root)
+        build_graph.build_and_save_graph(root=proj_root, user_id=effective_user_id)
     except Exception as e:
         logger.warning(f"Failed to rebuild graph after deleting note {note_id}: {e}")
 
@@ -630,6 +642,7 @@ def delete_wiki_note(
 def capture_uploaded_file(
     uploaded_file: Any,
     root: Path | str | None = None,
+    user_id: str | None = None,
 ) -> CaptureResult:
     """Capture an uploaded file from Streamlit into raw/ capture store.
 
@@ -639,6 +652,7 @@ def capture_uploaded_file(
     Args:
         uploaded_file: Streamlit UploadedFile object.
         root: Optional project root path override.
+        user_id: Optional user ID who owns the uploaded file.
 
     Returns:
         CaptureResult: Result dataclass describing the capture.
@@ -649,6 +663,7 @@ def capture_uploaded_file(
     if uploaded_file is None:
         raise ValueError("No file provided for capture.")
 
+    effective_user_id = user_id or DEFAULT_USER_ID
     file_name = getattr(uploaded_file, "name", "uploaded_file.bin")
     orig_name = Path(file_name).name
     content_bytes = (
@@ -664,7 +679,7 @@ def capture_uploaded_file(
     now_iso = datetime.now(timezone.utc).isoformat()
     c_hash = storage.content_hash(content_bytes)
 
-    existing_id = capture.find_duplicate_capture(c_hash)
+    existing_id = capture.find_duplicate_capture(c_hash, user_id=effective_user_id)
     if existing_id:
         logger.warning(
             f"Content with hash {c_hash} was already captured at raw/{existing_id}"
@@ -677,6 +692,7 @@ def capture_uploaded_file(
         source=f"upload:{orig_name}",
         original_filename=orig_name,
         content_hash=c_hash,
+        user_id=effective_user_id,
     )
 
     try:
@@ -695,8 +711,8 @@ def capture_uploaded_file(
     )
 
 
-def render_sidebar() -> None:
-    """Render the Sidebar containing Capture, Process, and Stats sections."""
+def render_sidebar(user: User) -> None:
+    """Render the Sidebar containing User Profile, Navigation, Capture, Process, and Stats."""
     with st.sidebar:
         # Custom CSS for modern tab appearance matching SecondSelf design
         st.markdown(
@@ -732,7 +748,6 @@ def render_sidebar() -> None:
         )
 
         st.header("Brain Controls")
-        st.divider()
 
         # Section 1: Capture (Tabbed: Note, Link, File)
         st.subheader("📥 Capture")
@@ -755,7 +770,10 @@ def render_sidebar() -> None:
                     st.warning("Note text cannot be empty.")
                 else:
                     try:
-                        cap_res: CaptureResult = capture.capture_note(clean_note)
+                        if user.id == DEFAULT_USER_ID:
+                            cap_res: CaptureResult = capture.capture_note(clean_note)
+                        else:
+                            cap_res: CaptureResult = capture.capture_note(clean_note, user_id=user.id)
                         st.session_state["capture_message"] = f"Captured note to `raw/{cap_res.id}`"
                         st.rerun()
                     except Exception as e:
@@ -784,7 +802,9 @@ def render_sidebar() -> None:
                     st.warning("URL cannot be empty.")
                 else:
                     try:
-                        cap_res: CaptureResult = capture.capture_link(clean_url, notes=clean_context)
+                        cap_res: CaptureResult = capture.capture_link(
+                            clean_url, notes=clean_context, user_id=user.id
+                        )
                         st.session_state["capture_message"] = f"Captured link to `raw/{cap_res.id}`"
                         st.rerun()
                     except Exception as e:
@@ -805,7 +825,7 @@ def render_sidebar() -> None:
                     st.warning("Please select a file to upload.")
                 else:
                     try:
-                        cap_res = capture_uploaded_file(uploaded_file)
+                        cap_res = capture_uploaded_file(uploaded_file, user_id=user.id)
                         st.session_state["capture_message"] = f"Captured file `{uploaded_file.name}` to `raw/{cap_res.id}`"
                         st.rerun()
                     except Exception as e:
@@ -824,7 +844,7 @@ def render_sidebar() -> None:
             try:
                 with st.spinner("Running classification & linking pipeline..."):
                     groq_model = get_active_groq_model()
-                    report = pipeline.process(llm_model=groq_model)
+                    report = pipeline.process(llm_model=groq_model, user_id=user.id)
                 load_graph.clear()
                 load_embeddings.clear()
                 load_note_embeddings.clear()
@@ -845,7 +865,7 @@ def render_sidebar() -> None:
 
         # Section 3: Stats
         st.subheader("📊 Stats")
-        stats = get_brain_stats()
+        stats = get_brain_stats(user_id=user.id)
         col_stat1, col_stat2 = st.columns(2)
         with col_stat1:
             st.metric("Total Notes", stats["total_notes"])
@@ -870,7 +890,7 @@ def render_sidebar() -> None:
 
         # Section 4: Note Editor & Delete (down side of Notes by PARA)
         st.subheader("✏️ Note Editor")
-        all_notes = storage.read_wiki_notes()
+        all_notes = storage.read_wiki_notes(user_id=user.id)
         if not all_notes:
             st.caption("No notes in knowledge base yet.")
         else:
@@ -934,6 +954,7 @@ def render_sidebar() -> None:
                                 new_summary=clean_summary,
                                 new_tags=clean_tags,
                                 new_body=new_body,
+                                user_id=user.id,
                             )
                             st.session_state["graph_refresh_counter"] = st.session_state.get("graph_refresh_counter", 0) + 1
                             st.session_state["sidebar_note_msg"] = f"✅ Saved [{note.id}]"
@@ -950,7 +971,7 @@ def render_sidebar() -> None:
                 col_c1, col_c2 = st.columns(2)
                 with col_c1:
                     if st.button("Confirm", type="primary", use_container_width=True, key=f"btn_confirm_del_{note.id}"):
-                        delete_wiki_note(note.id)
+                        delete_wiki_note(note.id, user_id=user.id)
                         st.session_state[f"confirm_delete_{note.id}"] = False
                         st.session_state["editing_note_id"] = None
                         st.session_state["graph_refresh_counter"] = st.session_state.get("graph_refresh_counter", 0) + 1
@@ -964,6 +985,220 @@ def render_sidebar() -> None:
         if st.session_state.get("sidebar_note_msg"):
             st.success(st.session_state["sidebar_note_msg"])
             st.session_state["sidebar_note_msg"] = None
+
+        # User Authentication & Workspace Profile Footer
+        st.divider()
+        with st.container(border=True):
+            user_display = user.full_name or user.email.split("@")[0]
+            st.markdown(f"**👤 {user_display}**")
+            role_label = "🛡️ Administrator" if user.is_admin else "👤 Member"
+            st.caption(f"{user.email} &bull; `{role_label}`")
+
+            col_u1, col_u2 = st.columns(2)
+            with col_u1:
+                if user.is_admin:
+                    in_admin_view = st.session_state.get("view_mode") == "admin"
+                    nav_label = "🧠 Second Brain" if in_admin_view else "🛡️ Admin Portal"
+                    if st.button(nav_label, key="btn_nav_toggle", use_container_width=True):
+                        st.session_state["view_mode"] = "user" if in_admin_view else "admin"
+                        st.rerun()
+            with col_u2:
+                if st.button("🚪 Logout", key="btn_logout", use_container_width=True):
+                    auth.logout_user(st.session_state.get("session_token"))
+                    st.session_state["authenticated_user"] = None
+                    st.session_state["session_token"] = None
+                    st.session_state["view_mode"] = "user"
+                    st.rerun()
+
+
+def render_auth_page() -> None:
+    """Render the SecondSelf authentication gateway (Login, Register, Forgot Password)."""
+    col_l, col_center, col_r = st.columns([1, 2, 1])
+    with col_center:
+        st.markdown(
+            """
+            <div style="text-align: center; margin-top: 40px; margin-bottom: 24px;">
+                <h1 style="font-size: 2.6rem; font-weight: 700; margin-bottom: 4px;">🧠 SecondSelf</h1>
+                <p style="color: #c084fc; font-size: 1.1rem; font-weight: 500;">Your Personal AI Second Brain</p>
+                <p style="color: #9ca3af; font-size: 0.9rem;">Secure Multi-User Personal Knowledge Management</p>
+            </div>
+            """,
+            unsafe_allow_html=True,
+        )
+
+        tab_login, tab_register, tab_reset = st.tabs(["🔐 Sign In", "✨ Create Account", "🔑 Forgot Password"])
+
+        with tab_login:
+            with st.form(key="form_user_login", clear_on_submit=False):
+                email = st.text_input("Email", placeholder="you@domain.com", key="auth_login_email")
+                password = st.text_input("Password", type="password", placeholder="••••••••", key="auth_login_password")
+                btn_login = st.form_submit_button("Sign In to SecondSelf", type="primary", use_container_width=True)
+
+            if btn_login:
+                ok, msg, session, user = auth.login_user(email, password)
+                if ok and session and user:
+                    st.session_state["authenticated_user"] = user
+                    st.session_state["session_token"] = session.token
+                    st.session_state["view_mode"] = "user"
+                    st.rerun()
+                else:
+                    st.error(msg)
+
+        with tab_register:
+            with st.form(key="form_user_register", clear_on_submit=False):
+                full_name = st.text_input("Full Name", placeholder="Jane Doe", key="auth_reg_name")
+                reg_email = st.text_input("Email Address", placeholder="you@domain.com", key="auth_reg_email")
+                reg_pwd = st.text_input("Password", type="password", placeholder="At least 8 characters", key="auth_reg_pwd")
+                reg_confirm = st.text_input("Confirm Password", type="password", placeholder="••••••••", key="auth_reg_confirm")
+                btn_register = st.form_submit_button("Create Account", type="primary", use_container_width=True)
+
+            if btn_register:
+                if reg_pwd != reg_confirm:
+                    st.error("Passwords do not match.")
+                else:
+                    ok, msg, new_user = auth.register_user(reg_email, reg_pwd, full_name=full_name)
+                    if ok and new_user:
+                        st.success("Account registered successfully! Logging you in...")
+                        log_ok, log_msg, session, user = auth.login_user(reg_email, reg_pwd)
+                        if log_ok and session and user:
+                            st.session_state["authenticated_user"] = user
+                            st.session_state["session_token"] = session.token
+                            st.session_state["view_mode"] = "user"
+                            st.rerun()
+                    else:
+                        st.error(msg)
+
+        with tab_reset:
+            st.markdown("##### Request Password Reset Token")
+            with st.form(key="form_user_req_reset", clear_on_submit=False):
+                reset_email = st.text_input("Account Email", placeholder="you@domain.com", key="auth_reset_email")
+                btn_req_token = st.form_submit_button("Generate Reset Token", use_container_width=True)
+
+            if btn_req_token:
+                ok, msg, token = auth.request_password_reset(reset_email)
+                if ok and token:
+                    st.success("Reset token generated successfully! Copy the token below:")
+                    st.code(token, language="text")
+                else:
+                    st.info(msg)
+
+            st.markdown("##### Reset Password with Token")
+            with st.form(key="form_user_perform_reset", clear_on_submit=False):
+                tok_input = st.text_input("Reset Token", key="auth_tok_input")
+                new_pwd = st.text_input("New Password", type="password", placeholder="At least 8 characters", key="auth_new_pwd")
+                new_confirm = st.text_input("Confirm New Password", type="password", placeholder="••••••••", key="auth_confirm_new_pwd")
+                btn_reset_pwd = st.form_submit_button("Reset Password", type="primary", use_container_width=True)
+
+            if btn_reset_pwd:
+                if new_pwd != new_confirm:
+                    st.error("Passwords do not match.")
+                else:
+                    ok, msg = auth.reset_password(tok_input, new_pwd)
+                    if ok:
+                        st.success(msg)
+                    else:
+                        st.error(msg)
+
+
+def render_admin_portal(current_user: User) -> None:
+    """Render the Administrator Portal for platform metrics and account management."""
+    if not auth.verify_admin(current_user):
+        st.error("⛔ Access Denied: Administrator privileges required.")
+        return
+
+    col_h1, col_h2 = st.columns([4, 1])
+    with col_h1:
+        st.title("🛡️ Administrator Portal")
+        st.caption("Platform Administration, User Account Management & System Statistics")
+    with col_h2:
+        st.write("")
+        if st.button("← Back to Second Brain", key="btn_back_to_brain", type="primary"):
+            st.session_state["view_mode"] = "user"
+            st.rerun()
+
+    st.divider()
+
+    # Section 1: Platform Metrics
+    st.subheader("Platform Metrics")
+    sys_stats = get_all_system_stats()
+    m1, m2, m3, m4, m5, m6 = st.columns(6)
+    with m1:
+        st.metric("Total Users", sys_stats.get("total_users", 0))
+    with m2:
+        st.metric("Active Users", sys_stats.get("active_users", 0))
+    with m3:
+        st.metric("Verified Users", sys_stats.get("verified_users", 0))
+    with m4:
+        st.metric("Total Notes", sys_stats.get("total_notes", 0))
+    with m5:
+        st.metric("Total Captures", sys_stats.get("total_captures", 0))
+    with m6:
+        st.metric("Total Edges", sys_stats.get("total_edges", 0))
+
+    st.divider()
+
+    # Section 2: User Account Management
+    st.subheader("Registered Users Management")
+    users = auth.admin_list_users(current_user)
+
+    for u in users:
+        uid = u["id"]
+        is_self = (uid == current_user.id)
+        with st.container(border=True):
+            col_info, col_actions = st.columns([3, 2])
+            with col_info:
+                badge = "🛡️ Admin" if u["role"] == "admin" else "👤 User"
+                status_color = "🟢 Active" if u["is_active"] else "🔴 Deactivated"
+                self_tag = " *(You)*" if is_self else ""
+                name_display = u["full_name"] or "Unnamed User"
+                st.markdown(f"**{name_display}** (`{u['email']}`){self_tag}")
+                st.caption(
+                    f"Role: **{badge}** &bull; Status: **{status_color}** &bull; "
+                    f"Notes: **{u.get('note_count', 0)}** &bull; Captures: **{u.get('capture_count', 0)}**"
+                )
+                created_str = str(u.get("created_at", ""))[:19].replace("T", " ")
+                last_login_str = str(u.get("last_login_at") or "Never")[:19].replace("T", " ")
+                st.caption(f"Registered: `{created_str}` | Last Login: `{last_login_str}`")
+
+            with col_actions:
+                if not is_self:
+                    col_act1, col_act2 = st.columns(2)
+                    with col_act1:
+                        if u["is_active"]:
+                            if st.button("Deactivate", key=f"btn_deact_{uid}", help="Disable user login"):
+                                ok, msg = auth.admin_set_user_status(current_user, uid, False)
+                                if ok:
+                                    st.success(msg)
+                                    st.rerun()
+                                else:
+                                    st.error(msg)
+                        else:
+                            if st.button("Activate", key=f"btn_act_{uid}", help="Enable user login"):
+                                ok, msg = auth.admin_set_user_status(current_user, uid, True)
+                                if ok:
+                                    st.success(msg)
+                                    st.rerun()
+                                else:
+                                    st.error(msg)
+                    with col_act2:
+                        if u["role"] == "user":
+                            if st.button("Make Admin", key=f"btn_mkadmin_{uid}", help="Promote to Admin"):
+                                ok, msg = auth.admin_set_user_role(current_user, uid, "admin")
+                                if ok:
+                                    st.success(msg)
+                                    st.rerun()
+                                else:
+                                    st.error(msg)
+                        else:
+                            if st.button("Demote", key=f"btn_demote_{uid}", help="Demote to normal User"):
+                                ok, msg = auth.admin_set_user_role(current_user, uid, "user")
+                                if ok:
+                                    st.success(msg)
+                                    st.rerun()
+                                else:
+                                    st.error(msg)
+                else:
+                    st.caption("Active Session")
 
 
 def main() -> None:
@@ -991,12 +1226,44 @@ def main() -> None:
         st.session_state["current_error"] = None
     if "graph_refresh_counter" not in st.session_state:
         st.session_state["graph_refresh_counter"] = 0
+    if "view_mode" not in st.session_state:
+        st.session_state["view_mode"] = "user"
 
-    # Render main UI sections according to task 4.2.1/4.2.2 layout
-    render_header()
-    render_ask_section()
-    render_graph_section()
-    render_sidebar()
+    # Validate active session token against database
+    current_user: User | None = st.session_state.get("authenticated_user")
+    token = st.session_state.get("session_token")
+    if token:
+        db_user = auth.authenticate_session(token)
+        if db_user:
+            current_user = db_user
+            st.session_state["authenticated_user"] = db_user
+        else:
+            current_user = None
+            st.session_state["authenticated_user"] = None
+            st.session_state["session_token"] = None
+
+    # Gatekeeper: If unauthenticated, check test environment or display authentication gateway and halt
+    if not current_user:
+        if os.environ.get("SECONDSELF_AUTO_LOGIN_ADMIN") == "1":
+            admin_user = db.get_user_by_id(db.DEFAULT_USER_ID)
+            if admin_user:
+                current_user = admin_user
+                st.session_state["authenticated_user"] = admin_user
+        if not current_user:
+            render_auth_page()
+            return
+
+    # If Admin Portal mode requested and user is server-side verified admin
+    if st.session_state.get("view_mode") == "admin" and auth.verify_admin(current_user):
+        render_sidebar(current_user)
+        render_admin_portal(current_user)
+        return
+
+    # Normal authenticated user dashboard
+    render_header(current_user)
+    render_ask_section(current_user)
+    render_graph_section(current_user)
+    render_sidebar(current_user)
 
 
 if __name__ == "__main__":
