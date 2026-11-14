@@ -33,6 +33,12 @@ import ask
 import build_graph
 import capture
 from lib import auth
+from lib.constants import (
+    CATEGORY_DEFINITIONS,
+    DEFAULT_CATEGORY,
+    VALID_CATEGORIES,
+    VALID_PARA_CATEGORIES,
+)
 import lib.database as db
 from lib.database import DEFAULT_USER_ID, get_all_system_stats
 import lib.embeddings as emb
@@ -318,7 +324,7 @@ def get_brain_stats(root: Path | str | None = None, user_id: str | None = None) 
         "graph_nodes": 0,
         "graph_edges": 0,
         "last_graph_build": None,
-        "para_breakdown": {"Projects": 0, "Areas": 0, "Resources": 0, "Archives": 0},
+        "para_breakdown": {cat: 0 for cat in VALID_CATEGORIES},
     }
 
     try:
@@ -897,13 +903,14 @@ def render_sidebar(user: User) -> None:
             st.caption(f"Last Graph Build: {ts_clean}")
 
         if stats.get("para_breakdown"):
-            with st.expander("Notes by PARA"):
+            with st.expander("Notes by Category"):
                 for para_cat, count in stats["para_breakdown"].items():
-                    st.write(f"- **{para_cat}**: {count}")
+                    icon = CATEGORY_DEFINITIONS.get(para_cat, {}).get("icon", "📌")
+                    st.write(f"- {icon} **{para_cat}**: {count}")
 
         st.divider()
 
-        # Section 4: Note Editor & Delete (down side of Notes by PARA)
+        # Section 4: Note Editor & Delete (down side of Notes by Category)
         st.subheader("✏️ Note Editor")
         all_notes = storage.read_wiki_notes(user_id=user.id)
         if not all_notes:
@@ -925,7 +932,10 @@ def render_sidebar(user: User) -> None:
                 options=note_options,
                 index=default_idx,
                 placeholder="Choose a note to edit...",
-                format_func=lambda nid: f"[{nid}] ({notes_by_id[nid].para}) {notes_by_id[nid].summary[:35]}",
+                format_func=lambda nid: (
+                    f"[{nid}] ({CATEGORY_DEFINITIONS.get(notes_by_id[nid].para, {}).get('icon', '📌')} "
+                    f"{notes_by_id[nid].para}) {notes_by_id[nid].summary[:35]}"
+                ),
                 key="sidebar_note_select",
             )
 
@@ -936,12 +946,13 @@ def render_sidebar(user: User) -> None:
                 note = notes_by_id[selected_note_id]
                 st.session_state["editing_note_id"] = selected_note_id
 
-                valid_paras = ["Projects", "Areas", "Resources", "Archives"]
+                valid_paras = list(VALID_CATEGORIES)
                 current_para_idx = valid_paras.index(note.para) if note.para in valid_paras else 0
                 new_para = st.selectbox(
                     "Category",
                     valid_paras,
                     index=current_para_idx,
+                    format_func=lambda c: f"{CATEGORY_DEFINITIONS.get(c, {}).get('icon', '📌')} {c}",
                     key=f"sb_para_{note.id}",
                 )
 

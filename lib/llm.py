@@ -34,8 +34,10 @@ _ENV_PATH = _PROJECT_ROOT / ".env"
 # Centralized model configuration
 DEFAULT_MODEL: str = "llama-3.1-8b-instant"
 
-# Valid PARA categories
-VALID_PARA_CATEGORIES: tuple[str, ...] = ("Projects", "Areas", "Resources", "Archives")
+try:
+    from lib.constants import CATEGORY_DEFINITIONS, VALID_CATEGORIES, VALID_PARA_CATEGORIES
+except ImportError:
+    from .constants import CATEGORY_DEFINITIONS, VALID_CATEGORIES, VALID_PARA_CATEGORIES
 
 
 class _PromptTemplate(str):
@@ -68,23 +70,33 @@ Notes:
 Question: {question}"""
 )
 
-# System prompt for PARA classification
-CLASSIFY_SYSTEM_PROMPT: str = """You are a personal knowledge librarian using the PARA method.
-Analyze the provided content and classify it into exactly one of the four PARA categories:
+# System prompt for classification
+CLASSIFY_SYSTEM_PROMPT: str = """You are a personal knowledge librarian for SecondSelf.
+Analyze the provided content and classify it into exactly one of the knowledge categories:
 - Projects: Active work with a specific goal, outcome, and deadline.
-- Areas: Ongoing responsibilities and life domains without a fixed end date (e.g. Health, Finance, Career).
-- Resources: Reference material, topics of interest, articles, notes, guides, and bookmarks for future reference.
+- Areas: Ongoing responsibilities and life domains without a fixed end date.
+- Resources: Reference material, topics of interest, articles, notes, guides, and bookmarks.
 - Archives: Completed, inactive, or historical items.
+- Work: Work-related tasks, activities, and professional responsibilities.
+- Payments: Bills, transactions, subscriptions, and financial transfers.
+- Finance: Financial planning, budgets, investments, and expenses.
+- Personal: Personal notes, personal goals, and private activities.
+- Learning: Courses, skills, tutorials, and educational materials.
+- Health: Fitness, wellness, medical, and health-related records.
+- People: Contacts, colleagues, friends, and relationship notes.
+- Ideas: Thoughts, concepts, brainstorms, and future possibilities.
+- Events: Meetings, appointments, conferences, and important dates.
+- Shopping: Purchases, product research, wishlists, and shopping lists.
 
 You MUST respond ONLY with a valid JSON object matching this schema:
 {
-  "para": "Projects" | "Areas" | "Resources" | "Archives",
+  "para": "Projects" | "Areas" | "Resources" | "Archives" | "Work" | "Payments" | "Finance" | "Personal" | "Learning" | "Health" | "People" | "Ideas" | "Events" | "Shopping",
   "tags": ["tag1", "tag2"],
   "summary": "One-line summary of the content"
 }
 
 Rules:
-1. "para" MUST be exactly one of: "Projects", "Areas", "Resources", "Archives".
+1. "para" MUST be exactly one of the valid categories above.
 2. "tags" MUST be a JSON array of 1-5 lowercase relevant topic keywords.
 3. "summary" MUST be a concise, single-line summary string.
 4. Do NOT wrap in markdown fences. Output raw JSON only."""
@@ -94,6 +106,7 @@ _client: Groq | None = None
 
 __all__ = [
     "DEFAULT_MODEL",
+    "VALID_CATEGORIES",
     "VALID_PARA_CATEGORIES",
     "CLASSIFY_SYSTEM_PROMPT",
     "RAG_PROMPT_TEMPLATE",
@@ -399,10 +412,10 @@ def parse_classification_json(raw_text: str) -> dict[str, Any]:
         raise ValueError("Classification response missing required 'para' field.")
 
     cleaned_para = raw_para.strip().capitalize().rstrip(".")
-    valid_lookup = {cat.lower(): cat for cat in VALID_PARA_CATEGORIES}
+    valid_lookup = {cat.lower(): cat for cat in VALID_CATEGORIES}
     if cleaned_para.lower() not in valid_lookup:
         raise ValueError(
-            f"Invalid PARA category {raw_para!r}. Must be one of: {', '.join(VALID_PARA_CATEGORIES)}."
+            f"Invalid PARA category {raw_para!r}. Must be one of: {', '.join(VALID_CATEGORIES)}."
         )
     para = valid_lookup[cleaned_para.lower()]
 

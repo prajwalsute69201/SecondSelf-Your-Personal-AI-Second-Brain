@@ -24,13 +24,18 @@ if str(_PROJECT_ROOT) not in sys.path:
     sys.path.insert(0, str(_PROJECT_ROOT))
 
 try:
-    from lib.constants import DEFAULT_ADMIN_EMAIL, DEFAULT_USER_ID
+    from lib.constants import DEFAULT_ADMIN_EMAIL, DEFAULT_USER_ID, VALID_CATEGORIES
 except ImportError:
     try:
-        from .constants import DEFAULT_ADMIN_EMAIL, DEFAULT_USER_ID
+        from .constants import DEFAULT_ADMIN_EMAIL, DEFAULT_USER_ID, VALID_CATEGORIES
     except ImportError:
         DEFAULT_USER_ID = "00000000-0000-0000-0000-000000000001"
         DEFAULT_ADMIN_EMAIL = "admin@secondself.ai"
+        VALID_CATEGORIES = (
+            "Projects", "Areas", "Resources", "Archives",
+            "Work", "Payments", "Finance", "Personal", "Learning",
+            "Health", "People", "Ideas", "Events", "Shopping",
+        )
 
 try:
     from lib.models import (
@@ -1182,13 +1187,10 @@ def get_stats_summary(user_id: str | None = None, root: Path | str | None = None
             "SELECT para, COUNT(*) as cnt FROM notes WHERE user_id = ? GROUP BY para;",
             (effective_user_id,),
         ).fetchall()
-        para_breakdown = {"Projects": 0, "Areas": 0, "Resources": 0, "Archives": 0}
+        para_breakdown = {cat: 0 for cat in VALID_CATEGORIES}
         for r in para_rows:
             cat = r["para"]
-            if cat in para_breakdown:
-                para_breakdown[cat] = r["cnt"]
-            else:
-                para_breakdown[cat] = r["cnt"]
+            para_breakdown[cat] = r["cnt"]
 
         return {
             "total_notes": total_notes,

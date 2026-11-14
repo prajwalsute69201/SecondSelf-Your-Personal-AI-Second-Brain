@@ -36,7 +36,13 @@ if str(_PROJECT_ROOT) not in sys.path:
 
 import lib.storage as storage
 
-VALID_PARA_CATEGORIES: set[str] = {"Projects", "Areas", "Resources", "Archives"}
+try:
+    from lib.constants import VALID_CATEGORIES
+except ImportError:
+    from .constants import VALID_CATEGORIES
+
+VALID_PARA_CATEGORIES: set[str] = set(VALID_CATEGORIES)
+VALID_CATEGORIES_SET: set[str] = set(VALID_CATEGORIES)
 VALID_EDGE_TYPES: set[str] = {"semantic", "explicit"}
 
 REQUIRED_TOP_LEVEL_KEYS: set[str] = {"nodes", "edges", "metadata"}

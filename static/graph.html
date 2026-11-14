@@ -25,6 +25,17 @@
       --para-resources-border: #b45309;
       --para-archives: #64748b;
       --para-archives-border: #334155;
+
+      --cat-work: #6366f1;
+      --cat-payments: #ec4899;
+      --cat-finance: #14b8a6;
+      --cat-personal: #8b5cf6;
+      --cat-learning: #06b6d4;
+      --cat-health: #ef4444;
+      --cat-people: #f97316;
+      --cat-ideas: #eab308;
+      --cat-events: #d946ef;
+      --cat-shopping: #84cc16;
     }
 
     * {
@@ -110,37 +121,122 @@
       font-weight: 600;
     }
 
-    /* PARA Legend */
+    /* Interactive Category Legend & Filter Panel */
     .legend-panel {
       background: var(--bg-panel);
       backdrop-filter: blur(12px);
       border: 1px solid var(--border-color);
       border-radius: 8px;
-      padding: 8px 14px;
+      padding: 8px 12px;
       box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
       display: flex;
-      gap: 14px;
-      font-size: 12px;
+      flex-direction: column;
+      gap: 6px;
+      max-width: min(880px, calc(100vw - 220px));
       pointer-events: auto;
     }
 
-    .legend-item {
+    .legend-header {
       display: flex;
       align-items: center;
-      gap: 6px;
+      justify-content: space-between;
+      gap: 12px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      padding-bottom: 4px;
+    }
+
+    .legend-title {
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--text-dim);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .legend-actions {
+      display: flex;
+      gap: 4px;
+    }
+
+    .legend-btn {
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid var(--border-color);
       color: var(--text-muted);
+      border-radius: 4px;
+      padding: 1px 7px;
+      font-size: 10px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+    .legend-btn:hover {
+      background: rgba(255, 255, 255, 0.14);
+      color: #fff;
+      border-color: #38bdf8;
+    }
+
+    .legend-items-grid {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 4px 6px;
+      align-items: center;
+      max-height: 125px;
+      overflow-y: auto;
+    }
+
+    .legend-item {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      color: var(--text-muted);
+      font-size: 11px;
       font-weight: 500;
+      padding: 2px 7px;
+      border-radius: 4px;
+      cursor: pointer;
+      user-select: none;
+      transition: all 0.15s ease;
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(255, 255, 255, 0.06);
+    }
+
+    .legend-item:hover {
+      color: var(--text-main);
+      background: rgba(255, 255, 255, 0.08);
+      border-color: rgba(255, 255, 255, 0.18);
+    }
+
+    .legend-item.active {
+      color: var(--text-main);
+      border-color: rgba(255, 255, 255, 0.15);
+    }
+
+    .legend-item.inactive {
+      opacity: 0.35;
+      text-decoration: line-through;
+      background: transparent;
     }
 
     .legend-dot {
-      width: 10px;
-      height: 10px;
+      width: 8px;
+      height: 8px;
       border-radius: 50%;
+      flex-shrink: 0;
     }
     .dot-projects { background: var(--para-projects); }
     .dot-areas { background: var(--para-areas); }
     .dot-resources { background: var(--para-resources); }
     .dot-archives { background: var(--para-archives); }
+    .dot-work { background: var(--cat-work); }
+    .dot-payments { background: var(--cat-payments); }
+    .dot-finance { background: var(--cat-finance); }
+    .dot-personal { background: var(--cat-personal); }
+    .dot-learning { background: var(--cat-learning); }
+    .dot-health { background: var(--cat-health); }
+    .dot-people { background: var(--cat-people); }
+    .dot-ideas { background: var(--cat-ideas); }
+    .dot-events { background: var(--cat-events); }
+    .dot-shopping { background: var(--cat-shopping); }
 
     /* Top-Right Quick Controls */
     .hud-controls {
@@ -225,6 +321,16 @@
     .badge-areas { background: rgba(16, 185, 129, 0.2); color: #34d399; border: 1px solid #047857; }
     .badge-resources { background: rgba(245, 158, 11, 0.2); color: #fbbf24; border: 1px solid #b45309; }
     .badge-archives { background: rgba(100, 116, 139, 0.2); color: #94a3b8; border: 1px solid #334155; }
+    .badge-work { background: rgba(99, 102, 241, 0.2); color: #818cf8; border: 1px solid #4338ca; }
+    .badge-payments { background: rgba(236, 72, 153, 0.2); color: #f472b6; border: 1px solid #be185d; }
+    .badge-finance { background: rgba(20, 184, 166, 0.2); color: #2dd4bf; border: 1px solid #0f766e; }
+    .badge-personal { background: rgba(139, 92, 246, 0.2); color: #a78bfa; border: 1px solid #6d28d9; }
+    .badge-learning { background: rgba(6, 182, 212, 0.2); color: #22d3ee; border: 1px solid #0e7490; }
+    .badge-health { background: rgba(239, 68, 68, 0.2); color: #f87171; border: 1px solid #b91c1c; }
+    .badge-people { background: rgba(249, 115, 22, 0.2); color: #fb923c; border: 1px solid #c2410c; }
+    .badge-ideas { background: rgba(234, 179, 8, 0.2); color: #facc15; border: 1px solid #a16207; }
+    .badge-events { background: rgba(217, 70, 239, 0.2); color: #e879f9; border: 1px solid #a21caf; }
+    .badge-shopping { background: rgba(132, 204, 22, 0.2); color: #a3e635; border: 1px solid #4d7c0f; }
 
     .node-title {
       font-size: 15px;
@@ -524,12 +630,16 @@
       </div>
     </div>
 
-    <!-- PARA Classification Legend -->
-    <div class="legend-panel">
-      <div class="legend-item"><span class="legend-dot dot-projects"></span>Projects</div>
-      <div class="legend-item"><span class="legend-dot dot-areas"></span>Areas</div>
-      <div class="legend-item"><span class="legend-dot dot-resources"></span>Resources</div>
-      <div class="legend-item"><span class="legend-dot dot-archives"></span>Archives</div>
+    <!-- Category Legend & Interactive Filters -->
+    <div class="legend-panel" id="legend-panel">
+      <div class="legend-header">
+        <span class="legend-title">Categories</span>
+        <div class="legend-actions">
+          <button id="btn-filter-all" class="legend-btn" title="Show all categories">All</button>
+          <button id="btn-filter-none" class="legend-btn" title="Deselect all categories">None</button>
+        </div>
+      </div>
+      <div id="legend-items" class="legend-items-grid"></div>
     </div>
   </header>
 
@@ -584,44 +694,141 @@
     (function () {
       "use strict";
 
-      // 1. Centralized PARA Color Palette per Design System
-      const PARA_PALETTE = {
+      // 1. Centralized Category Color Palette per Design System
+      const CATEGORY_PALETTE = {
         Projects: {
+          icon: "🚀",
           background: "#3b82f6",
           border: "#1d4ed8",
           highlight: { background: "#60a5fa", border: "#2563eb" },
-          badgeClass: "badge-projects"
+          badgeClass: "badge-projects",
+          color: "#60a5fa"
         },
         Areas: {
+          icon: "🌱",
           background: "#10b981",
           border: "#047857",
           highlight: { background: "#34d399", border: "#059669" },
-          badgeClass: "badge-areas"
+          badgeClass: "badge-areas",
+          color: "#34d399"
         },
         Resources: {
+          icon: "📚",
           background: "#f59e0b",
           border: "#b45309",
           highlight: { background: "#fbbf24", border: "#d97706" },
-          badgeClass: "badge-resources"
+          badgeClass: "badge-resources",
+          color: "#fbbf24"
         },
         Archives: {
+          icon: "📦",
           background: "#64748b",
           border: "#334155",
           highlight: { background: "#94a3b8", border: "#475569" },
-          badgeClass: "badge-archives"
+          badgeClass: "badge-archives",
+          color: "#94a3b8"
+        },
+        Work: {
+          icon: "💼",
+          background: "#6366f1",
+          border: "#4338ca",
+          highlight: { background: "#818cf8", border: "#4f46e5" },
+          badgeClass: "badge-work",
+          color: "#818cf8"
+        },
+        Payments: {
+          icon: "💳",
+          background: "#ec4899",
+          border: "#be185d",
+          highlight: { background: "#f472b6", border: "#db2777" },
+          badgeClass: "badge-payments",
+          color: "#f472b6"
+        },
+        Finance: {
+          icon: "💰",
+          background: "#14b8a6",
+          border: "#0f766e",
+          highlight: { background: "#2dd4bf", border: "#0d9488" },
+          badgeClass: "badge-finance",
+          color: "#2dd4bf"
+        },
+        Personal: {
+          icon: "👤",
+          background: "#8b5cf6",
+          border: "#6d28d9",
+          highlight: { background: "#a78bfa", border: "#7c3aed" },
+          badgeClass: "badge-personal",
+          color: "#a78bfa"
+        },
+        Learning: {
+          icon: "🎓",
+          background: "#06b6d4",
+          border: "#0e7490",
+          highlight: { background: "#22d3ee", border: "#0891b2" },
+          badgeClass: "badge-learning",
+          color: "#22d3ee"
+        },
+        Health: {
+          icon: "❤️",
+          background: "#ef4444",
+          border: "#b91c1c",
+          highlight: { background: "#f87171", border: "#dc2626" },
+          badgeClass: "badge-health",
+          color: "#f87171"
+        },
+        People: {
+          icon: "👥",
+          background: "#f97316",
+          border: "#c2410c",
+          highlight: { background: "#fb923c", border: "#ea580c" },
+          badgeClass: "badge-people",
+          color: "#fb923c"
+        },
+        Ideas: {
+          icon: "💡",
+          background: "#eab308",
+          border: "#a16207",
+          highlight: { background: "#facc15", border: "#ca8a04" },
+          badgeClass: "badge-ideas",
+          color: "#facc15"
+        },
+        Events: {
+          icon: "📅",
+          background: "#d946ef",
+          border: "#a21caf",
+          highlight: { background: "#e879f9", border: "#c026d3" },
+          badgeClass: "badge-events",
+          color: "#e879f9"
+        },
+        Shopping: {
+          icon: "🛒",
+          background: "#84cc16",
+          border: "#4d7c0f",
+          highlight: { background: "#a3e635", border: "#65a30d" },
+          badgeClass: "badge-shopping",
+          color: "#a3e635"
         }
       };
 
+      const PARA_PALETTE = CATEGORY_PALETTE;
+
       const DEFAULT_COLOR = {
+        icon: "📌",
         background: "#8b5cf6",
         border: "#6d28d9",
         highlight: { background: "#a78bfa", border: "#7c3aed" },
-        badgeClass: "badge-projects"
+        badgeClass: "badge-personal",
+        color: "#a78bfa"
       };
 
       // State
       let networkInstance = null;
       let rawGraphData = null;
+      let nodesDataSet = null;
+      let edgesDataSet = null;
+      let nodesView = null;
+      let edgesView = null;
+      const activeCategories = new Set(Object.keys(CATEGORY_PALETTE));
       const nodeMap = new Map(); // id -> raw node object
       const adjacencyMap = new Map(); // id -> set of neighboring node ids
 
@@ -760,11 +967,12 @@
           adjacencyMap.set(n.id, new Set());
 
           const paraCat = n.para || n.group || "Resources";
-          const palette = PARA_PALETTE[paraCat] || DEFAULT_COLOR;
+          const palette = CATEGORY_PALETTE[paraCat] || DEFAULT_COLOR;
+          const catIcon = palette.icon || "📌";
 
           // Multi-line tooltip constructed safely
           const tooltip = [
-            `[${paraCat}] ${n.label || n.id}`,
+            `[${catIcon} ${paraCat}] ${n.label || n.id}`,
             n.summary ? `Summary: ${n.summary}` : "",
             n.tags && n.tags.length ? `Tags: #${n.tags.join(" #")}` : "",
             n.content_preview ? `\n"${truncateText(n.content_preview, 140)}"` : ""
@@ -838,10 +1046,27 @@
           });
         }
 
-        // 4. Vis-Network Physics Configuration (Task 3.2.2 ForceAtlas2-based Tuning)
+        // 4. Vis-Network Physics Configuration with Interactive Filtering
+        nodesDataSet = new vis.DataSet(visNodes);
+        edgesDataSet = new vis.DataSet(visEdges);
+
+        nodesView = new vis.DataView(nodesDataSet, {
+          filter: function (node) {
+            return activeCategories.has(node.group);
+          }
+        });
+
+        edgesView = new vis.DataView(edgesDataSet, {
+          filter: function (edge) {
+            const src = nodesDataSet.get(edge.from);
+            const tgt = nodesDataSet.get(edge.to);
+            return src && tgt && activeCategories.has(src.group) && activeCategories.has(tgt.group);
+          }
+        });
+
         const data = {
-          nodes: new vis.DataSet(visNodes),
-          edges: new vis.DataSet(visEdges)
+          nodes: nodesView,
+          edges: edgesView
         };
 
         const options = {
@@ -881,6 +1106,9 @@
 
         networkInstance = new vis.Network(container, data, options);
 
+        // Populate interactive filter legend
+        renderLegend(nodesRaw);
+
         // 5. Interaction Event Handlers
         networkInstance.on("selectNode", function (params) {
           if (params.nodes && params.nodes.length > 0) {
@@ -900,17 +1128,93 @@
         });
       }
 
+      // Legend and Filter functions
+      function renderLegend(nodesRaw) {
+        const container = document.getElementById("legend-items");
+        if (!container) return;
+        container.innerHTML = "";
+
+        const categoryCounts = {};
+        for (const n of nodesRaw) {
+          const cat = n.para || n.group || "Resources";
+          categoryCounts[cat] = (categoryCounts[cat] || 0) + 1;
+        }
+
+        Object.keys(CATEGORY_PALETTE).forEach((cat) => {
+          const palette = CATEGORY_PALETTE[cat];
+          const count = categoryCounts[cat] || 0;
+          const isActive = activeCategories.has(cat);
+
+          const item = document.createElement("div");
+          item.className = "legend-item " + (isActive ? "active" : "inactive");
+          item.dataset.category = cat;
+          item.title = `Click to toggle ${cat} notes (${count} total in graph)`;
+
+          const dot = document.createElement("span");
+          dot.className = "legend-dot";
+          dot.style.background = palette.background;
+
+          const label = document.createElement("span");
+          label.textContent = `${palette.icon} ${cat}${count > 0 ? " (" + count + ")" : ""}`;
+
+          item.appendChild(dot);
+          item.appendChild(label);
+
+          item.addEventListener("click", function (e) {
+            if (e.altKey) {
+              activeCategories.clear();
+              activeCategories.add(cat);
+            } else {
+              if (activeCategories.has(cat)) {
+                activeCategories.delete(cat);
+              } else {
+                activeCategories.add(cat);
+              }
+            }
+            updateCategoryFilters();
+          });
+
+          container.appendChild(item);
+        });
+      }
+
+      function updateCategoryFilters() {
+        const items = document.querySelectorAll(".legend-item");
+        items.forEach((item) => {
+          const cat = item.dataset.category;
+          if (activeCategories.has(cat)) {
+            item.classList.add("active");
+            item.classList.remove("inactive");
+          } else {
+            item.classList.remove("active");
+            item.classList.add("inactive");
+          }
+        });
+
+        if (nodesView && edgesView) {
+          nodesView.refresh();
+          edgesView.refresh();
+        }
+
+        if (nodesView && metricNodes) {
+          metricNodes.textContent = String(nodesView.length);
+        }
+        if (edgesView && metricEdges) {
+          metricEdges.textContent = String(edgesView.length);
+        }
+      }
+
       // 6. Node Details Drawer Logic
       function showNodeDetails(nodeId) {
         const node = nodeMap.get(nodeId);
         if (!node) return;
 
         const paraCat = node.para || node.group || "Resources";
-        const palette = PARA_PALETTE[paraCat] || DEFAULT_COLOR;
+        const palette = CATEGORY_PALETTE[paraCat] || DEFAULT_COLOR;
 
         // Header info
-        setSafeText(detailParaBadge, paraCat);
-        detailParaBadge.className = "para-badge " + palette.badgeClass;
+        setSafeText(detailParaBadge, `${palette.icon || "📌"} ${paraCat}`);
+        detailParaBadge.className = "para-badge " + (palette.badgeClass || "badge-resources");
         setSafeText(detailLabel, node.label || node.summary || node.id);
         setSafeText(detailId, node.id);
 
@@ -992,6 +1296,22 @@
 
       // 7. Action Button Listeners
       btnCloseDrawer.addEventListener("click", closeDetails);
+
+      const btnFilterAll = document.getElementById("btn-filter-all");
+      if (btnFilterAll) {
+        btnFilterAll.addEventListener("click", function () {
+          Object.keys(CATEGORY_PALETTE).forEach((c) => activeCategories.add(c));
+          updateCategoryFilters();
+        });
+      }
+
+      const btnFilterNone = document.getElementById("btn-filter-none");
+      if (btnFilterNone) {
+        btnFilterNone.addEventListener("click", function () {
+          activeCategories.clear();
+          updateCategoryFilters();
+        });
+      }
 
       btnFit.addEventListener("click", function () {
         if (networkInstance) {

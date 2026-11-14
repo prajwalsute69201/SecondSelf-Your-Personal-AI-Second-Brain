@@ -35,11 +35,17 @@ from lib.models import GraphEdge, GraphNode, WikiNote
 import lib.storage as storage
 import link
 
+try:
+    from lib.constants import VALID_CATEGORIES, VALID_PARA_CATEGORIES as _CONST_PARA
+except ImportError:
+    from .constants import VALID_CATEGORIES, VALID_PARA_CATEGORIES as _CONST_PARA
+
 logger = logging.getLogger(__name__)
 
-VALID_PARA_CATEGORIES: set[str] = {"Projects", "Areas", "Resources", "Archives"}
+VALID_PARA_CATEGORIES: set[str] = set(VALID_CATEGORIES)
 
 __all__ = [
+    "VALID_CATEGORIES",
     "VALID_PARA_CATEGORIES",
     "get_graph_path",
     "extract_node_preview",
