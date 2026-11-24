@@ -1,0 +1,13 @@
+{
+  "id": "4ab10c64-5348-4d17-8b03-295014b9a63f",
+  "timestamp": "2026-11-23T05:09:31.025133+00:00",
+  "source_type": "text",
+  "source_uri": null,
+  "raw_content": "# Archive: Streamlit Second Brain Prototype (Deprecated)\nDecision: Abandoned in favor of Jamstack + Vercel Serverless.\nReasons for deprecation:\n- Streamlit requires persistent long-running Python containers with stateful WebSockets.\n- Canvas reruns entire script on every user click, making graph traversal stutter.\n- Hosting costs on EC2/Render were unnecessary when static HTML/Canvas + Vercel is free.",
+  "metadata": {
+    "title": "Archive: Streamlit Second Brain Prototype (Deprecated)",
+    "char_count": 404,
+    "content_hash": "1c9dabb65118fcd19080adcb0d7879beb42f77d45b5ed561f3ddf9602987869b",
+    "captured_at": "2026-11-23T05:09:31.025133+00:00"
+  }
+}

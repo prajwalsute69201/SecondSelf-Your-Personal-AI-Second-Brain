@@ -1,0 +1,14 @@
+﻿# ==============================================================================
+# Layer 2: Offline Local Ingestion & ML Pipeline (Local Workstation Only)
+# Used by: capture.py, classify.py, link.py, build_graph.py
+# ==============================================================================
+-r runtime.txt
+torch>=2.2.0,<2.5.0
+sentence-transformers>=3.0.0,<4.0.0
+trafilatura>=1.6.0,<2.0.0
+beautifulsoup4>=4.12.0,<5.0.0
+pypdf>=4.0.0,<5.0.0
+python-dotenv>=1.0.0,<2.0.0
+click>=8.1.0,<9.0.0
+rich>=13.7.0,<14.0.0
+

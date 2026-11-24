@@ -1,0 +1,13 @@
+{
+  "id": "cefca2e6-8bfc-46cf-9eb3-8cb74a56d2a2",
+  "timestamp": "2026-11-23T05:08:15.118234+00:00",
+  "source_type": "text",
+  "source_uri": null,
+  "raw_content": "# Project: Canvas Physics Optimization\nInvestigate vis-network Barnes-Hut parameters:\n- Set centralGravity to 0.3 to prevent nodes from drifting into infinity.\n- Use springLength=95 and damping=0.09 for silky smooth 60 FPS stabilization.\n- Implement click-to-focus camera zoom when an AI citation is clicked in the side drawer.",
+  "metadata": {
+    "title": "Project: Canvas Physics Optimization",
+    "char_count": 327,
+    "content_hash": "85400878b3a4765e7579d87a05e4b36183827777bb16e6add62d49892f9df4d7",
+    "captured_at": "2026-11-23T05:08:15.118234+00:00"
+  }
+}

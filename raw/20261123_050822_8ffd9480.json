@@ -1,0 +1,13 @@
+{
+  "id": "8ffd9480-2abd-45e9-a0d7-a50e4113840c",
+  "timestamp": "2026-11-23T05:08:22.724185+00:00",
+  "source_type": "text",
+  "source_uri": null,
+  "raw_content": "# Project: Groq Llama 3 Schema Reliability\nObjective: Enforce 100% Pydantic JSON compliance for classify.py.\nNotes:\n- Use JSON mode on llama-3.3-70b-versatile.\n- Instruct model to output clean markdown without hallucinating PARA categories.\n- Fallback to llama-3.1-8b-instant if Groq rate limits (HTTP 429) occur during bulk ingestion.",
+  "metadata": {
+    "title": "Project: Groq Llama 3 Schema Reliability",
+    "char_count": 335,
+    "content_hash": "f79ccf421f32a0616be5b37696119206c9ede1fd441ff03de3782ce735a34c10",
+    "captured_at": "2026-11-23T05:08:22.724185+00:00"
+  }
+}

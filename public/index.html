@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="SecondSelf — Static Knowledge Graph and Autonomous PARA Classifier Explorer">
+  <title>SecondSelf — Knowledge Graph &amp; PARA Explorer</title>
+
+  <!-- High contrast favicon -->
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%230f172a'/><text x='50' y='68' font-size='55' font-family='sans-serif' font-weight='bold' text-anchor='middle' fill='%2338bdf8'>S</text></svg>">
+
+  <!-- Vis.js Standalone CDN for high-performance canvas physics -->
+  <script src="https://unpkg.com/vis-network/standalone/umd/vis-network.min.js"></script>
+
+  <!-- Modern Accessible Stylesheet -->
+  <link rel="stylesheet" href="css/main.css">
+</head>
+<body>
+  <div id="app">
+    <!-- Top Application Bar & Realtime Knowledge Graph Stats -->
+    <header class="app-header" role="banner">
+      <div class="brand-section">
+        <div class="brand-logo" aria-hidden="true">S</div>
+        <h1 class="brand-title">
+          SecondSelf
+          <span class="brand-badge">Graph v1.0</span>
+        </h1>
+      </div>
+
+      <!-- Realtime Corpus Statistics Strip -->
+      <nav class="stats-strip" id="stats-strip" aria-label="Corpus distribution statistics">
+        <div class="stat-chip total" title="Total active entities in graph">
+          <span class="dot"></span>
+          <span>Notes:</span>
+          <span class="count" id="stat-total">--</span>
+        </div>
+        <div class="stat-chip project" title="Active, time-bound efforts">
+          <span class="dot"></span>
+          <span>Projects:</span>
+          <span class="count" id="stat-projects">--</span>
+        </div>
+        <div class="stat-chip area" title="Ongoing responsibilities">
+          <span class="dot"></span>
+          <span>Areas:</span>
+          <span class="count" id="stat-areas">--</span>
+        </div>
+        <div class="stat-chip resource" title="Reference topics of interest">
+          <span class="dot"></span>
+          <span>Resources:</span>
+          <span class="count" id="stat-resources">--</span>
+        </div>
+        <div class="stat-chip archive" title="Inactive / completed items">
+          <span class="dot"></span>
+          <span>Archives:</span>
+          <span class="count" id="stat-archives">--</span>
+        </div>
+        <div class="stat-chip total" title="Interconnected semantic relationships">
+          <span class="dot" style="background: var(--color-tag);"></span>
+          <span>Links:</span>
+          <span class="count" id="stat-edges">--</span>
+        </div>
+      </nav>
+
+      <!-- View Switcher (Graph vs Card List) -->
+      <div class="view-switcher" role="tablist" aria-label="Display View">
+        <button type="button" id="view-graph-btn" class="view-btn active" role="tab" aria-selected="true" aria-controls="graph-view" title="Graph View (g)">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+            <circle cx="6" cy="6" r="3"></circle>
+            <circle cx="18" cy="18" r="3"></circle>
+            <circle cx="18" cy="6" r="3"></circle>
+            <line x1="8.5" y1="7.5" x2="15.5" y2="16.5"></line>
+            <line x1="8.5" y1="6" x2="15.5" y2="6"></line>
+          </svg>
+          Graph
+        </button>
+        <button type="button" id="view-list-btn" class="view-btn" role="tab" aria-selected="false" aria-controls="list-view" title="List View (l)">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+            <line x1="8" y1="6" x2="21" y2="6"></line>
+            <line x1="8" y1="12" x2="21" y2="12"></line>
+            <line x1="8" y1="18" x2="21" y2="18"></line>
+            <line x1="3" y1="6" x2="3.01" y2="6"></line>
+            <line x1="3" y1="12" x2="3.01" y2="12"></line>
+            <line x1="3" y1="18" x2="3.01" y2="18"></line>
+          </svg>
+          List
+        </button>
+      </div>
+    </header>
+
+    <!-- Conversational Q&A Search Section (Task 4.3) -->
+    <section class="qa-search-section" aria-label="Corpus Question Answering & AI Synthesis">
+      <form id="qa-search-form" class="qa-search-form" data-api="/api/ask" role="search" novalidate>
+        <div class="qa-input-wrapper">
+          <span class="qa-search-icon" aria-hidden="true">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path>
+            </svg>
+          </span>
+          <label for="qa-search-input" class="sr-only">Ask SecondSelf a question over your corpus</label>
+          <input
+            type="text"
+            id="qa-search-input"
+            class="qa-search-input"
+            placeholder="Ask SecondSelf... (e.g. 'What is vector linking?' or 'Explain force layout' — Ctrl+K)"
+            autocomplete="off"
+            spellcheck="false"
+            maxlength="1000"
+          >
+          <button type="button" id="qa-clear-input-btn" class="qa-clear-input-btn hidden" aria-label="Clear question text" title="Clear (Esc)">
+            &times;
+          </button>
+        </div>
+
+        <div class="qa-actions">
+          <label class="qa-mode-toggle" title="Force retrieval-only mode without LLM synthesis">
+            <input type="checkbox" id="qa-no-llm-toggle" class="qa-checkbox">
+            <span>Retrieval only</span>
+          </label>
+          <button type="submit" id="qa-submit-btn" class="qa-submit-btn" aria-label="Synthesize Answer">
+            <span class="btn-text">Ask AI</span>
+            <span class="btn-spinner hidden" aria-hidden="true"></span>
+          </button>
+        </div>
+      </form>
+
+      <!-- Accessible ARIA Live Region for Async Status Announcements -->
+      <div id="qa-status-live" class="sr-only" role="status" aria-live="polite"></div>
+
+      <!-- Error State Card -->
+      <div id="qa-error-box" class="qa-error-box hidden" role="alert" aria-live="assertive">
+        <div class="qa-error-content">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+            <circle cx="12" cy="12" r="10"></circle>
+            <line x1="12" y1="8" x2="12" y2="12"></line>
+            <line x1="12" y1="16" x2="12.01" y2="16"></line>
+          </svg>
+          <span id="qa-error-msg" class="qa-error-msg">Failed to reach question answering engine.</span>
+        </div>
+        <button type="button" id="qa-retry-btn" class="qa-retry-btn">Retry</button>
+      </div>
+
+      <!-- Expandable Answer & Citations Panel -->
+      <section id="qa-answer-container" class="qa-answer-container hidden" aria-label="Synthesized Answer" aria-live="polite">
+        <!-- Rendered dynamically by citations.js -->
+      </section>
+    </section>
+
+    <!-- Interactive Filtering & Search Toolbar -->
+    <section class="filter-toolbar" aria-label="Knowledge graph filters">
+      <div class="filter-left-group">
+        <!-- Debounced Search Box -->
+        <div class="search-wrapper">
+          <span class="search-icon" aria-hidden="true">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="11" cy="11" r="8"></circle>
+              <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+            </svg>
+          </span>
+          <input
+            type="search"
+            id="search-input"
+            class="search-input"
+            placeholder="Search notes, tags, rationale... (press '/' to focus)"
+            aria-label="Search notes, tags, and rationale"
+            autocomplete="off"
+            spellcheck="false"
+          >
+          <button type="button" id="search-clear-btn" class="search-clear-btn" aria-label="Clear search input">
+            &times;
+          </button>
+        </div>
+
+        <!-- PARA Category Filter Pills -->
+        <div class="category-filter-group" role="group" aria-label="Filter by PARA Category">
+          <button type="button" class="cat-pill cat-project" data-category="Projects" aria-pressed="true">
+            Projects
+          </button>
+          <button type="button" class="cat-pill cat-area" data-category="Areas" aria-pressed="true">
+            Areas
+          </button>
+          <button type="button" class="cat-pill cat-resource" data-category="Resources" aria-pressed="true">
+            Resources
+          </button>
+          <button type="button" class="cat-pill cat-archive" data-category="Archives" aria-pressed="true">
+            Archives
+          </button>
+        </div>
+
+        <!-- Confidence Threshold Slider -->
+        <div class="confidence-filter-group" title="Minimum classification confidence threshold">
+          <label for="confidence-slider">Min Conf:</label>
+          <input
+            type="range"
+            id="confidence-slider"
+            class="confidence-slider"
+            min="0"
+            max="1"
+            step="0.05"
+            value="0.00"
+            aria-label="Minimum classification confidence score"
+          >
+          <span id="confidence-val" class="confidence-val" aria-hidden="true">0.00</span>
+        </div>
+      </div>
+
+      <!-- Live Counter and Reset Action -->
+      <div class="filter-actions">
+        <span id="results-counter" class="results-counter" aria-live="polite">
+          Loading graph data...
+        </span>
+        <button type="button" id="reset-filters-btn" class="reset-filters-btn" aria-label="Reset all search and category filters">
+          Reset Filters
+        </button>
+      </div>
+    </section>
+
+    <!-- Main Viewport (Graph Canvas + Card List) -->
+    <main class="app-main" id="main-content">
+      <!-- Loading State Overlay -->
+      <div id="loading-overlay" class="state-overlay" role="status" aria-live="assertive">
+        <div class="spinner" aria-hidden="true"></div>
+        <h2 class="state-title">Loading SecondSelf Knowledge Graph</h2>
+        <p id="loading-msg" class="state-msg">Fetching graph.json artifacts and preparing semantic network...</p>
+      </div>
+
+      <!-- Error State Overlay -->
+      <div id="error-overlay" class="state-overlay hidden" role="alert" aria-live="assertive">
+        <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="var(--color-danger)" stroke-width="2" aria-hidden="true">
+          <circle cx="12" cy="12" r="10"></circle>
+          <line x1="12" y1="8" x2="12" y2="12"></line>
+          <line x1="12" y1="16" x2="12.01" y2="16"></line>
+        </svg>
+        <h2 class="state-title">Unable to Load Knowledge Graph</h2>
+        <p id="error-msg" class="state-msg"></p>
+        <button type="button" id="retry-btn" class="retry-btn">Retry Loading</button>
+      </div>
+
+      <!-- 1. Interactive Force-Directed Network Graph -->
+      <section id="graph-view" class="view-container" role="tabpanel" aria-label="Interactive Graph View">
+        <div id="network-canvas" tabindex="0" role="region" aria-label="Force-directed associative knowledge graph"></div>
+
+        <!-- Floating Graph Controls (Zoom, Fit, Physics) -->
+        <div class="graph-floating-controls" role="toolbar" aria-label="Graph Canvas Controls">
+          <button type="button" id="graph-zoom-in" class="graph-btn" aria-label="Zoom in" title="Zoom In (+)">
+            +
+          </button>
+          <button type="button" id="graph-zoom-out" class="graph-btn" aria-label="Zoom out" title="Zoom Out (-)">
+            &minus;
+          </button>
+          <button type="button" id="graph-fit" class="graph-btn" aria-label="Fit graph into view" title="Fit Entire Graph (f)">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+              <path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"></path>
+            </svg>
+          </button>
+          <button type="button" id="graph-physics" class="graph-btn active" aria-label="Toggle physics simulation" title="Toggle Physics (Freeze/Thaw)">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+              <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon>
+            </svg>
+          </button>
+        </div>
+
+        <!-- Floating Visual Legend -->
+        <aside class="graph-legend" aria-label="Graph Legend">
+          <div class="legend-title">Entity Legend</div>
+          <div class="legend-items">
+            <div class="legend-item square">
+              <span class="shape" style="background: var(--color-project);"></span>
+              <span>Projects</span>
+            </div>
+            <div class="legend-item square">
+              <span class="shape" style="background: var(--color-area);"></span>
+              <span>Areas</span>
+            </div>
+            <div class="legend-item square">
+              <span class="shape" style="background: var(--color-resource);"></span>
+              <span>Resources</span>
+            </div>
+            <div class="legend-item square">
+              <span class="shape" style="background: var(--color-archive);"></span>
+              <span>Archives</span>
+            </div>
+            <div class="legend-item diamond">
+              <span class="shape" style="background: var(--color-tag);"></span>
+              <span>Tags</span>
+            </div>
+            <div class="legend-item">
+              <span class="shape" style="background: var(--color-source);"></span>
+              <span>Sources</span>
+            </div>
+          </div>
+        </aside>
+      </section>
+
+      <!-- 2. Responsive Card List / Explorer View -->
+      <section id="list-view" class="view-container hidden" role="tabpanel" aria-label="Notes List View">
+        <div id="list-grid" class="list-grid" role="feed" aria-label="Notes Catalog"></div>
+      </section>
+    </main>
+
+    <!-- Accessible Backdrop Overlay -->
+    <div id="drawer-backdrop" class="drawer-backdrop" aria-hidden="true"></div>
+
+    <!-- Slide-out Accessible Detail Drawer -->
+    <aside
+      id="detail-drawer"
+      class="detail-drawer"
+      role="dialog"
+      aria-modal="true"
+      aria-hidden="true"
+      aria-labelledby="drawer-title"
+    >
+      <header class="drawer-header">
+        <div>
+          <div id="drawer-type-label" class="drawer-type-label">Item</div>
+          <h2 id="drawer-title" class="drawer-title">Note Details</h2>
+        </div>
+        <button type="button" id="drawer-close-btn" class="drawer-close-btn" aria-label="Close note details (Escape)">
+          &times;
+        </button>
+      </header>
+
+      <div id="drawer-body" class="drawer-body">
+        <!-- Rendered dynamically by DetailPanel -->
+      </div>
+    </aside>
+  </div>
+
+  <!-- Modular ES6 Application Entrypoint -->
+  <script type="module" src="js/app.js"></script>
+</body>
+</html>

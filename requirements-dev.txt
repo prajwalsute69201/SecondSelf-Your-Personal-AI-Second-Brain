@@ -1,0 +1,9 @@
+﻿# ==============================================================================
+# SecondSelf — Full Local Offline Developer Toolchain
+# Installs runtime, offline ML pipeline, test suite, linters, and security tools.
+# ==============================================================================
+-r requirements/pipeline.txt
+-r requirements/test.txt
+-r requirements/dev.txt
+-r requirements/security.txt
+

@@ -1,0 +1,2986 @@
+{
+  "schema_version": "1.0.0",
+  "projection_version": "1.0.0",
+  "generated_at": "2026-11-23T09:17:30.255242+00:00",
+  "corpus_hash": "fb4c2a4a65344405b6408a9b9253859204bf7762f9f3f242c281cd0af2e11e75",
+  "statistics": {
+    "total_nodes": 32,
+    "total_edges": 72,
+    "node_counts_by_type": {
+      "PARA_Category": 4,
+      "Item": 24,
+      "Tag": 1,
+      "Source": 3
+    },
+    "edge_counts_by_type": {
+      "BELONGS_TO": 24,
+      "TAGGED_WITH": 24,
+      "EXTRACTED_FROM": 24
+    },
+    "avg_degree": 4.5,
+    "max_degree": 24,
+    "min_degree": 1,
+    "island_nodes_count": 0,
+    "island_ratio": 0.0,
+    "graph_density": 0.1452,
+    "duplicates_prevented_nodes": 44,
+    "duplicates_prevented_edges": 0
+  },
+  "nodes": [
+    {
+      "id": "item:0bdc54f2-29a8-43d7-89b6-2d5f9507f1d3",
+      "label": "Idea for SecondSelf: force-directed associative layout",
+      "type": "Item",
+      "group": "Resources",
+      "value": 14.09,
+      "degree": 3,
+      "summary": "Idea for SecondSelf: force-directed associative layout",
+      "tags": [
+        "capture"
+      ],
+      "properties": {
+        "record_id": "0bdc54f2-29a8-43d7-89b6-2d5f9507f1d3",
+        "title": "Idea for SecondSelf: force-directed associative layout",
+        "category": "Resources",
+        "confidence": 0.25,
+        "summary": "Idea for SecondSelf: force-directed associative layout",
+        "tags": [
+          "capture"
+        ],
+        "source_type": "text",
+        "created_at": "2026-11-23T08:14:40.287118+00:00",
+        "content_hash": "4295ee96b9daf322b4730dcad986c50397f42f686d026b8404c3506387a0ae1d",
+        "char_count": 54,
+        "word_count": 21,
+        "needs_review": true,
+        "file_path": "D:\\Second-Self\\wiki\\Resources\\0bdc54f2-29a8-43d7-89b6-2d5f9507f1d3.md"
+      }
+    },
+    {
+      "id": "item:16ca778f-a02e-4bd1-bc45-315f305b280c",
+      "label": "Transformer (deep learning) - Wikipedia",
+      "type": "Item",
+      "group": "Archives",
+      "value": 14.09,
+      "degree": 3,
+      "summary": "Transformer (deep learning)",
+      "tags": [
+        "capture"
+      ],
+      "properties": {
+        "record_id": "16ca778f-a02e-4bd1-bc45-315f305b280c",
+        "title": "Transformer (deep learning) - Wikipedia",
+        "category": "Archives",
+        "confidence": 0.411,
+        "summary": "Transformer (deep learning)",
+        "tags": [
+          "capture"
+        ],
+        "source_type": "url",
+        "created_at": "2026-11-23T08:14:40.240185+00:00",
+        "content_hash": "f13e3b79fc38079e8c6df9becc5720fbd27e0e733050bece38bcb7fb34d0ab13",
+        "char_count": 69564,
+        "word_count": 9667,
+        "needs_review": true,
+        "file_path": "D:\\Second-Self\\wiki\\Archives\\16ca778f-a02e-4bd1-bc45-315f305b280c.md"
+      }
+    },
+    {
+      "id": "item:1d6f5190-d72d-4e82-b0b7-eacb60d67008",
+      "label": "Retrieval-augmented generation - Wikipedia",
+      "type": "Item",
+      "group": "Archives",
+      "value": 14.09,
+      "degree": 3,
+      "summary": "Retrieval-augmented generation",
+      "tags": [
+        "capture"
+      ],
+      "properties": {
+        "record_id": "1d6f5190-d72d-4e82-b0b7-eacb60d67008",
+        "title": "Retrieval-augmented generation - Wikipedia",
+        "category": "Archives",
+        "confidence": 0.7895,
+        "summary": "Retrieval-augmented generation",
+        "tags": [
+          "capture"
+        ],
+        "source_type": "url",
+        "created_at": "2026-11-23T08:14:40.181536+00:00",
+        "content_hash": "875856e57f409916c87e52d02f00cc5bf80d8edfb41d3ad6ac198ea50a7b05b8",
+        "char_count": 17910,
+        "word_count": 2528,
+        "needs_review": true,
+        "file_path": "D:\\Second-Self\\wiki\\Archives\\1d6f5190-d72d-4e82-b0b7-eacb60d67008.md"
+      }
+    },
+    {
+      "id": "item:2358e341-52db-4166-98a7-c98dd2e10a69",
+      "label": "How to Do Great Work",
+      "type": "Item",
+      "group": "Projects",
+      "value": 14.09,
+      "degree": 3,
+      "summary": "If you collected lists of techniques for doing great work in a lot",
+      "tags": [
+        "capture"
+      ],
+      "properties": {
+        "record_id": "2358e341-52db-4166-98a7-c98dd2e10a69",
+        "title": "How to Do Great Work",
+        "category": "Projects",
+        "confidence": 0.5385,
+        "summary": "If you collected lists of techniques for doing great work in a lot",
+        "tags": [
+          "capture"
+        ],
+        "source_type": "url",
+        "created_at": "2026-11-23T08:14:40.275187+00:00",
+        "content_hash": "95baf4685350303fcc4249073fcb65bc8a2ad532b282a0dc7ec973d972c3930c",
+        "char_count": 67702,
+        "word_count": 11847,
+        "needs_review": true,
+        "file_path": "D:\\Second-Self\\wiki\\Projects\\2358e341-52db-4166-98a7-c98dd2e10a69.md"
+      }
+    },
+    {
+      "id": "item:2b33db10-6a55-4442-913e-7e1e800ef722",
+      "label": "Project Roadmap: Phase 1 Archivist Deliverables",
+      "type": "Item",
+      "group": "Projects",
+      "value": 14.09,
+      "degree": 3,
+      "summary": "Project Roadmap: Phase 1 Archivist Deliverables",
+      "tags": [
+        "capture"
+      ],
+      "properties": {
+        "record_id": "2b33db10-6a55-4442-913e-7e1e800ef722",
+        "title": "Project Roadmap: Phase 1 Archivist Deliverables",
+        "category": "Projects",
+        "confidence": 1.0,
+        "summary": "Project Roadmap: Phase 1 Archivist Deliverables",
+        "tags": [
+          "capture"
+        ],
+        "source_type": "text",
+        "created_at": "2026-11-23T08:14:40.287530+00:00",
+        "content_hash": "a546c72525110c4ac8676b4ad24b6a879f7bd734ede88bccf41413af1541af64",
+        "char_count": 47,
+        "word_count": 21,
+        "needs_review": true,
+        "file_path": "D:\\Second-Self\\wiki\\Projects\\2b33db10-6a55-4442-913e-7e1e800ef722.md"
+      }
+    },
+    {
+      "id": "item:2dde477f-5cee-4310-8aa4-fd3731685cd3",
+      "label": "Resource: Decoupled Serverless RAG Design",
+      "type": "Item",
+      "group": "Resources",
+      "value": 14.09,
+      "degree": 3,
+      "summary": "How to serve vector search in ephemeral Lambdas under 50 MB:",
+      "tags": [
+        "capture"
+      ],
+      "properties": {
+        "record_id": "2dde477f-5cee-4310-8aa4-fd3731685cd3",
+        "title": "Resource: Decoupled Serverless RAG Design",
+        "category": "Resources",
+        "confidence": 0.25,
+        "summary": "How to serve vector search in ephemeral Lambdas under 50 MB:",
+        "tags": [
+          "capture"
+        ],
+        "source_type": "text",
+        "created_at": "2026-11-23T08:14:40.284951+00:00",
+        "content_hash": "68ac0caec9417d3e1e387e3d903cc297fa5e5bfd2253a9cb517bd716d8645c99",
+        "char_count": 477,
+        "word_count": 88,
+        "needs_review": true,
+        "file_path": "D:\\Second-Self\\wiki\\Resources\\2dde477f-5cee-4310-8aa4-fd3731685cd3.md"
+      }
+    },
+    {
+      "id": "item:4ab10c64-5348-4d17-8b03-295014b9a63f",
+      "label": "Archive: Streamlit Second Brain Prototype (Deprecated)",
+      "type": "Item",
+      "group": "Archives",
+      "value": 14.09,
+      "degree": 3,
+      "summary": "Decision: Abandoned in favor of Jamstack + Vercel Serverless.",
+      "tags": [
+        "capture"
+      ],
+      "properties": {
+        "record_id": "4ab10c64-5348-4d17-8b03-295014b9a63f",
+        "title": "Archive: Streamlit Second Brain Prototype (Deprecated)",
+        "category": "Archives",
+        "confidence": 1.0,
+        "summary": "Decision: Abandoned in favor of Jamstack + Vercel Serverless.",
+        "tags": [
+          "capture"
+        ],
+        "source_type": "text",
+        "created_at": "2026-11-23T08:14:40.286655+00:00",
+        "content_hash": "1c9dabb65118fcd19080adcb0d7879beb42f77d45b5ed561f3ddf9602987869b",
+        "char_count": 404,
+        "word_count": 74,
+        "needs_review": true,
+        "file_path": "D:\\Second-Self\\wiki\\Archives\\4ab10c64-5348-4d17-8b03-295014b9a63f.md"
+      }
+    },
+    {
+      "id": "item:4bda912e-bfef-4e92-a7a4-28124013cba0",
+      "label": "Project: SecondSelf MVP Launch",
+      "type": "Item",
+      "group": "Projects",
+      "value": 14.09,
+      "degree": 3,
+      "summary": "Deadline: End of Month",
+      "tags": [
+        "capture"
+      ],
+      "properties": {
+        "record_id": "4bda912e-bfef-4e92-a7a4-28124013cba0",
+        "title": "Project: SecondSelf MVP Launch",
+        "category": "Projects",
+        "confidence": 1.0,
+        "summary": "Deadline: End of Month",
+        "tags": [
+          "capture"
+        ],
+        "source_type": "text",
+        "created_at": "2026-11-23T08:14:40.277886+00:00",
+        "content_hash": "653334509ddb95f06f326bfd70da8f4805b172e593033243295ed1f2872e43eb",
+        "char_count": 342,
+        "word_count": 62,
+        "needs_review": true,
+        "file_path": "D:\\Second-Self\\wiki\\Projects\\4bda912e-bfef-4e92-a7a4-28124013cba0.md"
+      }
+    },
+    {
+      "id": "item:652217da-3cd6-454f-9161-c8965e243733",
+      "label": "First note on associative memory for SecondSelf quality gate",
+      "type": "Item",
+      "group": "Resources",
+      "value": 14.09,
+      "degree": 3,
+      "summary": "First note on associative memory for SecondSelf quality gate",
+      "tags": [
+        "capture"
+      ],
+      "properties": {
+        "record_id": "652217da-3cd6-454f-9161-c8965e243733",
+        "title": "First note on associative memory for SecondSelf quality gate",
+        "category": "Resources",
+        "confidence": 0.25,
+        "summary": "First note on associative memory for SecondSelf quality gate",
+        "tags": [
+          "capture"
+        ],
+        "source_type": "text",
+        "created_at": "2026-11-23T08:14:40.287921+00:00",
+        "content_hash": "7efce12033e693c7ff73ba5af228fb83c299be03e60adf8535e5b05fbc43e1c8",
+        "char_count": 60,
+        "word_count": 30,
+        "needs_review": true,
+        "file_path": "D:\\Second-Self\\wiki\\Resources\\652217da-3cd6-454f-9161-c8965e243733.md"
+      }
+    },
+    {
+      "id": "item:6d04d954-5b68-4ddc-b124-f29e60130e1a",
+      "label": "Semantic network - Wikipedia",
+      "type": "Item",
+      "group": "Archives",
+      "value": 14.09,
+      "degree": 3,
+      "summary": "| Part of a series on | ||||",
+      "tags": [
+        "capture"
+      ],
+      "properties": {
+        "record_id": "6d04d954-5b68-4ddc-b124-f29e60130e1a",
+        "title": "Semantic network - Wikipedia",
+        "category": "Archives",
+        "confidence": 1.0,
+        "summary": "| Part of a series on | ||||",
+        "tags": [
+          "capture"
+        ],
+        "source_type": "url",
+        "created_at": "2026-11-23T08:14:40.206711+00:00",
+        "content_hash": "703d8a0eb10e420238d89a5c55938c337c6c42e78edf3f8a862cabfa38fde448",
+        "char_count": 18311,
+        "word_count": 2658,
+        "needs_review": true,
+        "file_path": "D:\\Second-Self\\wiki\\Archives\\6d04d954-5b68-4ddc-b124-f29e60130e1a.md"
+      }
+    },
+    {
+      "id": "item:7ae9a914-818c-4221-a7bb-e818763a687c",
+      "label": "Area: Cognitive Energy & Sleep Architecture",
+      "type": "Item",
+      "group": "Resources",
+      "value": 14.09,
+      "degree": 3,
+      "summary": "Daily operational protocols:",
+      "tags": [
+        "capture"
+      ],
+      "properties": {
+        "record_id": "7ae9a914-818c-4221-a7bb-e818763a687c",
+        "title": "Area: Cognitive Energy & Sleep Architecture",
+        "category": "Resources",
+        "confidence": 0.25,
+        "summary": "Daily operational protocols:",
+        "tags": [
+          "capture"
+        ],
+        "source_type": "text",
+        "created_at": "2026-11-23T08:14:40.281137+00:00",
+        "content_hash": "67ad438ce5b518a08b530794072594c798a2fa8cac3203b5bb17ec36b8e3eafd",
+        "char_count": 366,
+        "word_count": 68,
+        "needs_review": true,
+        "file_path": "D:\\Second-Self\\wiki\\Resources\\7ae9a914-818c-4221-a7bb-e818763a687c.md"
+      }
+    },
+    {
+      "id": "item:89275e83-e2d8-455d-9fa9-68a4251e5654",
+      "label": "Resource: Metric Selection in High-Dimensional Vector Sear...",
+      "type": "Item",
+      "group": "Resources",
+      "value": 14.09,
+      "degree": 3,
+      "summary": "- Cosine Similarity: Measures angle between vectors; invariant to vector magnitude. Best for normalized text embeddings where document length varies.",
+      "tags": [
+        "capture"
+      ],
+      "properties": {
+        "record_id": "89275e83-e2d8-455d-9fa9-68a4251e5654",
+        "title": "Resource: Metric Selection in High-Dimensional Vector Sear...",
+        "category": "Resources",
+        "confidence": 0.25,
+        "summary": "- Cosine Similarity: Measures angle between vectors; invariant to vector magnitude. Best for normalized text embeddings where document length varies.",
+        "tags": [
+          "capture"
+        ],
+        "source_type": "text",
+        "created_at": "2026-11-23T08:14:40.282782+00:00",
+        "content_hash": "4ba84b6366e7087804ea54cec687c2939d8299eff4bf529bfc3326b48d1d9e2a",
+        "char_count": 521,
+        "word_count": 99,
+        "needs_review": true,
+        "file_path": "D:\\Second-Self\\wiki\\Resources\\89275e83-e2d8-455d-9fa9-68a4251e5654.md"
+      }
+    },
+    {
+      "id": "item:8ffd9480-2abd-45e9-a0d7-a50e4113840c",
+      "label": "Project: Groq Llama 3 Schema Reliability",
+      "type": "Item",
+      "group": "Resources",
+      "value": 14.09,
+      "degree": 3,
+      "summary": "Objective: Enforce 100% Pydantic JSON compliance for classify.py.",
+      "tags": [
+        "capture"
+      ],
+      "properties": {
+        "record_id": "8ffd9480-2abd-45e9-a0d7-a50e4113840c",
+        "title": "Project: Groq Llama 3 Schema Reliability",
+        "category": "Resources",
+        "confidence": 0.25,
+        "summary": "Objective: Enforce 100% Pydantic JSON compliance for classify.py.",
+        "tags": [
+          "capture"
+        ],
+        "source_type": "text",
+        "created_at": "2026-11-23T08:14:40.279844+00:00",
+        "content_hash": "f79ccf421f32a0616be5b37696119206c9ede1fd441ff03de3782ce735a34c10",
+        "char_count": 335,
+        "word_count": 64,
+        "needs_review": true,
+        "file_path": "D:\\Second-Self\\wiki\\Resources\\8ffd9480-2abd-45e9-a0d7-a50e4113840c.md"
+      }
+    },
+    {
+      "id": "item:94bedd4e-9719-4e38-b306-473ffd496d78",
+      "label": "Area: Personal Software Engineering Standards",
+      "type": "Item",
+      "group": "Resources",
+      "value": 14.09,
+      "degree": 3,
+      "summary": "Principles to uphold across all projects:",
+      "tags": [
+        "capture"
+      ],
+      "properties": {
+        "record_id": "94bedd4e-9719-4e38-b306-473ffd496d78",
+        "title": "Area: Personal Software Engineering Standards",
+        "category": "Resources",
+        "confidence": 0.25,
+        "summary": "Principles to uphold across all projects:",
+        "tags": [
+          "capture"
+        ],
+        "source_type": "text",
+        "created_at": "2026-11-23T08:14:40.280451+00:00",
+        "content_hash": "4cfb46a5652c62ce5656ddd3c4617985833b5a8bc58d7fc953cded8cddddab19",
+        "char_count": 432,
+        "word_count": 71,
+        "needs_review": true,
+        "file_path": "D:\\Second-Self\\wiki\\Resources\\94bedd4e-9719-4e38-b306-473ffd496d78.md"
+      }
+    },
+    {
+      "id": "item:9f5ff45f-32cf-448d-9690-b353712d42e1",
+      "label": "Force-directed graph drawing - Wikipedia",
+      "type": "Item",
+      "group": "Archives",
+      "value": 14.09,
+      "degree": 3,
+      "summary": "Force-directed graph drawing",
+      "tags": [
+        "capture"
+      ],
+      "properties": {
+        "record_id": "9f5ff45f-32cf-448d-9690-b353712d42e1",
+        "title": "Force-directed graph drawing - Wikipedia",
+        "category": "Archives",
+        "confidence": 0.8056,
+        "summary": "Force-directed graph drawing",
+        "tags": [
+          "capture"
+        ],
+        "source_type": "url",
+        "created_at": "2026-11-23T08:14:40.152212+00:00",
+        "content_hash": "00701b605f1053cd922d94135107ea6076bb69af0eb7944d68ca069832f0f9e8",
+        "char_count": 14158,
+        "word_count": 2134,
+        "needs_review": true,
+        "file_path": "D:\\Second-Self\\wiki\\Archives\\9f5ff45f-32cf-448d-9690-b353712d42e1.md"
+      }
+    },
+    {
+      "id": "item:a30cde12-f2ba-4b89-ba52-4433e4a73846",
+      "label": "Vector database - Wikipedia",
+      "type": "Item",
+      "group": "Projects",
+      "value": 14.09,
+      "degree": 3,
+      "summary": "| Part of a series on |",
+      "tags": [
+        "capture"
+      ],
+      "properties": {
+        "record_id": "a30cde12-f2ba-4b89-ba52-4433e4a73846",
+        "title": "Vector database - Wikipedia",
+        "category": "Projects",
+        "confidence": 0.5,
+        "summary": "| Part of a series on |",
+        "tags": [
+          "capture"
+        ],
+        "source_type": "url",
+        "created_at": "2026-11-23T08:14:40.196898+00:00",
+        "content_hash": "9a62d92b1f76533a9ca9f80ea653e922dc23c741ab90b2549d454f4e1e1bb23b",
+        "char_count": 13333,
+        "word_count": 1828,
+        "needs_review": true,
+        "file_path": "D:\\Second-Self\\wiki\\Projects\\a30cde12-f2ba-4b89-ba52-4433e4a73846.md"
+      }
+    },
+    {
+      "id": "item:ba529ac4-b1d3-4ac7-b540-ade1f9aeb548",
+      "label": "Area: Personal Asset Allocation Policy",
+      "type": "Item",
+      "group": "Resources",
+      "value": 14.09,
+      "degree": 3,
+      "summary": "Rules for capital deployment:",
+      "tags": [
+        "capture"
+      ],
+      "properties": {
+        "record_id": "ba529ac4-b1d3-4ac7-b540-ade1f9aeb548",
+        "title": "Area: Personal Asset Allocation Policy",
+        "category": "Resources",
+        "confidence": 0.25,
+        "summary": "Rules for capital deployment:",
+        "tags": [
+          "capture"
+        ],
+        "source_type": "text",
+        "created_at": "2026-11-23T08:14:40.281706+00:00",
+        "content_hash": "be1276a1496bfd064a399f3c2774095913d81c352db6ea324fcf93afbec3e625",
+        "char_count": 345,
+        "word_count": 65,
+        "needs_review": true,
+        "file_path": "D:\\Second-Self\\wiki\\Resources\\ba529ac4-b1d3-4ac7-b540-ade1f9aeb548.md"
+      }
+    },
+    {
+      "id": "item:bcb3f86d-b6c8-46a2-8f4b-b37ed95ad5df",
+      "label": "Personal knowledge management - Wikipedia",
+      "type": "Item",
+      "group": "Resources",
+      "value": 14.09,
+      "degree": 3,
+      "summary": "Personal knowledge management",
+      "tags": [
+        "capture"
+      ],
+      "properties": {
+        "record_id": "bcb3f86d-b6c8-46a2-8f4b-b37ed95ad5df",
+        "title": "Personal knowledge management - Wikipedia",
+        "category": "Resources",
+        "confidence": 0.25,
+        "summary": "Personal knowledge management",
+        "tags": [
+          "capture"
+        ],
+        "source_type": "url",
+        "created_at": "2026-11-23T08:14:40.190034+00:00",
+        "content_hash": "076772aef6e616a028a049c20f5c45e64366f55a3a6898bb66d833bc3fc1e4f9",
+        "char_count": 15655,
+        "word_count": 2144,
+        "needs_review": true,
+        "file_path": "D:\\Second-Self\\wiki\\Resources\\bcb3f86d-b6c8-46a2-8f4b-b37ed95ad5df.md"
+      }
+    },
+    {
+      "id": "item:cefca2e6-8bfc-46cf-9eb3-8cb74a56d2a2",
+      "label": "Project: Canvas Physics Optimization",
+      "type": "Item",
+      "group": "Projects",
+      "value": 14.09,
+      "degree": 3,
+      "summary": "Investigate vis-network Barnes-Hut parameters:",
+      "tags": [
+        "capture"
+      ],
+      "properties": {
+        "record_id": "cefca2e6-8bfc-46cf-9eb3-8cb74a56d2a2",
+        "title": "Project: Canvas Physics Optimization",
+        "category": "Projects",
+        "confidence": 1.0,
+        "summary": "Investigate vis-network Barnes-Hut parameters:",
+        "tags": [
+          "capture"
+        ],
+        "source_type": "text",
+        "created_at": "2026-11-23T08:14:40.278794+00:00",
+        "content_hash": "85400878b3a4765e7579d87a05e4b36183827777bb16e6add62d49892f9df4d7",
+        "char_count": 327,
+        "word_count": 58,
+        "needs_review": true,
+        "file_path": "D:\\Second-Self\\wiki\\Projects\\cefca2e6-8bfc-46cf-9eb3-8cb74a56d2a2.md"
+      }
+    },
+    {
+      "id": "item:d15ef515-448b-45b0-b269-277f3ddd243a",
+      "label": "Resource: Tiago Forte's P.A.R.A. Framework",
+      "type": "Item",
+      "group": "Areas",
+      "value": 14.09,
+      "degree": 3,
+      "summary": "Four distinct top-level categories based on actionability:",
+      "tags": [
+        "capture"
+      ],
+      "properties": {
+        "record_id": "d15ef515-448b-45b0-b269-277f3ddd243a",
+        "title": "Resource: Tiago Forte's P.A.R.A. Framework",
+        "category": "Areas",
+        "confidence": 0.6667,
+        "summary": "Four distinct top-level categories based on actionability:",
+        "tags": [
+          "capture"
+        ],
+        "source_type": "text",
+        "created_at": "2026-11-23T08:14:40.284034+00:00",
+        "content_hash": "1bc54dc11195567ca3f35b832e1ed70cef070066343f6d2deb8aefda7fd54608",
+        "char_count": 499,
+        "word_count": 81,
+        "needs_review": true,
+        "file_path": "D:\\Second-Self\\wiki\\Areas\\d15ef515-448b-45b0-b269-277f3ddd243a.md"
+      }
+    },
+    {
+      "id": "item:d33c88c1-1f47-43f0-9878-8a1d63775d1d",
+      "label": "Barnes\u2013Hut simulation - Wikipedia",
+      "type": "Item",
+      "group": "Projects",
+      "value": 14.09,
+      "degree": 3,
+      "summary": "Barnes\u2013Hut simulation",
+      "tags": [
+        "capture"
+      ],
+      "properties": {
+        "record_id": "d33c88c1-1f47-43f0-9878-8a1d63775d1d",
+        "title": "Barnes\u2013Hut simulation - Wikipedia",
+        "category": "Projects",
+        "confidence": 1.0,
+        "summary": "Barnes\u2013Hut simulation",
+        "tags": [
+          "capture"
+        ],
+        "source_type": "url",
+        "created_at": "2026-11-23T08:14:40.155710+00:00",
+        "content_hash": "e2d2dc8541844cd7750854fe6e0ab1d085e1dee7b9209bd7dc5013d8a8d87330",
+        "char_count": 5031,
+        "word_count": 769,
+        "needs_review": true,
+        "file_path": "D:\\Second-Self\\wiki\\Projects\\d33c88c1-1f47-43f0-9878-8a1d63775d1d.md"
+      }
+    },
+    {
+      "id": "item:d3dfb23c-36a8-44fe-92ae-a394c1496377",
+      "label": "Cosine similarity - Wikipedia",
+      "type": "Item",
+      "group": "Resources",
+      "value": 14.09,
+      "degree": 3,
+      "summary": "| Part of a series on |",
+      "tags": [
+        "capture"
+      ],
+      "properties": {
+        "record_id": "d3dfb23c-36a8-44fe-92ae-a394c1496377",
+        "title": "Cosine similarity - Wikipedia",
+        "category": "Resources",
+        "confidence": 0.6923,
+        "summary": "| Part of a series on |",
+        "tags": [
+          "capture"
+        ],
+        "source_type": "url",
+        "created_at": "2026-11-23T08:14:40.143977+00:00",
+        "content_hash": "d5ab50990c278e7d10a889f2f54df0a5129b8b9e06dc060bd45a9c1b2097c60d",
+        "char_count": 14847,
+        "word_count": 2225,
+        "needs_review": true,
+        "file_path": "D:\\Second-Self\\wiki\\Resources\\d3dfb23c-36a8-44fe-92ae-a394c1496377.md"
+      }
+    },
+    {
+      "id": "item:e5ec9c63-60dd-48f9-9249-e459cc718219",
+      "label": "Archive: 2025 Home Office Renovation",
+      "type": "Item",
+      "group": "Archives",
+      "value": 14.09,
+      "degree": 3,
+      "summary": "Status: Completed & Decommissioned",
+      "tags": [
+        "capture"
+      ],
+      "properties": {
+        "record_id": "e5ec9c63-60dd-48f9-9249-e459cc718219",
+        "title": "Archive: 2025 Home Office Renovation",
+        "category": "Archives",
+        "confidence": 1.0,
+        "summary": "Status: Completed & Decommissioned",
+        "tags": [
+          "capture"
+        ],
+        "source_type": "text",
+        "created_at": "2026-11-23T08:14:40.285758+00:00",
+        "content_hash": "ef4cad0efdc3a9ecf03a5622fce64c88addec9eb935da64cb8a2683ab50d7650",
+        "char_count": 347,
+        "word_count": 64,
+        "needs_review": true,
+        "file_path": "D:\\Second-Self\\wiki\\Archives\\e5ec9c63-60dd-48f9-9249-e459cc718219.md"
+      }
+    },
+    {
+      "id": "item:e9e3c923-b684-453b-beae-19fa2d697760",
+      "label": "SecondSelf \u2014 Engineering & Code Conventions",
+      "type": "Item",
+      "group": "Archives",
+      "value": 14.09,
+      "degree": 3,
+      "summary": "This document defines the strict engineering standards, coding guidelines, schema contracts, and repository conventions for the **SecondSelf** project. Every contributor and autonomous agent must adhe",
+      "tags": [
+        "capture"
+      ],
+      "properties": {
+        "record_id": "e9e3c923-b684-453b-beae-19fa2d697760",
+        "title": "SecondSelf \u2014 Engineering & Code Conventions",
+        "category": "Archives",
+        "confidence": 0.4173,
+        "summary": "This document defines the strict engineering standards, coding guidelines, schema contracts, and repository conventions for the **SecondSelf** project. Every contributor and autonomous agent must adhe",
+        "tags": [
+          "capture"
+        ],
+        "source_type": "file",
+        "created_at": "2026-11-23T08:14:40.295382+00:00",
+        "content_hash": "555811955cac4f4a46aa8550edb5546437bea9fd15bfcb75679a4f08599f2e14",
+        "char_count": 16634,
+        "word_count": 1977,
+        "needs_review": true,
+        "file_path": "D:\\Second-Self\\wiki\\Archives\\e9e3c923-b684-453b-beae-19fa2d697760.md"
+      }
+    },
+    {
+      "id": "para:archives",
+      "label": "Archives",
+      "type": "PARA_Category",
+      "group": "PARA_Category",
+      "value": 32.0,
+      "degree": 7,
+      "summary": "",
+      "tags": [],
+      "properties": {
+        "category": "Archives",
+        "display_name": "Archives",
+        "target_folder": "wiki/Archives",
+        "description": "Completed projects, inactive areas, and superseded historical records.",
+        "color_hex": "#6B7280"
+      },
+      "color": {
+        "background": "#6B7280",
+        "border": "#6B7280"
+      }
+    },
+    {
+      "id": "para:areas",
+      "label": "Areas",
+      "type": "PARA_Category",
+      "group": "PARA_Category",
+      "value": 32.0,
+      "degree": 1,
+      "summary": "",
+      "tags": [],
+      "properties": {
+        "category": "Areas",
+        "display_name": "Areas",
+        "target_folder": "wiki/Areas",
+        "description": "Ongoing spheres of activity and standards of performance to maintain indefinitely.",
+        "color_hex": "#3B82F6"
+      },
+      "color": {
+        "background": "#3B82F6",
+        "border": "#3B82F6"
+      }
+    },
+    {
+      "id": "para:projects",
+      "label": "Projects",
+      "type": "PARA_Category",
+      "group": "PARA_Category",
+      "value": 32.0,
+      "degree": 6,
+      "summary": "",
+      "tags": [],
+      "properties": {
+        "category": "Projects",
+        "display_name": "Projects",
+        "target_folder": "wiki/Projects",
+        "description": "Active, time-bound efforts with a definitive goal and deadline.",
+        "color_hex": "#F59E0B"
+      },
+      "color": {
+        "background": "#F59E0B",
+        "border": "#F59E0B"
+      }
+    },
+    {
+      "id": "para:resources",
+      "label": "Resources",
+      "type": "PARA_Category",
+      "group": "PARA_Category",
+      "value": 32.0,
+      "degree": 10,
+      "summary": "",
+      "tags": [],
+      "properties": {
+        "category": "Resources",
+        "display_name": "Resources",
+        "target_folder": "wiki/Resources",
+        "description": "Reference materials, topic guides, and conceptual resources for future lookup.",
+        "color_hex": "#10B981"
+      },
+      "color": {
+        "background": "#10B981",
+        "border": "#10B981"
+      }
+    },
+    {
+      "id": "source:file",
+      "label": "FILE",
+      "type": "Source",
+      "group": "Source",
+      "value": 16.0,
+      "degree": 1,
+      "summary": "",
+      "tags": [],
+      "properties": {
+        "source_type": "file",
+        "display_name": "File",
+        "source_uri": "D:\\Second-Self\\Docs\\Conventions.md"
+      }
+    },
+    {
+      "id": "source:text",
+      "label": "TEXT",
+      "type": "Source",
+      "group": "Source",
+      "value": 16.0,
+      "degree": 14,
+      "summary": "",
+      "tags": [],
+      "properties": {
+        "source_type": "text",
+        "display_name": "Text",
+        "source_uri": ""
+      }
+    },
+    {
+      "id": "source:url",
+      "label": "URL",
+      "type": "Source",
+      "group": "Source",
+      "value": 16.0,
+      "degree": 9,
+      "summary": "",
+      "tags": [],
+      "properties": {
+        "source_type": "url",
+        "display_name": "Url",
+        "source_uri": "https://en.wikipedia.org/wiki/Transformer_(deep_learning_architecture)"
+      }
+    },
+    {
+      "id": "tag:capture",
+      "label": "#capture",
+      "type": "Tag",
+      "group": "Tag",
+      "value": 14.0,
+      "degree": 24,
+      "summary": "",
+      "tags": [],
+      "properties": {
+        "name": "capture",
+        "slug": "capture"
+      }
+    }
+  ],
+  "edges": [
+    {
+      "source": "item:0bdc54f2-29a8-43d7-89b6-2d5f9507f1d3",
+      "target": "para:resources",
+      "from": "item:0bdc54f2-29a8-43d7-89b6-2d5f9507f1d3",
+      "to": "para:resources",
+      "type": "BELONGS_TO",
+      "value": 1.0,
+      "title": "BELONGS_TO",
+      "properties": {
+        "category": "Resources",
+        "confidence": 0.25,
+        "method": "rules",
+        "rationale": "",
+        "assigned_at": "2026-11-23T08:14:40.287118+00:00"
+      }
+    },
+    {
+      "source": "item:16ca778f-a02e-4bd1-bc45-315f305b280c",
+      "target": "para:archives",
+      "from": "item:16ca778f-a02e-4bd1-bc45-315f305b280c",
+      "to": "para:archives",
+      "type": "BELONGS_TO",
+      "value": 1.0,
+      "title": "BELONGS_TO",
+      "properties": {
+        "category": "Archives",
+        "confidence": 0.411,
+        "method": "rules",
+        "rationale": "",
+        "assigned_at": "2026-11-23T08:14:40.240185+00:00"
+      }
+    },
+    {
+      "source": "item:1d6f5190-d72d-4e82-b0b7-eacb60d67008",
+      "target": "para:archives",
+      "from": "item:1d6f5190-d72d-4e82-b0b7-eacb60d67008",
+      "to": "para:archives",
+      "type": "BELONGS_TO",
+      "value": 1.0,
+      "title": "BELONGS_TO",
+      "properties": {
+        "category": "Archives",
+        "confidence": 0.7895,
+        "method": "rules",
+        "rationale": "",
+        "assigned_at": "2026-11-23T08:14:40.181536+00:00"
+      }
+    },
+    {
+      "source": "item:2358e341-52db-4166-98a7-c98dd2e10a69",
+      "target": "para:projects",
+      "from": "item:2358e341-52db-4166-98a7-c98dd2e10a69",
+      "to": "para:projects",
+      "type": "BELONGS_TO",
+      "value": 1.0,
+      "title": "BELONGS_TO",
+      "properties": {
+        "category": "Projects",
+        "confidence": 0.5385,
+        "method": "rules",
+        "rationale": "",
+        "assigned_at": "2026-11-23T08:14:40.275187+00:00"
+      }
+    },
+    {
+      "source": "item:2b33db10-6a55-4442-913e-7e1e800ef722",
+      "target": "para:projects",
+      "from": "item:2b33db10-6a55-4442-913e-7e1e800ef722",
+      "to": "para:projects",
+      "type": "BELONGS_TO",
+      "value": 1.0,
+      "title": "BELONGS_TO",
+      "properties": {
+        "category": "Projects",
+        "confidence": 1.0,
+        "method": "rules",
+        "rationale": "",
+        "assigned_at": "2026-11-23T08:14:40.287530+00:00"
+      }
+    },
+    {
+      "source": "item:2dde477f-5cee-4310-8aa4-fd3731685cd3",
+      "target": "para:resources",
+      "from": "item:2dde477f-5cee-4310-8aa4-fd3731685cd3",
+      "to": "para:resources",
+      "type": "BELONGS_TO",
+      "value": 1.0,
+      "title": "BELONGS_TO",
+      "properties": {
+        "category": "Resources",
+        "confidence": 0.25,
+        "method": "rules",
+        "rationale": "",
+        "assigned_at": "2026-11-23T08:14:40.284951+00:00"
+      }
+    },
+    {
+      "source": "item:4ab10c64-5348-4d17-8b03-295014b9a63f",
+      "target": "para:archives",
+      "from": "item:4ab10c64-5348-4d17-8b03-295014b9a63f",
+      "to": "para:archives",
+      "type": "BELONGS_TO",
+      "value": 1.0,
+      "title": "BELONGS_TO",
+      "properties": {
+        "category": "Archives",
+        "confidence": 1.0,
+        "method": "rules",
+        "rationale": "",
+        "assigned_at": "2026-11-23T08:14:40.286655+00:00"
+      }
+    },
+    {
+      "source": "item:4bda912e-bfef-4e92-a7a4-28124013cba0",
+      "target": "para:projects",
+      "from": "item:4bda912e-bfef-4e92-a7a4-28124013cba0",
+      "to": "para:projects",
+      "type": "BELONGS_TO",
+      "value": 1.0,
+      "title": "BELONGS_TO",
+      "properties": {
+        "category": "Projects",
+        "confidence": 1.0,
+        "method": "rules",
+        "rationale": "",
+        "assigned_at": "2026-11-23T08:14:40.277886+00:00"
+      }
+    },
+    {
+      "source": "item:652217da-3cd6-454f-9161-c8965e243733",
+      "target": "para:resources",
+      "from": "item:652217da-3cd6-454f-9161-c8965e243733",
+      "to": "para:resources",
+      "type": "BELONGS_TO",
+      "value": 1.0,
+      "title": "BELONGS_TO",
+      "properties": {
+        "category": "Resources",
+        "confidence": 0.25,
+        "method": "rules",
+        "rationale": "",
+        "assigned_at": "2026-11-23T08:14:40.287921+00:00"
+      }
+    },
+    {
+      "source": "item:6d04d954-5b68-4ddc-b124-f29e60130e1a",
+      "target": "para:archives",
+      "from": "item:6d04d954-5b68-4ddc-b124-f29e60130e1a",
+      "to": "para:archives",
+      "type": "BELONGS_TO",
+      "value": 1.0,
+      "title": "BELONGS_TO",
+      "properties": {
+        "category": "Archives",
+        "confidence": 1.0,
+        "method": "rules",
+        "rationale": "",
+        "assigned_at": "2026-11-23T08:14:40.206711+00:00"
+      }
+    },
+    {
+      "source": "item:7ae9a914-818c-4221-a7bb-e818763a687c",
+      "target": "para:resources",
+      "from": "item:7ae9a914-818c-4221-a7bb-e818763a687c",
+      "to": "para:resources",
+      "type": "BELONGS_TO",
+      "value": 1.0,
+      "title": "BELONGS_TO",
+      "properties": {
+        "category": "Resources",
+        "confidence": 0.25,
+        "method": "rules",
+        "rationale": "",
+        "assigned_at": "2026-11-23T08:14:40.281137+00:00"
+      }
+    },
+    {
+      "source": "item:89275e83-e2d8-455d-9fa9-68a4251e5654",
+      "target": "para:resources",
+      "from": "item:89275e83-e2d8-455d-9fa9-68a4251e5654",
+      "to": "para:resources",
+      "type": "BELONGS_TO",
+      "value": 1.0,
+      "title": "BELONGS_TO",
+      "properties": {
+        "category": "Resources",
+        "confidence": 0.25,
+        "method": "rules",
+        "rationale": "",
+        "assigned_at": "2026-11-23T08:14:40.282782+00:00"
+      }
+    },
+    {
+      "source": "item:8ffd9480-2abd-45e9-a0d7-a50e4113840c",
+      "target": "para:resources",
+      "from": "item:8ffd9480-2abd-45e9-a0d7-a50e4113840c",
+      "to": "para:resources",
+      "type": "BELONGS_TO",
+      "value": 1.0,
+      "title": "BELONGS_TO",
+      "properties": {
+        "category": "Resources",
+        "confidence": 0.25,
+        "method": "rules",
+        "rationale": "",
+        "assigned_at": "2026-11-23T08:14:40.279844+00:00"
+      }
+    },
+    {
+      "source": "item:94bedd4e-9719-4e38-b306-473ffd496d78",
+      "target": "para:resources",
+      "from": "item:94bedd4e-9719-4e38-b306-473ffd496d78",
+      "to": "para:resources",
+      "type": "BELONGS_TO",
+      "value": 1.0,
+      "title": "BELONGS_TO",
+      "properties": {
+        "category": "Resources",
+        "confidence": 0.25,
+        "method": "rules",
+        "rationale": "",
+        "assigned_at": "2026-11-23T08:14:40.280451+00:00"
+      }
+    },
+    {
+      "source": "item:9f5ff45f-32cf-448d-9690-b353712d42e1",
+      "target": "para:archives",
+      "from": "item:9f5ff45f-32cf-448d-9690-b353712d42e1",
+      "to": "para:archives",
+      "type": "BELONGS_TO",
+      "value": 1.0,
+      "title": "BELONGS_TO",
+      "properties": {
+        "category": "Archives",
+        "confidence": 0.8056,
+        "method": "rules",
+        "rationale": "",
+        "assigned_at": "2026-11-23T08:14:40.152212+00:00"
+      }
+    },
+    {
+      "source": "item:a30cde12-f2ba-4b89-ba52-4433e4a73846",
+      "target": "para:projects",
+      "from": "item:a30cde12-f2ba-4b89-ba52-4433e4a73846",
+      "to": "para:projects",
+      "type": "BELONGS_TO",
+      "value": 1.0,
+      "title": "BELONGS_TO",
+      "properties": {
+        "category": "Projects",
+        "confidence": 0.5,
+        "method": "rules",
+        "rationale": "",
+        "assigned_at": "2026-11-23T08:14:40.196898+00:00"
+      }
+    },
+    {
+      "source": "item:ba529ac4-b1d3-4ac7-b540-ade1f9aeb548",
+      "target": "para:resources",
+      "from": "item:ba529ac4-b1d3-4ac7-b540-ade1f9aeb548",
+      "to": "para:resources",
+      "type": "BELONGS_TO",
+      "value": 1.0,
+      "title": "BELONGS_TO",
+      "properties": {
+        "category": "Resources",
+        "confidence": 0.25,
+        "method": "rules",
+        "rationale": "",
+        "assigned_at": "2026-11-23T08:14:40.281706+00:00"
+      }
+    },
+    {
+      "source": "item:bcb3f86d-b6c8-46a2-8f4b-b37ed95ad5df",
+      "target": "para:resources",
+      "from": "item:bcb3f86d-b6c8-46a2-8f4b-b37ed95ad5df",
+      "to": "para:resources",
+      "type": "BELONGS_TO",
+      "value": 1.0,
+      "title": "BELONGS_TO",
+      "properties": {
+        "category": "Resources",
+        "confidence": 0.25,
+        "method": "rules",
+        "rationale": "",
+        "assigned_at": "2026-11-23T08:14:40.190034+00:00"
+      }
+    },
+    {
+      "source": "item:cefca2e6-8bfc-46cf-9eb3-8cb74a56d2a2",
+      "target": "para:projects",
+      "from": "item:cefca2e6-8bfc-46cf-9eb3-8cb74a56d2a2",
+      "to": "para:projects",
+      "type": "BELONGS_TO",
+      "value": 1.0,
+      "title": "BELONGS_TO",
+      "properties": {
+        "category": "Projects",
+        "confidence": 1.0,
+        "method": "rules",
+        "rationale": "",
+        "assigned_at": "2026-11-23T08:14:40.278794+00:00"
+      }
+    },
+    {
+      "source": "item:d15ef515-448b-45b0-b269-277f3ddd243a",
+      "target": "para:areas",
+      "from": "item:d15ef515-448b-45b0-b269-277f3ddd243a",
+      "to": "para:areas",
+      "type": "BELONGS_TO",
+      "value": 1.0,
+      "title": "BELONGS_TO",
+      "properties": {
+        "category": "Areas",
+        "confidence": 0.6667,
+        "method": "rules",
+        "rationale": "",
+        "assigned_at": "2026-11-23T08:14:40.284034+00:00"
+      }
+    },
+    {
+      "source": "item:d33c88c1-1f47-43f0-9878-8a1d63775d1d",
+      "target": "para:projects",
+      "from": "item:d33c88c1-1f47-43f0-9878-8a1d63775d1d",
+      "to": "para:projects",
+      "type": "BELONGS_TO",
+      "value": 1.0,
+      "title": "BELONGS_TO",
+      "properties": {
+        "category": "Projects",
+        "confidence": 1.0,
+        "method": "rules",
+        "rationale": "",
+        "assigned_at": "2026-11-23T08:14:40.155710+00:00"
+      }
+    },
+    {
+      "source": "item:d3dfb23c-36a8-44fe-92ae-a394c1496377",
+      "target": "para:resources",
+      "from": "item:d3dfb23c-36a8-44fe-92ae-a394c1496377",
+      "to": "para:resources",
+      "type": "BELONGS_TO",
+      "value": 1.0,
+      "title": "BELONGS_TO",
+      "properties": {
+        "category": "Resources",
+        "confidence": 0.6923,
+        "method": "rules",
+        "rationale": "",
+        "assigned_at": "2026-11-23T08:14:40.143977+00:00"
+      }
+    },
+    {
+      "source": "item:e5ec9c63-60dd-48f9-9249-e459cc718219",
+      "target": "para:archives",
+      "from": "item:e5ec9c63-60dd-48f9-9249-e459cc718219",
+      "to": "para:archives",
+      "type": "BELONGS_TO",
+      "value": 1.0,
+      "title": "BELONGS_TO",
+      "properties": {
+        "category": "Archives",
+        "confidence": 1.0,
+        "method": "rules",
+        "rationale": "",
+        "assigned_at": "2026-11-23T08:14:40.285758+00:00"
+      }
+    },
+    {
+      "source": "item:e9e3c923-b684-453b-beae-19fa2d697760",
+      "target": "para:archives",
+      "from": "item:e9e3c923-b684-453b-beae-19fa2d697760",
+      "to": "para:archives",
+      "type": "BELONGS_TO",
+      "value": 1.0,
+      "title": "BELONGS_TO",
+      "properties": {
+        "category": "Archives",
+        "confidence": 0.4173,
+        "method": "rules",
+        "rationale": "",
+        "assigned_at": "2026-11-23T08:14:40.295382+00:00"
+      }
+    },
+    {
+      "source": "item:0bdc54f2-29a8-43d7-89b6-2d5f9507f1d3",
+      "target": "source:text",
+      "from": "item:0bdc54f2-29a8-43d7-89b6-2d5f9507f1d3",
+      "to": "source:text",
+      "type": "EXTRACTED_FROM",
+      "value": 1.0,
+      "title": "EXTRACTED_FROM",
+      "properties": {
+        "source_type": "text",
+        "source_uri": "",
+        "char_count": 54,
+        "captured_at": "2026-11-23T05:31:55.087843+00:00"
+      }
+    },
+    {
+      "source": "item:16ca778f-a02e-4bd1-bc45-315f305b280c",
+      "target": "source:url",
+      "from": "item:16ca778f-a02e-4bd1-bc45-315f305b280c",
+      "to": "source:url",
+      "type": "EXTRACTED_FROM",
+      "value": 1.0,
+      "title": "EXTRACTED_FROM",
+      "properties": {
+        "source_type": "url",
+        "source_uri": "https://en.wikipedia.org/wiki/Transformer_(deep_learning_architecture)",
+        "char_count": 69564,
+        "captured_at": "2026-11-23T05:07:42.239467+00:00"
+      }
+    },
+    {
+      "source": "item:1d6f5190-d72d-4e82-b0b7-eacb60d67008",
+      "target": "source:url",
+      "from": "item:1d6f5190-d72d-4e82-b0b7-eacb60d67008",
+      "to": "source:url",
+      "type": "EXTRACTED_FROM",
+      "value": 1.0,
+      "title": "EXTRACTED_FROM",
+      "properties": {
+        "source_type": "url",
+        "source_uri": "https://en.wikipedia.org/wiki/Retrieval-augmented_generation",
+        "char_count": 17910,
+        "captured_at": "2026-11-23T05:07:19.154542+00:00"
+      }
+    },
+    {
+      "source": "item:2358e341-52db-4166-98a7-c98dd2e10a69",
+      "target": "source:url",
+      "from": "item:2358e341-52db-4166-98a7-c98dd2e10a69",
+      "to": "source:url",
+      "type": "EXTRACTED_FROM",
+      "value": 1.0,
+      "title": "EXTRACTED_FROM",
+      "properties": {
+        "source_type": "url",
+        "source_uri": "https://www.paulgraham.com/greatwork.html",
+        "char_count": 67702,
+        "captured_at": "2026-11-23T05:07:49.568303+00:00"
+      }
+    },
+    {
+      "source": "item:2b33db10-6a55-4442-913e-7e1e800ef722",
+      "target": "source:text",
+      "from": "item:2b33db10-6a55-4442-913e-7e1e800ef722",
+      "to": "source:text",
+      "type": "EXTRACTED_FROM",
+      "value": 1.0,
+      "title": "EXTRACTED_FROM",
+      "properties": {
+        "source_type": "text",
+        "source_uri": "",
+        "char_count": 47,
+        "captured_at": "2026-11-23T05:31:55.613189+00:00"
+      }
+    },
+    {
+      "source": "item:2dde477f-5cee-4310-8aa4-fd3731685cd3",
+      "target": "source:text",
+      "from": "item:2dde477f-5cee-4310-8aa4-fd3731685cd3",
+      "to": "source:text",
+      "type": "EXTRACTED_FROM",
+      "value": 1.0,
+      "title": "EXTRACTED_FROM",
+      "properties": {
+        "source_type": "text",
+        "source_uri": "",
+        "char_count": 477,
+        "captured_at": "2026-11-23T05:09:11.523885+00:00"
+      }
+    },
+    {
+      "source": "item:4ab10c64-5348-4d17-8b03-295014b9a63f",
+      "target": "source:text",
+      "from": "item:4ab10c64-5348-4d17-8b03-295014b9a63f",
+      "to": "source:text",
+      "type": "EXTRACTED_FROM",
+      "value": 1.0,
+      "title": "EXTRACTED_FROM",
+      "properties": {
+        "source_type": "text",
+        "source_uri": "",
+        "char_count": 404,
+        "captured_at": "2026-11-23T05:09:31.025133+00:00"
+      }
+    },
+    {
+      "source": "item:4bda912e-bfef-4e92-a7a4-28124013cba0",
+      "target": "source:text",
+      "from": "item:4bda912e-bfef-4e92-a7a4-28124013cba0",
+      "to": "source:text",
+      "type": "EXTRACTED_FROM",
+      "value": 1.0,
+      "title": "EXTRACTED_FROM",
+      "properties": {
+        "source_type": "text",
+        "source_uri": "",
+        "char_count": 342,
+        "captured_at": "2026-11-23T05:08:08.059902+00:00"
+      }
+    },
+    {
+      "source": "item:652217da-3cd6-454f-9161-c8965e243733",
+      "target": "source:text",
+      "from": "item:652217da-3cd6-454f-9161-c8965e243733",
+      "to": "source:text",
+      "type": "EXTRACTED_FROM",
+      "value": 1.0,
+      "title": "EXTRACTED_FROM",
+      "properties": {
+        "source_type": "text",
+        "source_uri": "",
+        "char_count": 60,
+        "captured_at": "2026-11-23T05:32:40.959154+00:00"
+      }
+    },
+    {
+      "source": "item:6d04d954-5b68-4ddc-b124-f29e60130e1a",
+      "target": "source:url",
+      "from": "item:6d04d954-5b68-4ddc-b124-f29e60130e1a",
+      "to": "source:url",
+      "type": "EXTRACTED_FROM",
+      "value": 1.0,
+      "title": "EXTRACTED_FROM",
+      "properties": {
+        "source_type": "url",
+        "source_uri": "https://en.wikipedia.org/wiki/Semantic_network",
+        "char_count": 18311,
+        "captured_at": "2026-11-23T05:07:36.669268+00:00"
+      }
+    },
+    {
+      "source": "item:7ae9a914-818c-4221-a7bb-e818763a687c",
+      "target": "source:text",
+      "from": "item:7ae9a914-818c-4221-a7bb-e818763a687c",
+      "to": "source:text",
+      "type": "EXTRACTED_FROM",
+      "value": 1.0,
+      "title": "EXTRACTED_FROM",
+      "properties": {
+        "source_type": "text",
+        "source_uri": "",
+        "char_count": 366,
+        "captured_at": "2026-11-23T05:08:42.381286+00:00"
+      }
+    },
+    {
+      "source": "item:89275e83-e2d8-455d-9fa9-68a4251e5654",
+      "target": "source:text",
+      "from": "item:89275e83-e2d8-455d-9fa9-68a4251e5654",
+      "to": "source:text",
+      "type": "EXTRACTED_FROM",
+      "value": 1.0,
+      "title": "EXTRACTED_FROM",
+      "properties": {
+        "source_type": "text",
+        "source_uri": "",
+        "char_count": 521,
+        "captured_at": "2026-11-23T05:08:57.456379+00:00"
+      }
+    },
+    {
+      "source": "item:8ffd9480-2abd-45e9-a0d7-a50e4113840c",
+      "target": "source:text",
+      "from": "item:8ffd9480-2abd-45e9-a0d7-a50e4113840c",
+      "to": "source:text",
+      "type": "EXTRACTED_FROM",
+      "value": 1.0,
+      "title": "EXTRACTED_FROM",
+      "properties": {
+        "source_type": "text",
+        "source_uri": "",
+        "char_count": 335,
+        "captured_at": "2026-11-23T05:08:22.724185+00:00"
+      }
+    },
+    {
+      "source": "item:94bedd4e-9719-4e38-b306-473ffd496d78",
+      "target": "source:text",
+      "from": "item:94bedd4e-9719-4e38-b306-473ffd496d78",
+      "to": "source:text",
+      "type": "EXTRACTED_FROM",
+      "value": 1.0,
+      "title": "EXTRACTED_FROM",
+      "properties": {
+        "source_type": "text",
+        "source_uri": "",
+        "char_count": 432,
+        "captured_at": "2026-11-23T05:08:32.143990+00:00"
+      }
+    },
+    {
+      "source": "item:9f5ff45f-32cf-448d-9690-b353712d42e1",
+      "target": "source:url",
+      "from": "item:9f5ff45f-32cf-448d-9690-b353712d42e1",
+      "to": "source:url",
+      "type": "EXTRACTED_FROM",
+      "value": 1.0,
+      "title": "EXTRACTED_FROM",
+      "properties": {
+        "source_type": "url",
+        "source_uri": "https://en.wikipedia.org/wiki/Force-directed_graph_drawing",
+        "char_count": 14158,
+        "captured_at": "2026-11-23T05:07:00.409496+00:00"
+      }
+    },
+    {
+      "source": "item:a30cde12-f2ba-4b89-ba52-4433e4a73846",
+      "target": "source:url",
+      "from": "item:a30cde12-f2ba-4b89-ba52-4433e4a73846",
+      "to": "source:url",
+      "type": "EXTRACTED_FROM",
+      "value": 1.0,
+      "title": "EXTRACTED_FROM",
+      "properties": {
+        "source_type": "url",
+        "source_uri": "https://en.wikipedia.org/wiki/Vector_database",
+        "char_count": 13333,
+        "captured_at": "2026-11-23T05:07:30.823759+00:00"
+      }
+    },
+    {
+      "source": "item:ba529ac4-b1d3-4ac7-b540-ade1f9aeb548",
+      "target": "source:text",
+      "from": "item:ba529ac4-b1d3-4ac7-b540-ade1f9aeb548",
+      "to": "source:text",
+      "type": "EXTRACTED_FROM",
+      "value": 1.0,
+      "title": "EXTRACTED_FROM",
+      "properties": {
+        "source_type": "text",
+        "source_uri": "",
+        "char_count": 345,
+        "captured_at": "2026-11-23T05:08:47.874661+00:00"
+      }
+    },
+    {
+      "source": "item:bcb3f86d-b6c8-46a2-8f4b-b37ed95ad5df",
+      "target": "source:url",
+      "from": "item:bcb3f86d-b6c8-46a2-8f4b-b37ed95ad5df",
+      "to": "source:url",
+      "type": "EXTRACTED_FROM",
+      "value": 1.0,
+      "title": "EXTRACTED_FROM",
+      "properties": {
+        "source_type": "url",
+        "source_uri": "https://en.wikipedia.org/wiki/Personal_knowledge_management",
+        "char_count": 15655,
+        "captured_at": "2026-11-23T05:07:25.233798+00:00"
+      }
+    },
+    {
+      "source": "item:cefca2e6-8bfc-46cf-9eb3-8cb74a56d2a2",
+      "target": "source:text",
+      "from": "item:cefca2e6-8bfc-46cf-9eb3-8cb74a56d2a2",
+      "to": "source:text",
+      "type": "EXTRACTED_FROM",
+      "value": 1.0,
+      "title": "EXTRACTED_FROM",
+      "properties": {
+        "source_type": "text",
+        "source_uri": "",
+        "char_count": 327,
+        "captured_at": "2026-11-23T05:08:15.118234+00:00"
+      }
+    },
+    {
+      "source": "item:d15ef515-448b-45b0-b269-277f3ddd243a",
+      "target": "source:text",
+      "from": "item:d15ef515-448b-45b0-b269-277f3ddd243a",
+      "to": "source:text",
+      "type": "EXTRACTED_FROM",
+      "value": 1.0,
+      "title": "EXTRACTED_FROM",
+      "properties": {
+        "source_type": "text",
+        "source_uri": "",
+        "char_count": 499,
+        "captured_at": "2026-11-23T05:09:03.225996+00:00"
+      }
+    },
+    {
+      "source": "item:d33c88c1-1f47-43f0-9878-8a1d63775d1d",
+      "target": "source:url",
+      "from": "item:d33c88c1-1f47-43f0-9878-8a1d63775d1d",
+      "to": "source:url",
+      "type": "EXTRACTED_FROM",
+      "value": 1.0,
+      "title": "EXTRACTED_FROM",
+      "properties": {
+        "source_type": "url",
+        "source_uri": "https://en.wikipedia.org/wiki/Barnes%E2%80%93Hut_simulation",
+        "char_count": 5031,
+        "captured_at": "2026-11-23T05:07:11.879057+00:00"
+      }
+    },
+    {
+      "source": "item:d3dfb23c-36a8-44fe-92ae-a394c1496377",
+      "target": "source:url",
+      "from": "item:d3dfb23c-36a8-44fe-92ae-a394c1496377",
+      "to": "source:url",
+      "type": "EXTRACTED_FROM",
+      "value": 1.0,
+      "title": "EXTRACTED_FROM",
+      "properties": {
+        "source_type": "url",
+        "source_uri": "https://en.wikipedia.org/wiki/Cosine_similarity",
+        "char_count": 14847,
+        "captured_at": "2026-11-23T05:06:46.270745+00:00"
+      }
+    },
+    {
+      "source": "item:e5ec9c63-60dd-48f9-9249-e459cc718219",
+      "target": "source:text",
+      "from": "item:e5ec9c63-60dd-48f9-9249-e459cc718219",
+      "to": "source:text",
+      "type": "EXTRACTED_FROM",
+      "value": 1.0,
+      "title": "EXTRACTED_FROM",
+      "properties": {
+        "source_type": "text",
+        "source_uri": "",
+        "char_count": 347,
+        "captured_at": "2026-11-23T05:09:24.540679+00:00"
+      }
+    },
+    {
+      "source": "item:e9e3c923-b684-453b-beae-19fa2d697760",
+      "target": "source:file",
+      "from": "item:e9e3c923-b684-453b-beae-19fa2d697760",
+      "to": "source:file",
+      "type": "EXTRACTED_FROM",
+      "value": 1.0,
+      "title": "EXTRACTED_FROM",
+      "properties": {
+        "source_type": "file",
+        "source_uri": "D:\\Second-Self\\Docs\\Conventions.md",
+        "char_count": 16634,
+        "captured_at": "2026-11-23T05:33:26.660964+00:00"
+      }
+    },
+    {
+      "source": "item:0bdc54f2-29a8-43d7-89b6-2d5f9507f1d3",
+      "target": "tag:capture",
+      "from": "item:0bdc54f2-29a8-43d7-89b6-2d5f9507f1d3",
+      "to": "tag:capture",
+      "type": "TAGGED_WITH",
+      "value": 1.0,
+      "title": "TAGGED_WITH",
+      "properties": {
+        "tag_slug": "capture",
+        "tag_name": "capture"
+      }
+    },
+    {
+      "source": "item:16ca778f-a02e-4bd1-bc45-315f305b280c",
+      "target": "tag:capture",
+      "from": "item:16ca778f-a02e-4bd1-bc45-315f305b280c",
+      "to": "tag:capture",
+      "type": "TAGGED_WITH",
+      "value": 1.0,
+      "title": "TAGGED_WITH",
+      "properties": {
+        "tag_slug": "capture",
+        "tag_name": "capture"
+      }
+    },
+    {
+      "source": "item:1d6f5190-d72d-4e82-b0b7-eacb60d67008",
+      "target": "tag:capture",
+      "from": "item:1d6f5190-d72d-4e82-b0b7-eacb60d67008",
+      "to": "tag:capture",
+      "type": "TAGGED_WITH",
+      "value": 1.0,
+      "title": "TAGGED_WITH",
+      "properties": {
+        "tag_slug": "capture",
+        "tag_name": "capture"
+      }
+    },
+    {
+      "source": "item:2358e341-52db-4166-98a7-c98dd2e10a69",
+      "target": "tag:capture",
+      "from": "item:2358e341-52db-4166-98a7-c98dd2e10a69",
+      "to": "tag:capture",
+      "type": "TAGGED_WITH",
+      "value": 1.0,
+      "title": "TAGGED_WITH",
+      "properties": {
+        "tag_slug": "capture",
+        "tag_name": "capture"
+      }
+    },
+    {
+      "source": "item:2b33db10-6a55-4442-913e-7e1e800ef722",
+      "target": "tag:capture",
+      "from": "item:2b33db10-6a55-4442-913e-7e1e800ef722",
+      "to": "tag:capture",
+      "type": "TAGGED_WITH",
+      "value": 1.0,
+      "title": "TAGGED_WITH",
+      "properties": {
+        "tag_slug": "capture",
+        "tag_name": "capture"
+      }
+    },
+    {
+      "source": "item:2dde477f-5cee-4310-8aa4-fd3731685cd3",
+      "target": "tag:capture",
+      "from": "item:2dde477f-5cee-4310-8aa4-fd3731685cd3",
+      "to": "tag:capture",
+      "type": "TAGGED_WITH",
+      "value": 1.0,
+      "title": "TAGGED_WITH",
+      "properties": {
+        "tag_slug": "capture",
+        "tag_name": "capture"
+      }
+    },
+    {
+      "source": "item:4ab10c64-5348-4d17-8b03-295014b9a63f",
+      "target": "tag:capture",
+      "from": "item:4ab10c64-5348-4d17-8b03-295014b9a63f",
+      "to": "tag:capture",
+      "type": "TAGGED_WITH",
+      "value": 1.0,
+      "title": "TAGGED_WITH",
+      "properties": {
+        "tag_slug": "capture",
+        "tag_name": "capture"
+      }
+    },
+    {
+      "source": "item:4bda912e-bfef-4e92-a7a4-28124013cba0",
+      "target": "tag:capture",
+      "from": "item:4bda912e-bfef-4e92-a7a4-28124013cba0",
+      "to": "tag:capture",
+      "type": "TAGGED_WITH",
+      "value": 1.0,
+      "title": "TAGGED_WITH",
+      "properties": {
+        "tag_slug": "capture",
+        "tag_name": "capture"
+      }
+    },
+    {
+      "source": "item:652217da-3cd6-454f-9161-c8965e243733",
+      "target": "tag:capture",
+      "from": "item:652217da-3cd6-454f-9161-c8965e243733",
+      "to": "tag:capture",
+      "type": "TAGGED_WITH",
+      "value": 1.0,
+      "title": "TAGGED_WITH",
+      "properties": {
+        "tag_slug": "capture",
+        "tag_name": "capture"
+      }
+    },
+    {
+      "source": "item:6d04d954-5b68-4ddc-b124-f29e60130e1a",
+      "target": "tag:capture",
+      "from": "item:6d04d954-5b68-4ddc-b124-f29e60130e1a",
+      "to": "tag:capture",
+      "type": "TAGGED_WITH",
+      "value": 1.0,
+      "title": "TAGGED_WITH",
+      "properties": {
+        "tag_slug": "capture",
+        "tag_name": "capture"
+      }
+    },
+    {
+      "source": "item:7ae9a914-818c-4221-a7bb-e818763a687c",
+      "target": "tag:capture",
+      "from": "item:7ae9a914-818c-4221-a7bb-e818763a687c",
+      "to": "tag:capture",
+      "type": "TAGGED_WITH",
+      "value": 1.0,
+      "title": "TAGGED_WITH",
+      "properties": {
+        "tag_slug": "capture",
+        "tag_name": "capture"
+      }
+    },
+    {
+      "source": "item:89275e83-e2d8-455d-9fa9-68a4251e5654",
+      "target": "tag:capture",
+      "from": "item:89275e83-e2d8-455d-9fa9-68a4251e5654",
+      "to": "tag:capture",
+      "type": "TAGGED_WITH",
+      "value": 1.0,
+      "title": "TAGGED_WITH",
+      "properties": {
+        "tag_slug": "capture",
+        "tag_name": "capture"
+      }
+    },
+    {
+      "source": "item:8ffd9480-2abd-45e9-a0d7-a50e4113840c",
+      "target": "tag:capture",
+      "from": "item:8ffd9480-2abd-45e9-a0d7-a50e4113840c",
+      "to": "tag:capture",
+      "type": "TAGGED_WITH",
+      "value": 1.0,
+      "title": "TAGGED_WITH",
+      "properties": {
+        "tag_slug": "capture",
+        "tag_name": "capture"
+      }
+    },
+    {
+      "source": "item:94bedd4e-9719-4e38-b306-473ffd496d78",
+      "target": "tag:capture",
+      "from": "item:94bedd4e-9719-4e38-b306-473ffd496d78",
+      "to": "tag:capture",
+      "type": "TAGGED_WITH",
+      "value": 1.0,
+      "title": "TAGGED_WITH",
+      "properties": {
+        "tag_slug": "capture",
+        "tag_name": "capture"
+      }
+    },
+    {
+      "source": "item:9f5ff45f-32cf-448d-9690-b353712d42e1",
+      "target": "tag:capture",
+      "from": "item:9f5ff45f-32cf-448d-9690-b353712d42e1",
+      "to": "tag:capture",
+      "type": "TAGGED_WITH",
+      "value": 1.0,
+      "title": "TAGGED_WITH",
+      "properties": {
+        "tag_slug": "capture",
+        "tag_name": "capture"
+      }
+    },
+    {
+      "source": "item:a30cde12-f2ba-4b89-ba52-4433e4a73846",
+      "target": "tag:capture",
+      "from": "item:a30cde12-f2ba-4b89-ba52-4433e4a73846",
+      "to": "tag:capture",
+      "type": "TAGGED_WITH",
+      "value": 1.0,
+      "title": "TAGGED_WITH",
+      "properties": {
+        "tag_slug": "capture",
+        "tag_name": "capture"
+      }
+    },
+    {
+      "source": "item:ba529ac4-b1d3-4ac7-b540-ade1f9aeb548",
+      "target": "tag:capture",
+      "from": "item:ba529ac4-b1d3-4ac7-b540-ade1f9aeb548",
+      "to": "tag:capture",
+      "type": "TAGGED_WITH",
+      "value": 1.0,
+      "title": "TAGGED_WITH",
+      "properties": {
+        "tag_slug": "capture",
+        "tag_name": "capture"
+      }
+    },
+    {
+      "source": "item:bcb3f86d-b6c8-46a2-8f4b-b37ed95ad5df",
+      "target": "tag:capture",
+      "from": "item:bcb3f86d-b6c8-46a2-8f4b-b37ed95ad5df",
+      "to": "tag:capture",
+      "type": "TAGGED_WITH",
+      "value": 1.0,
+      "title": "TAGGED_WITH",
+      "properties": {
+        "tag_slug": "capture",
+        "tag_name": "capture"
+      }
+    },
+    {
+      "source": "item:cefca2e6-8bfc-46cf-9eb3-8cb74a56d2a2",
+      "target": "tag:capture",
+      "from": "item:cefca2e6-8bfc-46cf-9eb3-8cb74a56d2a2",
+      "to": "tag:capture",
+      "type": "TAGGED_WITH",
+      "value": 1.0,
+      "title": "TAGGED_WITH",
+      "properties": {
+        "tag_slug": "capture",
+        "tag_name": "capture"
+      }
+    },
+    {
+      "source": "item:d15ef515-448b-45b0-b269-277f3ddd243a",
+      "target": "tag:capture",
+      "from": "item:d15ef515-448b-45b0-b269-277f3ddd243a",
+      "to": "tag:capture",
+      "type": "TAGGED_WITH",
+      "value": 1.0,
+      "title": "TAGGED_WITH",
+      "properties": {
+        "tag_slug": "capture",
+        "tag_name": "capture"
+      }
+    },
+    {
+      "source": "item:d33c88c1-1f47-43f0-9878-8a1d63775d1d",
+      "target": "tag:capture",
+      "from": "item:d33c88c1-1f47-43f0-9878-8a1d63775d1d",
+      "to": "tag:capture",
+      "type": "TAGGED_WITH",
+      "value": 1.0,
+      "title": "TAGGED_WITH",
+      "properties": {
+        "tag_slug": "capture",
+        "tag_name": "capture"
+      }
+    },
+    {
+      "source": "item:d3dfb23c-36a8-44fe-92ae-a394c1496377",
+      "target": "tag:capture",
+      "from": "item:d3dfb23c-36a8-44fe-92ae-a394c1496377",
+      "to": "tag:capture",
+      "type": "TAGGED_WITH",
+      "value": 1.0,
+      "title": "TAGGED_WITH",
+      "properties": {
+        "tag_slug": "capture",
+        "tag_name": "capture"
+      }
+    },
+    {
+      "source": "item:e5ec9c63-60dd-48f9-9249-e459cc718219",
+      "target": "tag:capture",
+      "from": "item:e5ec9c63-60dd-48f9-9249-e459cc718219",
+      "to": "tag:capture",
+      "type": "TAGGED_WITH",
+      "value": 1.0,
+      "title": "TAGGED_WITH",
+      "properties": {
+        "tag_slug": "capture",
+        "tag_name": "capture"
+      }
+    },
+    {
+      "source": "item:e9e3c923-b684-453b-beae-19fa2d697760",
+      "target": "tag:capture",
+      "from": "item:e9e3c923-b684-453b-beae-19fa2d697760",
+      "to": "tag:capture",
+      "type": "TAGGED_WITH",
+      "value": 1.0,
+      "title": "TAGGED_WITH",
+      "properties": {
+        "tag_slug": "capture",
+        "tag_name": "capture"
+      }
+    }
+  ],
+  "links": [
+    {
+      "source": "item:0bdc54f2-29a8-43d7-89b6-2d5f9507f1d3",
+      "target": "para:resources",
+      "from": "item:0bdc54f2-29a8-43d7-89b6-2d5f9507f1d3",
+      "to": "para:resources",
+      "type": "BELONGS_TO",
+      "value": 1.0,
+      "title": "BELONGS_TO",
+      "properties": {
+        "category": "Resources",
+        "confidence": 0.25,
+        "method": "rules",
+        "rationale": "",
+        "assigned_at": "2026-11-23T08:14:40.287118+00:00"
+      }
+    },
+    {
+      "source": "item:16ca778f-a02e-4bd1-bc45-315f305b280c",
+      "target": "para:archives",
+      "from": "item:16ca778f-a02e-4bd1-bc45-315f305b280c",
+      "to": "para:archives",
+      "type": "BELONGS_TO",
+      "value": 1.0,
+      "title": "BELONGS_TO",
+      "properties": {
+        "category": "Archives",
+        "confidence": 0.411,
+        "method": "rules",
+        "rationale": "",
+        "assigned_at": "2026-11-23T08:14:40.240185+00:00"
+      }
+    },
+    {
+      "source": "item:1d6f5190-d72d-4e82-b0b7-eacb60d67008",
+      "target": "para:archives",
+      "from": "item:1d6f5190-d72d-4e82-b0b7-eacb60d67008",
+      "to": "para:archives",
+      "type": "BELONGS_TO",
+      "value": 1.0,
+      "title": "BELONGS_TO",
+      "properties": {
+        "category": "Archives",
+        "confidence": 0.7895,
+        "method": "rules",
+        "rationale": "",
+        "assigned_at": "2026-11-23T08:14:40.181536+00:00"
+      }
+    },
+    {
+      "source": "item:2358e341-52db-4166-98a7-c98dd2e10a69",
+      "target": "para:projects",
+      "from": "item:2358e341-52db-4166-98a7-c98dd2e10a69",
+      "to": "para:projects",
+      "type": "BELONGS_TO",
+      "value": 1.0,
+      "title": "BELONGS_TO",
+      "properties": {
+        "category": "Projects",
+        "confidence": 0.5385,
+        "method": "rules",
+        "rationale": "",
+        "assigned_at": "2026-11-23T08:14:40.275187+00:00"
+      }
+    },
+    {
+      "source": "item:2b33db10-6a55-4442-913e-7e1e800ef722",
+      "target": "para:projects",
+      "from": "item:2b33db10-6a55-4442-913e-7e1e800ef722",
+      "to": "para:projects",
+      "type": "BELONGS_TO",
+      "value": 1.0,
+      "title": "BELONGS_TO",
+      "properties": {
+        "category": "Projects",
+        "confidence": 1.0,
+        "method": "rules",
+        "rationale": "",
+        "assigned_at": "2026-11-23T08:14:40.287530+00:00"
+      }
+    },
+    {
+      "source": "item:2dde477f-5cee-4310-8aa4-fd3731685cd3",
+      "target": "para:resources",
+      "from": "item:2dde477f-5cee-4310-8aa4-fd3731685cd3",
+      "to": "para:resources",
+      "type": "BELONGS_TO",
+      "value": 1.0,
+      "title": "BELONGS_TO",
+      "properties": {
+        "category": "Resources",
+        "confidence": 0.25,
+        "method": "rules",
+        "rationale": "",
+        "assigned_at": "2026-11-23T08:14:40.284951+00:00"
+      }
+    },
+    {
+      "source": "item:4ab10c64-5348-4d17-8b03-295014b9a63f",
+      "target": "para:archives",
+      "from": "item:4ab10c64-5348-4d17-8b03-295014b9a63f",
+      "to": "para:archives",
+      "type": "BELONGS_TO",
+      "value": 1.0,
+      "title": "BELONGS_TO",
+      "properties": {
+        "category": "Archives",
+        "confidence": 1.0,
+        "method": "rules",
+        "rationale": "",
+        "assigned_at": "2026-11-23T08:14:40.286655+00:00"
+      }
+    },
+    {
+      "source": "item:4bda912e-bfef-4e92-a7a4-28124013cba0",
+      "target": "para:projects",
+      "from": "item:4bda912e-bfef-4e92-a7a4-28124013cba0",
+      "to": "para:projects",
+      "type": "BELONGS_TO",
+      "value": 1.0,
+      "title": "BELONGS_TO",
+      "properties": {
+        "category": "Projects",
+        "confidence": 1.0,
+        "method": "rules",
+        "rationale": "",
+        "assigned_at": "2026-11-23T08:14:40.277886+00:00"
+      }
+    },
+    {
+      "source": "item:652217da-3cd6-454f-9161-c8965e243733",
+      "target": "para:resources",
+      "from": "item:652217da-3cd6-454f-9161-c8965e243733",
+      "to": "para:resources",
+      "type": "BELONGS_TO",
+      "value": 1.0,
+      "title": "BELONGS_TO",
+      "properties": {
+        "category": "Resources",
+        "confidence": 0.25,
+        "method": "rules",
+        "rationale": "",
+        "assigned_at": "2026-11-23T08:14:40.287921+00:00"
+      }
+    },
+    {
+      "source": "item:6d04d954-5b68-4ddc-b124-f29e60130e1a",
+      "target": "para:archives",
+      "from": "item:6d04d954-5b68-4ddc-b124-f29e60130e1a",
+      "to": "para:archives",
+      "type": "BELONGS_TO",
+      "value": 1.0,
+      "title": "BELONGS_TO",
+      "properties": {
+        "category": "Archives",
+        "confidence": 1.0,
+        "method": "rules",
+        "rationale": "",
+        "assigned_at": "2026-11-23T08:14:40.206711+00:00"
+      }
+    },
+    {
+      "source": "item:7ae9a914-818c-4221-a7bb-e818763a687c",
+      "target": "para:resources",
+      "from": "item:7ae9a914-818c-4221-a7bb-e818763a687c",
+      "to": "para:resources",
+      "type": "BELONGS_TO",
+      "value": 1.0,
+      "title": "BELONGS_TO",
+      "properties": {
+        "category": "Resources",
+        "confidence": 0.25,
+        "method": "rules",
+        "rationale": "",
+        "assigned_at": "2026-11-23T08:14:40.281137+00:00"
+      }
+    },
+    {
+      "source": "item:89275e83-e2d8-455d-9fa9-68a4251e5654",
+      "target": "para:resources",
+      "from": "item:89275e83-e2d8-455d-9fa9-68a4251e5654",
+      "to": "para:resources",
+      "type": "BELONGS_TO",
+      "value": 1.0,
+      "title": "BELONGS_TO",
+      "properties": {
+        "category": "Resources",
+        "confidence": 0.25,
+        "method": "rules",
+        "rationale": "",
+        "assigned_at": "2026-11-23T08:14:40.282782+00:00"
+      }
+    },
+    {
+      "source": "item:8ffd9480-2abd-45e9-a0d7-a50e4113840c",
+      "target": "para:resources",
+      "from": "item:8ffd9480-2abd-45e9-a0d7-a50e4113840c",
+      "to": "para:resources",
+      "type": "BELONGS_TO",
+      "value": 1.0,
+      "title": "BELONGS_TO",
+      "properties": {
+        "category": "Resources",
+        "confidence": 0.25,
+        "method": "rules",
+        "rationale": "",
+        "assigned_at": "2026-11-23T08:14:40.279844+00:00"
+      }
+    },
+    {
+      "source": "item:94bedd4e-9719-4e38-b306-473ffd496d78",
+      "target": "para:resources",
+      "from": "item:94bedd4e-9719-4e38-b306-473ffd496d78",
+      "to": "para:resources",
+      "type": "BELONGS_TO",
+      "value": 1.0,
+      "title": "BELONGS_TO",
+      "properties": {
+        "category": "Resources",
+        "confidence": 0.25,
+        "method": "rules",
+        "rationale": "",
+        "assigned_at": "2026-11-23T08:14:40.280451+00:00"
+      }
+    },
+    {
+      "source": "item:9f5ff45f-32cf-448d-9690-b353712d42e1",
+      "target": "para:archives",
+      "from": "item:9f5ff45f-32cf-448d-9690-b353712d42e1",
+      "to": "para:archives",
+      "type": "BELONGS_TO",
+      "value": 1.0,
+      "title": "BELONGS_TO",
+      "properties": {
+        "category": "Archives",
+        "confidence": 0.8056,
+        "method": "rules",
+        "rationale": "",
+        "assigned_at": "2026-11-23T08:14:40.152212+00:00"
+      }
+    },
+    {
+      "source": "item:a30cde12-f2ba-4b89-ba52-4433e4a73846",
+      "target": "para:projects",
+      "from": "item:a30cde12-f2ba-4b89-ba52-4433e4a73846",
+      "to": "para:projects",
+      "type": "BELONGS_TO",
+      "value": 1.0,
+      "title": "BELONGS_TO",
+      "properties": {
+        "category": "Projects",
+        "confidence": 0.5,
+        "method": "rules",
+        "rationale": "",
+        "assigned_at": "2026-11-23T08:14:40.196898+00:00"
+      }
+    },
+    {
+      "source": "item:ba529ac4-b1d3-4ac7-b540-ade1f9aeb548",
+      "target": "para:resources",
+      "from": "item:ba529ac4-b1d3-4ac7-b540-ade1f9aeb548",
+      "to": "para:resources",
+      "type": "BELONGS_TO",
+      "value": 1.0,
+      "title": "BELONGS_TO",
+      "properties": {
+        "category": "Resources",
+        "confidence": 0.25,
+        "method": "rules",
+        "rationale": "",
+        "assigned_at": "2026-11-23T08:14:40.281706+00:00"
+      }
+    },
+    {
+      "source": "item:bcb3f86d-b6c8-46a2-8f4b-b37ed95ad5df",
+      "target": "para:resources",
+      "from": "item:bcb3f86d-b6c8-46a2-8f4b-b37ed95ad5df",
+      "to": "para:resources",
+      "type": "BELONGS_TO",
+      "value": 1.0,
+      "title": "BELONGS_TO",
+      "properties": {
+        "category": "Resources",
+        "confidence": 0.25,
+        "method": "rules",
+        "rationale": "",
+        "assigned_at": "2026-11-23T08:14:40.190034+00:00"
+      }
+    },
+    {
+      "source": "item:cefca2e6-8bfc-46cf-9eb3-8cb74a56d2a2",
+      "target": "para:projects",
+      "from": "item:cefca2e6-8bfc-46cf-9eb3-8cb74a56d2a2",
+      "to": "para:projects",
+      "type": "BELONGS_TO",
+      "value": 1.0,
+      "title": "BELONGS_TO",
+      "properties": {
+        "category": "Projects",
+        "confidence": 1.0,
+        "method": "rules",
+        "rationale": "",
+        "assigned_at": "2026-11-23T08:14:40.278794+00:00"
+      }
+    },
+    {
+      "source": "item:d15ef515-448b-45b0-b269-277f3ddd243a",
+      "target": "para:areas",
+      "from": "item:d15ef515-448b-45b0-b269-277f3ddd243a",
+      "to": "para:areas",
+      "type": "BELONGS_TO",
+      "value": 1.0,
+      "title": "BELONGS_TO",
+      "properties": {
+        "category": "Areas",
+        "confidence": 0.6667,
+        "method": "rules",
+        "rationale": "",
+        "assigned_at": "2026-11-23T08:14:40.284034+00:00"
+      }
+    },
+    {
+      "source": "item:d33c88c1-1f47-43f0-9878-8a1d63775d1d",
+      "target": "para:projects",
+      "from": "item:d33c88c1-1f47-43f0-9878-8a1d63775d1d",
+      "to": "para:projects",
+      "type": "BELONGS_TO",
+      "value": 1.0,
+      "title": "BELONGS_TO",
+      "properties": {
+        "category": "Projects",
+        "confidence": 1.0,
+        "method": "rules",
+        "rationale": "",
+        "assigned_at": "2026-11-23T08:14:40.155710+00:00"
+      }
+    },
+    {
+      "source": "item:d3dfb23c-36a8-44fe-92ae-a394c1496377",
+      "target": "para:resources",
+      "from": "item:d3dfb23c-36a8-44fe-92ae-a394c1496377",
+      "to": "para:resources",
+      "type": "BELONGS_TO",
+      "value": 1.0,
+      "title": "BELONGS_TO",
+      "properties": {
+        "category": "Resources",
+        "confidence": 0.6923,
+        "method": "rules",
+        "rationale": "",
+        "assigned_at": "2026-11-23T08:14:40.143977+00:00"
+      }
+    },
+    {
+      "source": "item:e5ec9c63-60dd-48f9-9249-e459cc718219",
+      "target": "para:archives",
+      "from": "item:e5ec9c63-60dd-48f9-9249-e459cc718219",
+      "to": "para:archives",
+      "type": "BELONGS_TO",
+      "value": 1.0,
+      "title": "BELONGS_TO",
+      "properties": {
+        "category": "Archives",
+        "confidence": 1.0,
+        "method": "rules",
+        "rationale": "",
+        "assigned_at": "2026-11-23T08:14:40.285758+00:00"
+      }
+    },
+    {
+      "source": "item:e9e3c923-b684-453b-beae-19fa2d697760",
+      "target": "para:archives",
+      "from": "item:e9e3c923-b684-453b-beae-19fa2d697760",
+      "to": "para:archives",
+      "type": "BELONGS_TO",
+      "value": 1.0,
+      "title": "BELONGS_TO",
+      "properties": {
+        "category": "Archives",
+        "confidence": 0.4173,
+        "method": "rules",
+        "rationale": "",
+        "assigned_at": "2026-11-23T08:14:40.295382+00:00"
+      }
+    },
+    {
+      "source": "item:0bdc54f2-29a8-43d7-89b6-2d5f9507f1d3",
+      "target": "source:text",
+      "from": "item:0bdc54f2-29a8-43d7-89b6-2d5f9507f1d3",
+      "to": "source:text",
+      "type": "EXTRACTED_FROM",
+      "value": 1.0,
+      "title": "EXTRACTED_FROM",
+      "properties": {
+        "source_type": "text",
+        "source_uri": "",
+        "char_count": 54,
+        "captured_at": "2026-11-23T05:31:55.087843+00:00"
+      }
+    },
+    {
+      "source": "item:16ca778f-a02e-4bd1-bc45-315f305b280c",
+      "target": "source:url",
+      "from": "item:16ca778f-a02e-4bd1-bc45-315f305b280c",
+      "to": "source:url",
+      "type": "EXTRACTED_FROM",
+      "value": 1.0,
+      "title": "EXTRACTED_FROM",
+      "properties": {
+        "source_type": "url",
+        "source_uri": "https://en.wikipedia.org/wiki/Transformer_(deep_learning_architecture)",
+        "char_count": 69564,
+        "captured_at": "2026-11-23T05:07:42.239467+00:00"
+      }
+    },
+    {
+      "source": "item:1d6f5190-d72d-4e82-b0b7-eacb60d67008",
+      "target": "source:url",
+      "from": "item:1d6f5190-d72d-4e82-b0b7-eacb60d67008",
+      "to": "source:url",
+      "type": "EXTRACTED_FROM",
+      "value": 1.0,
+      "title": "EXTRACTED_FROM",
+      "properties": {
+        "source_type": "url",
+        "source_uri": "https://en.wikipedia.org/wiki/Retrieval-augmented_generation",
+        "char_count": 17910,
+        "captured_at": "2026-11-23T05:07:19.154542+00:00"
+      }
+    },
+    {
+      "source": "item:2358e341-52db-4166-98a7-c98dd2e10a69",
+      "target": "source:url",
+      "from": "item:2358e341-52db-4166-98a7-c98dd2e10a69",
+      "to": "source:url",
+      "type": "EXTRACTED_FROM",
+      "value": 1.0,
+      "title": "EXTRACTED_FROM",
+      "properties": {
+        "source_type": "url",
+        "source_uri": "https://www.paulgraham.com/greatwork.html",
+        "char_count": 67702,
+        "captured_at": "2026-11-23T05:07:49.568303+00:00"
+      }
+    },
+    {
+      "source": "item:2b33db10-6a55-4442-913e-7e1e800ef722",
+      "target": "source:text",
+      "from": "item:2b33db10-6a55-4442-913e-7e1e800ef722",
+      "to": "source:text",
+      "type": "EXTRACTED_FROM",
+      "value": 1.0,
+      "title": "EXTRACTED_FROM",
+      "properties": {
+        "source_type": "text",
+        "source_uri": "",
+        "char_count": 47,
+        "captured_at": "2026-11-23T05:31:55.613189+00:00"
+      }
+    },
+    {
+      "source": "item:2dde477f-5cee-4310-8aa4-fd3731685cd3",
+      "target": "source:text",
+      "from": "item:2dde477f-5cee-4310-8aa4-fd3731685cd3",
+      "to": "source:text",
+      "type": "EXTRACTED_FROM",
+      "value": 1.0,
+      "title": "EXTRACTED_FROM",
+      "properties": {
+        "source_type": "text",
+        "source_uri": "",
+        "char_count": 477,
+        "captured_at": "2026-11-23T05:09:11.523885+00:00"
+      }
+    },
+    {
+      "source": "item:4ab10c64-5348-4d17-8b03-295014b9a63f",
+      "target": "source:text",
+      "from": "item:4ab10c64-5348-4d17-8b03-295014b9a63f",
+      "to": "source:text",
+      "type": "EXTRACTED_FROM",
+      "value": 1.0,
+      "title": "EXTRACTED_FROM",
+      "properties": {
+        "source_type": "text",
+        "source_uri": "",
+        "char_count": 404,
+        "captured_at": "2026-11-23T05:09:31.025133+00:00"
+      }
+    },
+    {
+      "source": "item:4bda912e-bfef-4e92-a7a4-28124013cba0",
+      "target": "source:text",
+      "from": "item:4bda912e-bfef-4e92-a7a4-28124013cba0",
+      "to": "source:text",
+      "type": "EXTRACTED_FROM",
+      "value": 1.0,
+      "title": "EXTRACTED_FROM",
+      "properties": {
+        "source_type": "text",
+        "source_uri": "",
+        "char_count": 342,
+        "captured_at": "2026-11-23T05:08:08.059902+00:00"
+      }
+    },
+    {
+      "source": "item:652217da-3cd6-454f-9161-c8965e243733",
+      "target": "source:text",
+      "from": "item:652217da-3cd6-454f-9161-c8965e243733",
+      "to": "source:text",
+      "type": "EXTRACTED_FROM",
+      "value": 1.0,
+      "title": "EXTRACTED_FROM",
+      "properties": {
+        "source_type": "text",
+        "source_uri": "",
+        "char_count": 60,
+        "captured_at": "2026-11-23T05:32:40.959154+00:00"
+      }
+    },
+    {
+      "source": "item:6d04d954-5b68-4ddc-b124-f29e60130e1a",
+      "target": "source:url",
+      "from": "item:6d04d954-5b68-4ddc-b124-f29e60130e1a",
+      "to": "source:url",
+      "type": "EXTRACTED_FROM",
+      "value": 1.0,
+      "title": "EXTRACTED_FROM",
+      "properties": {
+        "source_type": "url",
+        "source_uri": "https://en.wikipedia.org/wiki/Semantic_network",
+        "char_count": 18311,
+        "captured_at": "2026-11-23T05:07:36.669268+00:00"
+      }
+    },
+    {
+      "source": "item:7ae9a914-818c-4221-a7bb-e818763a687c",
+      "target": "source:text",
+      "from": "item:7ae9a914-818c-4221-a7bb-e818763a687c",
+      "to": "source:text",
+      "type": "EXTRACTED_FROM",
+      "value": 1.0,
+      "title": "EXTRACTED_FROM",
+      "properties": {
+        "source_type": "text",
+        "source_uri": "",
+        "char_count": 366,
+        "captured_at": "2026-11-23T05:08:42.381286+00:00"
+      }
+    },
+    {
+      "source": "item:89275e83-e2d8-455d-9fa9-68a4251e5654",
+      "target": "source:text",
+      "from": "item:89275e83-e2d8-455d-9fa9-68a4251e5654",
+      "to": "source:text",
+      "type": "EXTRACTED_FROM",
+      "value": 1.0,
+      "title": "EXTRACTED_FROM",
+      "properties": {
+        "source_type": "text",
+        "source_uri": "",
+        "char_count": 521,
+        "captured_at": "2026-11-23T05:08:57.456379+00:00"
+      }
+    },
+    {
+      "source": "item:8ffd9480-2abd-45e9-a0d7-a50e4113840c",
+      "target": "source:text",
+      "from": "item:8ffd9480-2abd-45e9-a0d7-a50e4113840c",
+      "to": "source:text",
+      "type": "EXTRACTED_FROM",
+      "value": 1.0,
+      "title": "EXTRACTED_FROM",
+      "properties": {
+        "source_type": "text",
+        "source_uri": "",
+        "char_count": 335,
+        "captured_at": "2026-11-23T05:08:22.724185+00:00"
+      }
+    },
+    {
+      "source": "item:94bedd4e-9719-4e38-b306-473ffd496d78",
+      "target": "source:text",
+      "from": "item:94bedd4e-9719-4e38-b306-473ffd496d78",
+      "to": "source:text",
+      "type": "EXTRACTED_FROM",
+      "value": 1.0,
+      "title": "EXTRACTED_FROM",
+      "properties": {
+        "source_type": "text",
+        "source_uri": "",
+        "char_count": 432,
+        "captured_at": "2026-11-23T05:08:32.143990+00:00"
+      }
+    },
+    {
+      "source": "item:9f5ff45f-32cf-448d-9690-b353712d42e1",
+      "target": "source:url",
+      "from": "item:9f5ff45f-32cf-448d-9690-b353712d42e1",
+      "to": "source:url",
+      "type": "EXTRACTED_FROM",
+      "value": 1.0,
+      "title": "EXTRACTED_FROM",
+      "properties": {
+        "source_type": "url",
+        "source_uri": "https://en.wikipedia.org/wiki/Force-directed_graph_drawing",
+        "char_count": 14158,
+        "captured_at": "2026-11-23T05:07:00.409496+00:00"
+      }
+    },
+    {
+      "source": "item:a30cde12-f2ba-4b89-ba52-4433e4a73846",
+      "target": "source:url",
+      "from": "item:a30cde12-f2ba-4b89-ba52-4433e4a73846",
+      "to": "source:url",
+      "type": "EXTRACTED_FROM",
+      "value": 1.0,
+      "title": "EXTRACTED_FROM",
+      "properties": {
+        "source_type": "url",
+        "source_uri": "https://en.wikipedia.org/wiki/Vector_database",
+        "char_count": 13333,
+        "captured_at": "2026-11-23T05:07:30.823759+00:00"
+      }
+    },
+    {
+      "source": "item:ba529ac4-b1d3-4ac7-b540-ade1f9aeb548",
+      "target": "source:text",
+      "from": "item:ba529ac4-b1d3-4ac7-b540-ade1f9aeb548",
+      "to": "source:text",
+      "type": "EXTRACTED_FROM",
+      "value": 1.0,
+      "title": "EXTRACTED_FROM",
+      "properties": {
+        "source_type": "text",
+        "source_uri": "",
+        "char_count": 345,
+        "captured_at": "2026-11-23T05:08:47.874661+00:00"
+      }
+    },
+    {
+      "source": "item:bcb3f86d-b6c8-46a2-8f4b-b37ed95ad5df",
+      "target": "source:url",
+      "from": "item:bcb3f86d-b6c8-46a2-8f4b-b37ed95ad5df",
+      "to": "source:url",
+      "type": "EXTRACTED_FROM",
+      "value": 1.0,
+      "title": "EXTRACTED_FROM",
+      "properties": {
+        "source_type": "url",
+        "source_uri": "https://en.wikipedia.org/wiki/Personal_knowledge_management",
+        "char_count": 15655,
+        "captured_at": "2026-11-23T05:07:25.233798+00:00"
+      }
+    },
+    {
+      "source": "item:cefca2e6-8bfc-46cf-9eb3-8cb74a56d2a2",
+      "target": "source:text",
+      "from": "item:cefca2e6-8bfc-46cf-9eb3-8cb74a56d2a2",
+      "to": "source:text",
+      "type": "EXTRACTED_FROM",
+      "value": 1.0,
+      "title": "EXTRACTED_FROM",
+      "properties": {
+        "source_type": "text",
+        "source_uri": "",
+        "char_count": 327,
+        "captured_at": "2026-11-23T05:08:15.118234+00:00"
+      }
+    },
+    {
+      "source": "item:d15ef515-448b-45b0-b269-277f3ddd243a",
+      "target": "source:text",
+      "from": "item:d15ef515-448b-45b0-b269-277f3ddd243a",
+      "to": "source:text",
+      "type": "EXTRACTED_FROM",
+      "value": 1.0,
+      "title": "EXTRACTED_FROM",
+      "properties": {
+        "source_type": "text",
+        "source_uri": "",
+        "char_count": 499,
+        "captured_at": "2026-11-23T05:09:03.225996+00:00"
+      }
+    },
+    {
+      "source": "item:d33c88c1-1f47-43f0-9878-8a1d63775d1d",
+      "target": "source:url",
+      "from": "item:d33c88c1-1f47-43f0-9878-8a1d63775d1d",
+      "to": "source:url",
+      "type": "EXTRACTED_FROM",
+      "value": 1.0,
+      "title": "EXTRACTED_FROM",
+      "properties": {
+        "source_type": "url",
+        "source_uri": "https://en.wikipedia.org/wiki/Barnes%E2%80%93Hut_simulation",
+        "char_count": 5031,
+        "captured_at": "2026-11-23T05:07:11.879057+00:00"
+      }
+    },
+    {
+      "source": "item:d3dfb23c-36a8-44fe-92ae-a394c1496377",
+      "target": "source:url",
+      "from": "item:d3dfb23c-36a8-44fe-92ae-a394c1496377",
+      "to": "source:url",
+      "type": "EXTRACTED_FROM",
+      "value": 1.0,
+      "title": "EXTRACTED_FROM",
+      "properties": {
+        "source_type": "url",
+        "source_uri": "https://en.wikipedia.org/wiki/Cosine_similarity",
+        "char_count": 14847,
+        "captured_at": "2026-11-23T05:06:46.270745+00:00"
+      }
+    },
+    {
+      "source": "item:e5ec9c63-60dd-48f9-9249-e459cc718219",
+      "target": "source:text",
+      "from": "item:e5ec9c63-60dd-48f9-9249-e459cc718219",
+      "to": "source:text",
+      "type": "EXTRACTED_FROM",
+      "value": 1.0,
+      "title": "EXTRACTED_FROM",
+      "properties": {
+        "source_type": "text",
+        "source_uri": "",
+        "char_count": 347,
+        "captured_at": "2026-11-23T05:09:24.540679+00:00"
+      }
+    },
+    {
+      "source": "item:e9e3c923-b684-453b-beae-19fa2d697760",
+      "target": "source:file",
+      "from": "item:e9e3c923-b684-453b-beae-19fa2d697760",
+      "to": "source:file",
+      "type": "EXTRACTED_FROM",
+      "value": 1.0,
+      "title": "EXTRACTED_FROM",
+      "properties": {
+        "source_type": "file",
+        "source_uri": "D:\\Second-Self\\Docs\\Conventions.md",
+        "char_count": 16634,
+        "captured_at": "2026-11-23T05:33:26.660964+00:00"
+      }
+    },
+    {
+      "source": "item:0bdc54f2-29a8-43d7-89b6-2d5f9507f1d3",
+      "target": "tag:capture",
+      "from": "item:0bdc54f2-29a8-43d7-89b6-2d5f9507f1d3",
+      "to": "tag:capture",
+      "type": "TAGGED_WITH",
+      "value": 1.0,
+      "title": "TAGGED_WITH",
+      "properties": {
+        "tag_slug": "capture",
+        "tag_name": "capture"
+      }
+    },
+    {
+      "source": "item:16ca778f-a02e-4bd1-bc45-315f305b280c",
+      "target": "tag:capture",
+      "from": "item:16ca778f-a02e-4bd1-bc45-315f305b280c",
+      "to": "tag:capture",
+      "type": "TAGGED_WITH",
+      "value": 1.0,
+      "title": "TAGGED_WITH",
+      "properties": {
+        "tag_slug": "capture",
+        "tag_name": "capture"
+      }
+    },
+    {
+      "source": "item:1d6f5190-d72d-4e82-b0b7-eacb60d67008",
+      "target": "tag:capture",
+      "from": "item:1d6f5190-d72d-4e82-b0b7-eacb60d67008",
+      "to": "tag:capture",
+      "type": "TAGGED_WITH",
+      "value": 1.0,
+      "title": "TAGGED_WITH",
+      "properties": {
+        "tag_slug": "capture",
+        "tag_name": "capture"
+      }
+    },
+    {
+      "source": "item:2358e341-52db-4166-98a7-c98dd2e10a69",
+      "target": "tag:capture",
+      "from": "item:2358e341-52db-4166-98a7-c98dd2e10a69",
+      "to": "tag:capture",
+      "type": "TAGGED_WITH",
+      "value": 1.0,
+      "title": "TAGGED_WITH",
+      "properties": {
+        "tag_slug": "capture",
+        "tag_name": "capture"
+      }
+    },
+    {
+      "source": "item:2b33db10-6a55-4442-913e-7e1e800ef722",
+      "target": "tag:capture",
+      "from": "item:2b33db10-6a55-4442-913e-7e1e800ef722",
+      "to": "tag:capture",
+      "type": "TAGGED_WITH",
+      "value": 1.0,
+      "title": "TAGGED_WITH",
+      "properties": {
+        "tag_slug": "capture",
+        "tag_name": "capture"
+      }
+    },
+    {
+      "source": "item:2dde477f-5cee-4310-8aa4-fd3731685cd3",
+      "target": "tag:capture",
+      "from": "item:2dde477f-5cee-4310-8aa4-fd3731685cd3",
+      "to": "tag:capture",
+      "type": "TAGGED_WITH",
+      "value": 1.0,
+      "title": "TAGGED_WITH",
+      "properties": {
+        "tag_slug": "capture",
+        "tag_name": "capture"
+      }
+    },
+    {
+      "source": "item:4ab10c64-5348-4d17-8b03-295014b9a63f",
+      "target": "tag:capture",
+      "from": "item:4ab10c64-5348-4d17-8b03-295014b9a63f",
+      "to": "tag:capture",
+      "type": "TAGGED_WITH",
+      "value": 1.0,
+      "title": "TAGGED_WITH",
+      "properties": {
+        "tag_slug": "capture",
+        "tag_name": "capture"
+      }
+    },
+    {
+      "source": "item:4bda912e-bfef-4e92-a7a4-28124013cba0",
+      "target": "tag:capture",
+      "from": "item:4bda912e-bfef-4e92-a7a4-28124013cba0",
+      "to": "tag:capture",
+      "type": "TAGGED_WITH",
+      "value": 1.0,
+      "title": "TAGGED_WITH",
+      "properties": {
+        "tag_slug": "capture",
+        "tag_name": "capture"
+      }
+    },
+    {
+      "source": "item:652217da-3cd6-454f-9161-c8965e243733",
+      "target": "tag:capture",
+      "from": "item:652217da-3cd6-454f-9161-c8965e243733",
+      "to": "tag:capture",
+      "type": "TAGGED_WITH",
+      "value": 1.0,
+      "title": "TAGGED_WITH",
+      "properties": {
+        "tag_slug": "capture",
+        "tag_name": "capture"
+      }
+    },
+    {
+      "source": "item:6d04d954-5b68-4ddc-b124-f29e60130e1a",
+      "target": "tag:capture",
+      "from": "item:6d04d954-5b68-4ddc-b124-f29e60130e1a",
+      "to": "tag:capture",
+      "type": "TAGGED_WITH",
+      "value": 1.0,
+      "title": "TAGGED_WITH",
+      "properties": {
+        "tag_slug": "capture",
+        "tag_name": "capture"
+      }
+    },
+    {
+      "source": "item:7ae9a914-818c-4221-a7bb-e818763a687c",
+      "target": "tag:capture",
+      "from": "item:7ae9a914-818c-4221-a7bb-e818763a687c",
+      "to": "tag:capture",
+      "type": "TAGGED_WITH",
+      "value": 1.0,
+      "title": "TAGGED_WITH",
+      "properties": {
+        "tag_slug": "capture",
+        "tag_name": "capture"
+      }
+    },
+    {
+      "source": "item:89275e83-e2d8-455d-9fa9-68a4251e5654",
+      "target": "tag:capture",
+      "from": "item:89275e83-e2d8-455d-9fa9-68a4251e5654",
+      "to": "tag:capture",
+      "type": "TAGGED_WITH",
+      "value": 1.0,
+      "title": "TAGGED_WITH",
+      "properties": {
+        "tag_slug": "capture",
+        "tag_name": "capture"
+      }
+    },
+    {
+      "source": "item:8ffd9480-2abd-45e9-a0d7-a50e4113840c",
+      "target": "tag:capture",
+      "from": "item:8ffd9480-2abd-45e9-a0d7-a50e4113840c",
+      "to": "tag:capture",
+      "type": "TAGGED_WITH",
+      "value": 1.0,
+      "title": "TAGGED_WITH",
+      "properties": {
+        "tag_slug": "capture",
+        "tag_name": "capture"
+      }
+    },
+    {
+      "source": "item:94bedd4e-9719-4e38-b306-473ffd496d78",
+      "target": "tag:capture",
+      "from": "item:94bedd4e-9719-4e38-b306-473ffd496d78",
+      "to": "tag:capture",
+      "type": "TAGGED_WITH",
+      "value": 1.0,
+      "title": "TAGGED_WITH",
+      "properties": {
+        "tag_slug": "capture",
+        "tag_name": "capture"
+      }
+    },
+    {
+      "source": "item:9f5ff45f-32cf-448d-9690-b353712d42e1",
+      "target": "tag:capture",
+      "from": "item:9f5ff45f-32cf-448d-9690-b353712d42e1",
+      "to": "tag:capture",
+      "type": "TAGGED_WITH",
+      "value": 1.0,
+      "title": "TAGGED_WITH",
+      "properties": {
+        "tag_slug": "capture",
+        "tag_name": "capture"
+      }
+    },
+    {
+      "source": "item:a30cde12-f2ba-4b89-ba52-4433e4a73846",
+      "target": "tag:capture",
+      "from": "item:a30cde12-f2ba-4b89-ba52-4433e4a73846",
+      "to": "tag:capture",
+      "type": "TAGGED_WITH",
+      "value": 1.0,
+      "title": "TAGGED_WITH",
+      "properties": {
+        "tag_slug": "capture",
+        "tag_name": "capture"
+      }
+    },
+    {
+      "source": "item:ba529ac4-b1d3-4ac7-b540-ade1f9aeb548",
+      "target": "tag:capture",
+      "from": "item:ba529ac4-b1d3-4ac7-b540-ade1f9aeb548",
+      "to": "tag:capture",
+      "type": "TAGGED_WITH",
+      "value": 1.0,
+      "title": "TAGGED_WITH",
+      "properties": {
+        "tag_slug": "capture",
+        "tag_name": "capture"
+      }
+    },
+    {
+      "source": "item:bcb3f86d-b6c8-46a2-8f4b-b37ed95ad5df",
+      "target": "tag:capture",
+      "from": "item:bcb3f86d-b6c8-46a2-8f4b-b37ed95ad5df",
+      "to": "tag:capture",
+      "type": "TAGGED_WITH",
+      "value": 1.0,
+      "title": "TAGGED_WITH",
+      "properties": {
+        "tag_slug": "capture",
+        "tag_name": "capture"
+      }
+    },
+    {
+      "source": "item:cefca2e6-8bfc-46cf-9eb3-8cb74a56d2a2",
+      "target": "tag:capture",
+      "from": "item:cefca2e6-8bfc-46cf-9eb3-8cb74a56d2a2",
+      "to": "tag:capture",
+      "type": "TAGGED_WITH",
+      "value": 1.0,
+      "title": "TAGGED_WITH",
+      "properties": {
+        "tag_slug": "capture",
+        "tag_name": "capture"
+      }
+    },
+    {
+      "source": "item:d15ef515-448b-45b0-b269-277f3ddd243a",
+      "target": "tag:capture",
+      "from": "item:d15ef515-448b-45b0-b269-277f3ddd243a",
+      "to": "tag:capture",
+      "type": "TAGGED_WITH",
+      "value": 1.0,
+      "title": "TAGGED_WITH",
+      "properties": {
+        "tag_slug": "capture",
+        "tag_name": "capture"
+      }
+    },
+    {
+      "source": "item:d33c88c1-1f47-43f0-9878-8a1d63775d1d",
+      "target": "tag:capture",
+      "from": "item:d33c88c1-1f47-43f0-9878-8a1d63775d1d",
+      "to": "tag:capture",
+      "type": "TAGGED_WITH",
+      "value": 1.0,
+      "title": "TAGGED_WITH",
+      "properties": {
+        "tag_slug": "capture",
+        "tag_name": "capture"
+      }
+    },
+    {
+      "source": "item:d3dfb23c-36a8-44fe-92ae-a394c1496377",
+      "target": "tag:capture",
+      "from": "item:d3dfb23c-36a8-44fe-92ae-a394c1496377",
+      "to": "tag:capture",
+      "type": "TAGGED_WITH",
+      "value": 1.0,
+      "title": "TAGGED_WITH",
+      "properties": {
+        "tag_slug": "capture",
+        "tag_name": "capture"
+      }
+    },
+    {
+      "source": "item:e5ec9c63-60dd-48f9-9249-e459cc718219",
+      "target": "tag:capture",
+      "from": "item:e5ec9c63-60dd-48f9-9249-e459cc718219",
+      "to": "tag:capture",
+      "type": "TAGGED_WITH",
+      "value": 1.0,
+      "title": "TAGGED_WITH",
+      "properties": {
+        "tag_slug": "capture",
+        "tag_name": "capture"
+      }
+    },
+    {
+      "source": "item:e9e3c923-b684-453b-beae-19fa2d697760",
+      "target": "tag:capture",
+      "from": "item:e9e3c923-b684-453b-beae-19fa2d697760",
+      "to": "tag:capture",
+      "type": "TAGGED_WITH",
+      "value": 1.0,
+      "title": "TAGGED_WITH",
+      "properties": {
+        "tag_slug": "capture",
+        "tag_name": "capture"
+      }
+    }
+  ]
+}

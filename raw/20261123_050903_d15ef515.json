@@ -1,0 +1,13 @@
+{
+  "id": "d15ef515-448b-45b0-b269-277f3ddd243a",
+  "timestamp": "2026-11-23T05:09:03.225996+00:00",
+  "source_type": "text",
+  "source_uri": null,
+  "raw_content": "# Resource: Tiago Forte's P.A.R.A. Framework\nFour distinct top-level categories based on actionability:\n1. Projects: Short-term efforts with a specific goal and deadline (e.g., 'Launch SecondSelf MVP').\n2. Areas: Long-term responsibilities with standards to maintain over time (e.g., 'Health', 'Architecture').\n3. Resources: Topics or themes of ongoing interest for reference (e.g., 'Machine Learning', 'Recipes').\n4. Archives: Inactive items from the other three categories preserved for retrieval.",
+  "metadata": {
+    "title": "Resource: Tiago Forte's P.A.R.A. Framework",
+    "char_count": 499,
+    "content_hash": "1bc54dc11195567ca3f35b832e1ed70cef070066343f6d2deb8aefda7fd54608",
+    "captured_at": "2026-11-23T05:09:03.225996+00:00"
+  }
+}

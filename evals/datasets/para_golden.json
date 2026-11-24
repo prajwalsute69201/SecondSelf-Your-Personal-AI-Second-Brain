@@ -1,0 +1,252 @@
+[
+  {
+    "id": "4bda912e-bfef-4e92-a7a4-28124013cba0",
+    "title": "Project: SecondSelf MVP Launch",
+    "expected_category": "Projects",
+    "source_type": "text",
+    "content": "# Project: SecondSelf MVP Launch\nDeadline: End of Month\nCore Goals:\n- Ship Milestone 1 (Archivist CLI capture) and Milestone 2 (Groq PARA classification).\n- Keep production serverless bundle below 50 MB on Vercel.\n- Achieve sub-1.5s latency on /api/ask queries.\nKey Blockers: Tuning cosine similarity threshold (target θ = 0.65).",
+    "expected_signals": ["deadline", "ship", "milestone", "goals"],
+    "expected_related_ids": ["cefca2e6-8bfc-46cf-9eb3-8cb74a56d2a2", "2b33db10-6a55-4442-913e-7e1e800ef722"],
+    "ground_truth_rationale": "Explicit deadline ('End of Month') with discrete release deliverable (ship Milestone 1 and 2)."
+  },
+  {
+    "id": "cefca2e6-8bfc-46cf-9eb3-8cb74a56d2a2",
+    "title": "Project: Canvas Physics Optimization",
+    "expected_category": "Projects",
+    "source_type": "text",
+    "content": "# Project: Canvas Physics Optimization\nTarget Date: Next Friday\nAction Items:\n- Clamp Barnes-Hut theta parameter to 0.5 to prevent graph flutter.\n- Implement level-of-detail label culling for N > 250 nodes.\n- Profile WebGL render loop to maintain 60 FPS on mobile Safari.",
+    "expected_signals": ["target date", "action items", "release target"],
+    "expected_related_ids": ["4bda912e-bfef-4e92-a7a4-28124013cba0", "9f5ff45f-32cf-448d-9690-b353712d42e1"],
+    "ground_truth_rationale": "Time-bound effort with target date 'Next Friday' and discrete engineering action items."
+  },
+  {
+    "id": "2b33db10-6a55-4442-913e-7e1e800ef722",
+    "title": "Project Roadmap: Phase 1 Archivist Deliverables",
+    "expected_category": "Projects",
+    "source_type": "text",
+    "content": "# Project Roadmap: Phase 1 Archivist Deliverables\nSprint Goal: Complete capture CLI and raw JSON serialization by end of week.\nDeliverables:\n1. Implement text, url, and pdf extractors.\n2. Write atomic immutable raw store with SHA-256 verification.\n3. Validate against 10 real capture items.",
+    "expected_signals": ["sprint goal", "deliverables", "by end of week"],
+    "expected_related_ids": ["4bda912e-bfef-4e92-a7a4-28124013cba0"],
+    "ground_truth_rationale": "Active sprint goal with immediate end-of-week deadline and discrete Phase 1 deliverables."
+  },
+  {
+    "id": "8ffd9480-2abd-45e9-a0d7-a50e4113840c",
+    "title": "Project: Groq Llama 3 Schema Reliability",
+    "expected_category": "Projects",
+    "source_type": "text",
+    "content": "# Project: Groq Llama 3 Schema Reliability\nTarget completion: by tomorrow EOD.\nSprint milestone: Implement strict JSON schema parsing and fallback retry loop.\nTasks to complete:\n- Add Pydantic schema validation for PARA classification responses.\n- Build regex JSON fence cleaner for malformed LLM outputs.",
+    "expected_signals": ["by tomorrow", "target completion", "tasks to complete"],
+    "expected_related_ids": ["4bda912e-bfef-4e92-a7a4-28124013cba0"],
+    "ground_truth_rationale": "Time-bound sprint milestone with explicit tomorrow EOD completion target."
+  },
+  {
+    "id": "d33c88c1-1f47-43f0-9878-8a1d63775d1d",
+    "title": "Barnes–Hut simulation - Wikipedia",
+    "expected_category": "Projects",
+    "source_type": "url",
+    "content": "The Barnes–Hut simulation (named after Josh Barnes and Piet Hut) is an approximate algorithm for performing an N-body simulation with O(N log N) complexity. Implement in SecondSelf by next sprint to optimize force-directed layout.",
+    "expected_signals": ["implement", "by next sprint"],
+    "expected_related_ids": ["cefca2e6-8bfc-46cf-9eb3-8cb74a56d2a2", "9f5ff45f-32cf-448d-9690-b353712d42e1"],
+    "ground_truth_rationale": "Algorithm reference paired with an active sprint implementation commitment."
+  },
+  {
+    "id": "a30cde12-f2ba-4b89-ba52-4433e4a73846",
+    "title": "Vector database - Wikipedia",
+    "expected_category": "Projects",
+    "source_type": "url",
+    "content": "A vector database is an indexing system optimized for storing and retrieving high-dimensional embeddings. We need to evaluate and deploy our lightweight NumPy dot-product index by EOD Friday for SecondSelf Milestone 2.",
+    "expected_signals": ["by eod friday", "deploy", "evaluate"],
+    "expected_related_ids": ["89275e83-e2d8-455d-9fa9-68a4251e5654", "d3dfb23c-36a8-44fe-92ae-a394c1496377"],
+    "ground_truth_rationale": "Contains an explicit action item to evaluate and deploy by EOD Friday."
+  },
+  {
+    "id": "94bedd4e-9719-4e38-b306-473ffd496d78",
+    "title": "Area: Personal Software Engineering Standards",
+    "expected_category": "Areas",
+    "source_type": "text",
+    "content": "# Area: Personal Software Engineering Standards\nPrinciples to uphold across all projects indefinitely:\n1. Strict Twelve-Factor App compliance: Config in environment, never hardcode secrets.\n2. Dual-Plane Separation: Heavy ML dependencies belong strictly in requirements-dev.txt.\n3. GitOps truth: Knowledge files in Git, markdown-first architecture.\n4. Standard operating procedure: run pre-commit hooks and type checker on every commit.",
+    "expected_signals": ["principles to uphold", "standard operating procedure", "indefinitely"],
+    "expected_related_ids": ["e9e3c923-b684-453b-beae-19fa2d697760"],
+    "ground_truth_rationale": "Standard of performance and engineering governance maintained continuously without an end date."
+  },
+  {
+    "id": "7ae9a914-818c-4221-a7bb-e818763a687c",
+    "title": "Area: Cognitive Energy & Sleep Architecture",
+    "expected_category": "Areas",
+    "source_type": "text",
+    "content": "# Area: Cognitive Energy & Sleep Architecture\nOngoing health tracking and daily habit protocols:\n- Morning routine: 15 minutes direct sunlight before screens.\n- Caffeine cutoff: strictly 10 hours prior to bedtime.\n- Weekly review cadence: audit Oura sleep latency and deep sleep percentage every Sunday evening.",
+    "expected_signals": ["health tracking", "daily habit", "routine", "weekly review"],
+    "expected_related_ids": [],
+    "ground_truth_rationale": "Personal health maintenance domain and recurring daily/weekly routine with no finish line."
+  },
+  {
+    "id": "ba529ac4-b1d3-4ac7-b540-ade1f9aeb548",
+    "title": "Area: Personal Asset Allocation Policy",
+    "expected_category": "Areas",
+    "source_type": "text",
+    "content": "# Area: Personal Asset Allocation Policy\nOngoing financial governance and budget management:\n- 70% Global index equity funds.\n- 20% Treasury bills & cash buffer.\n- 10% Asymmetric technology bets.\nMonthly checklist: rebalance on the 1st of every month if any asset class drifts by > 5%.",
+    "expected_signals": ["budget management", "ongoing", "monthly checklist", "governance"],
+    "expected_related_ids": [],
+    "ground_truth_rationale": "Continuous financial responsibility requiring monthly recurring rebalancing cadence."
+  },
+  {
+    "id": "e9e3c923-b684-453b-beae-19fa2d697760",
+    "title": "SecondSelf — Engineering & Code Conventions",
+    "expected_category": "Areas",
+    "source_type": "text",
+    "content": "# SecondSelf — Engineering & Code Conventions\nGuidelines to follow for codebase maintainability:\n- Continuous maintenance of PEP 8 style standards.\n- Strict mypy type hint coverage across all modules.\n- SOP for error handling: never silently suppress exceptions.",
+    "expected_signals": ["guidelines to follow", "continuous maintenance", "sop"],
+    "expected_related_ids": ["94bedd4e-9719-4e38-b306-473ffd496d78"],
+    "ground_truth_rationale": "Operating standard and living guidelines to follow continuously during development."
+  },
+  {
+    "id": "d15ef515-448b-45b0-b269-277f3ddd243a",
+    "title": "Resource: Tiago Forte's P.A.R.A. Framework",
+    "expected_category": "Areas",
+    "source_type": "text",
+    "content": "# Tiago Forte's P.A.R.A. System Maintenance\nStandard operating procedure for knowledge management:\n- Weekly review routine: Process raw/ inbox into PARA folders.\n- Ongoing maintenance of Areas: audit active responsibilities quarterly.\n- Keep track of project deadlines every Monday morning.",
+    "expected_signals": ["weekly review", "standard operating procedure", "ongoing maintenance"],
+    "expected_related_ids": ["bcb3f86d-b6c8-46a2-8f4b-b37ed95ad5df"],
+    "ground_truth_rationale": "Focuses on recurring routine and ongoing maintenance protocols for personal knowledge."
+  },
+  {
+    "id": "sop-infra-01",
+    "title": "System Infrastructure Monitoring Protocols",
+    "expected_category": "Areas",
+    "source_type": "text",
+    "content": "# System Infrastructure Monitoring Protocols\nStandard operating procedure for site reliability.\nWeekly cadence: audit database connection pools, memory utilization, and error rates.\nMaintain continuous upkeep of serverless function execution logs.",
+    "expected_signals": ["standard operating procedure", "weekly cadence", "continuous upkeep"],
+    "expected_related_ids": ["94bedd4e-9719-4e38-b306-473ffd496d78"],
+    "ground_truth_rationale": "Ongoing system operations protocol without a completion date."
+  },
+  {
+    "id": "d3dfb23c-36a8-44fe-92ae-a394c1496377",
+    "title": "Cosine similarity - Wikipedia",
+    "expected_category": "Resources",
+    "source_type": "url",
+    "content": "Cosine similarity is a measure of similarity between two non-zero vectors defined in an inner product space. Cosine similarity is the cosine of the angle between the vectors; that is, it is the dot product of the vectors divided by the product of their lengths. A reference guide for high-dimensional information retrieval.",
+    "expected_signals": ["reference guide", "documentation", "definition"],
+    "expected_related_ids": ["89275e83-e2d8-455d-9fa9-68a4251e5654"],
+    "ground_truth_rationale": "Timeless mathematical and conceptual reference guide without personal action items."
+  },
+  {
+    "id": "89275e83-e2d8-455d-9fa9-68a4251e5654",
+    "title": "Resource: Metric Selection in High-Dimensional Vector Search",
+    "expected_category": "Resources",
+    "source_type": "text",
+    "content": "# Resource: Metric Selection in High-Dimensional Vector Search\nTechnical cheatsheet and syntax reference for distance metrics:\n- Cosine Similarity: Measures angle between vectors; invariant to vector magnitude.\n- Dot Product: Equal to cosine similarity when vectors are L2-normalized.\n- Euclidean (L2) Distance: Measures geometric distance; sensitive to length without normalization.",
+    "expected_signals": ["cheatsheet", "syntax reference", "resource"],
+    "expected_related_ids": ["d3dfb23c-36a8-44fe-92ae-a394c1496377"],
+    "ground_truth_rationale": "Technical cheatsheet and lookup reference documentation for vector search metrics."
+  },
+  {
+    "id": "2dde477f-5cee-4310-8aa4-fd3731685cd3",
+    "title": "Resource: Decoupled Serverless RAG Design",
+    "expected_category": "Resources",
+    "source_type": "text",
+    "content": "# Resource: Decoupled Serverless RAG Design\nArchitecture notes on decoupled build vs runtime planes.\nOverview of Jamstack principles: compile vectors locally with heavy PyTorch dependencies, export to static JSON, and serve sub-15ms queries from edge functions.",
+    "expected_signals": ["architecture notes", "overview of", "resource"],
+    "expected_related_ids": ["1d6f5190-d72d-4e82-b0b7-eacb60d67008"],
+    "ground_truth_rationale": "Architectural documentation and conceptual notes stored for future design lookup."
+  },
+  {
+    "id": "bcb3f86d-b6c8-46a2-8f4b-b37ed95ad5df",
+    "title": "Personal knowledge management - Wikipedia",
+    "expected_category": "Resources",
+    "source_type": "url",
+    "content": "Personal knowledge management (PKM) is a collection of processes that a person uses to gather, classify, store, search, retrieve and organize knowledge in their daily activities. A curated summary of PKM frameworks including Zettelkasten and P.A.R.A.",
+    "expected_signals": ["curated summary", "frameworks", "reference"],
+    "expected_related_ids": ["d15ef515-448b-45b0-b269-277f3ddd243a"],
+    "ground_truth_rationale": "Encyclopedic overview and conceptual summary of PKM literature."
+  },
+  {
+    "id": "16ca778f-a02e-4bd1-bc45-315f305b280c",
+    "title": "Transformer (deep learning) - Wikipedia",
+    "expected_category": "Resources",
+    "source_type": "url",
+    "content": "A transformer is a deep learning architecture developed by Google and based on the multi-head self-attention mechanism. Technical documentation and research paper overview of transformer attention math.",
+    "expected_signals": ["technical documentation", "overview", "research paper"],
+    "expected_related_ids": ["1d6f5190-d72d-4e82-b0b7-eacb60d67008"],
+    "ground_truth_rationale": "Static technical documentation of transformer neural network architecture."
+  },
+  {
+    "id": "2358e341-52db-4166-98a7-c98dd2e10a69",
+    "title": "How to Do Great Work - Paul Graham",
+    "expected_category": "Resources",
+    "source_type": "text",
+    "content": "If you wanted to collect recipes for doing great work in a lot of different fields, what would they have in common? A deep dive essay by Paul Graham exploring curiosity, work ethic, and intellectual independence.",
+    "expected_signals": ["deep dive", "essay", "literature notes"],
+    "expected_related_ids": [],
+    "ground_truth_rationale": "Curated literature notes and philosophical essay for future contemplation."
+  },
+  {
+    "id": "0bdc54f2-29a8-43d7-89b6-2d5f9507f1d3",
+    "title": "Idea for SecondSelf: force-directed associative layout",
+    "expected_category": "Resources",
+    "source_type": "text",
+    "content": "Summary of force-directed associative layout algorithms for canvas visualization. Research notes on physics engines, Coulomb repulsion, and Hooke's spring law.",
+    "expected_signals": ["summary of", "research notes", "guide to"],
+    "expected_related_ids": ["9f5ff45f-32cf-448d-9690-b353712d42e1"],
+    "ground_truth_rationale": "Conceptual research notes on physics equations without an active sprint commitment."
+  },
+  {
+    "id": "e5ec9c63-60dd-48f9-9249-e459cc718219",
+    "title": "Archive: 2025 Home Office Renovation",
+    "expected_category": "Archives",
+    "source_type": "text",
+    "content": "# Archive: 2025 Home Office Renovation\nStatus: DONE. Completed in November 2025.\nProject retrospective: Total spend came in at $4,200 (under $5,000 budget). Contractor work finished and signed off. All receipts filed.",
+    "expected_signals": ["status: done", "completed", "retrospective"],
+    "expected_related_ids": [],
+    "ground_truth_rationale": "Explicitly marked 'Status: DONE' with completed project retrospective."
+  },
+  {
+    "id": "4ab10c64-5348-4d17-8b03-295014b9a63f",
+    "title": "Archive: Streamlit Second Brain Prototype (Deprecated)",
+    "expected_category": "Archives",
+    "source_type": "text",
+    "content": "# Archive: Streamlit Second Brain Prototype (Deprecated)\nDecision: Abandoned in favor of Jamstack + Vercel Serverless.\nReasons for deprecation:\n- Streamlit requires persistent long-running Python containers with stateful WebSockets.\n- Canvas reruns entire script on every user click, making graph traversal sluggish.\n- Retired and archived in Q1 2026.",
+    "expected_signals": ["deprecated", "abandoned", "retired and archived"],
+    "expected_related_ids": [],
+    "ground_truth_rationale": "Superseded technical architecture marked deprecated, abandoned, and retired."
+  },
+  {
+    "id": "6d04d954-5b68-4ddc-b124-f29e60130e1a",
+    "title": "Semantic network - Wikipedia",
+    "expected_category": "Archives",
+    "source_type": "url",
+    "content": "Historical survey of early artificial intelligence: A semantic network, or frame network, is a knowledge base that represents semantic relations between concepts in a network. Deprecated AI representation from 1960s GOFAI, superseded by modern vector embeddings. Status: archived legacy notes.",
+    "expected_signals": ["historical", "deprecated", "superseded", "archived legacy"],
+    "expected_related_ids": [],
+    "ground_truth_rationale": "Historical legacy concept explicitly marked deprecated, superseded, and archived."
+  },
+  {
+    "id": "9f5ff45f-32cf-448d-9690-b353712d42e1",
+    "title": "Force-directed graph drawing - Wikipedia",
+    "expected_category": "Archives",
+    "source_type": "url",
+    "content": "Post-mortem analysis of classic force-directed graph drawing algorithms. Historical review of Eades 1984 spring embedder and Fruchterman-Reingold algorithm. All experimental prototypes finished and archived.",
+    "expected_signals": ["post-mortem", "historical review", "archived"],
+    "expected_related_ids": ["d33c88c1-1f47-43f0-9878-8a1d63775d1d", "0bdc54f2-29a8-43d7-89b6-2d5f9507f1d3"],
+    "ground_truth_rationale": "Historical retrospective on early graph algorithms with all prototypes finished and archived."
+  },
+  {
+    "id": "1d6f5190-d72d-4e82-b0b7-eacb60d67008",
+    "title": "Retrieval-augmented generation - Wikipedia",
+    "expected_category": "Archives",
+    "source_type": "url",
+    "content": "Legacy technical documentation on RAG architecture v0.1: Early proof-of-concept using local LangChain vector stores. Deprecated due to bundle size violations on serverless platforms. Project retrospective complete and closed.",
+    "expected_signals": ["legacy", "deprecated", "retrospective", "closed"],
+    "expected_related_ids": ["2dde477f-5cee-4310-8aa4-fd3731685cd3"],
+    "ground_truth_rationale": "Obsolete v0.1 proof-of-concept marked legacy, deprecated, and closed."
+  },
+  {
+    "id": "legacy-auth-migration-01",
+    "title": "2024 Legacy Auth Migration Post-Mortem",
+    "expected_category": "Archives",
+    "source_type": "text",
+    "content": "# 2024 Legacy Auth Migration Post-Mortem\nIncident wrap-up and retrospective on session token deprecation.\nAll migration milestones successfully completed and closed. Historical archive.",
+    "expected_signals": ["post-mortem", "deprecated", "completed and closed", "historical archive"],
+    "expected_related_ids": [],
+    "ground_truth_rationale": "Finished post-mortem on legacy auth migration marked historical archive."
+  }
+]

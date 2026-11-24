@@ -1,0 +1,8 @@
+﻿# ==============================================================================
+# Layer 6: Optional Integrations & Alternative Runtimes
+# Used for: FastEmbed (ONNX alternative to torch), static type stubs
+# ==============================================================================
+fastembed>=0.3.0,<1.0.0
+types-requests>=2.31.0
+types-beautifulsoup4>=4.12.0
+

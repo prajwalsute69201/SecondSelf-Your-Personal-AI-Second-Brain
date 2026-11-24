@@ -1,0 +1,27 @@
+﻿# ==============================================================================
+# SecondSelf — Container Build Exclusions (.dockerignore)
+# ==============================================================================
+.env
+.env.*
+.env.local
+.env.staging
+.env.production
+!.env.example
+!.env.test
+
+.git/
+.gitignore
+.github/
+.venv/
+env/
+__pycache__/
+*.pyc
+*.pyo
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.vercel/
+htmlcov/
+tests/
+evals/
+Docs/

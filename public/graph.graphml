@@ -1,0 +1,529 @@
+<?xml version="1.0" encoding="utf-8"?>
+<graphml xmlns="http://graphml.graphdrawing.org/xmlns" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://graphml.graphdrawing.org/xmlns http://graphml.graphdrawing.org/xmlns/1.0/graphml.xsd">
+  <key id="d_label" for="node" attr.name="label" attr.type="string"/>
+  <key id="d_type" for="node" attr.name="type" attr.type="string"/>
+  <key id="d_group" for="node" attr.name="group" attr.type="string"/>
+  <key id="d_degree" for="node" attr.name="degree" attr.type="int"/>
+  <key id="d_visual_value" for="node" attr.name="visual_value" attr.type="double"/>
+  <key id="d_summary" for="node" attr.name="summary" attr.type="string"/>
+  <key id="d_confidence" for="node" attr.name="confidence" attr.type="double"/>
+  <key id="e_type" for="edge" attr.name="type" attr.type="string"/>
+  <key id="e_score" for="edge" attr.name="score" attr.type="double"/>
+  <key id="e_similarity_pct" for="edge" attr.name="similarity_pct" attr.type="int"/>
+  <key id="e_method" for="edge" attr.name="method" attr.type="string"/>
+  <key id="e_reason" for="edge" attr.name="reason" attr.type="string"/>
+  <graph id="G" edgedefault="directed">
+    <node id="item:0bdc54f2-29a8-43d7-89b6-2d5f9507f1d3">
+      <data key="d_label">Idea for SecondSelf: force-directed associative layout</data>
+      <data key="d_type">Item</data>
+      <data key="d_group">Resources</data>
+      <data key="d_degree">3</data>
+      <data key="d_visual_value">14.09</data>
+      <data key="d_summary">Idea for SecondSelf: force-directed associative layout</data>
+      <data key="d_confidence">0.25</data>
+    </node>
+    <node id="item:16ca778f-a02e-4bd1-bc45-315f305b280c">
+      <data key="d_label">Transformer (deep learning) - Wikipedia</data>
+      <data key="d_type">Item</data>
+      <data key="d_group">Archives</data>
+      <data key="d_degree">3</data>
+      <data key="d_visual_value">14.09</data>
+      <data key="d_summary">Transformer (deep learning)</data>
+      <data key="d_confidence">0.411</data>
+    </node>
+    <node id="item:1d6f5190-d72d-4e82-b0b7-eacb60d67008">
+      <data key="d_label">Retrieval-augmented generation - Wikipedia</data>
+      <data key="d_type">Item</data>
+      <data key="d_group">Archives</data>
+      <data key="d_degree">3</data>
+      <data key="d_visual_value">14.09</data>
+      <data key="d_summary">Retrieval-augmented generation</data>
+      <data key="d_confidence">0.7895</data>
+    </node>
+    <node id="item:2358e341-52db-4166-98a7-c98dd2e10a69">
+      <data key="d_label">How to Do Great Work</data>
+      <data key="d_type">Item</data>
+      <data key="d_group">Projects</data>
+      <data key="d_degree">3</data>
+      <data key="d_visual_value">14.09</data>
+      <data key="d_summary">If you collected lists of techniques for doing great work in a lot</data>
+      <data key="d_confidence">0.5385</data>
+    </node>
+    <node id="item:2b33db10-6a55-4442-913e-7e1e800ef722">
+      <data key="d_label">Project Roadmap: Phase 1 Archivist Deliverables</data>
+      <data key="d_type">Item</data>
+      <data key="d_group">Projects</data>
+      <data key="d_degree">3</data>
+      <data key="d_visual_value">14.09</data>
+      <data key="d_summary">Project Roadmap: Phase 1 Archivist Deliverables</data>
+      <data key="d_confidence">1.0</data>
+    </node>
+    <node id="item:2dde477f-5cee-4310-8aa4-fd3731685cd3">
+      <data key="d_label">Resource: Decoupled Serverless RAG Design</data>
+      <data key="d_type">Item</data>
+      <data key="d_group">Resources</data>
+      <data key="d_degree">3</data>
+      <data key="d_visual_value">14.09</data>
+      <data key="d_summary">How to serve vector search in ephemeral Lambdas under 50 MB:</data>
+      <data key="d_confidence">0.25</data>
+    </node>
+    <node id="item:4ab10c64-5348-4d17-8b03-295014b9a63f">
+      <data key="d_label">Archive: Streamlit Second Brain Prototype (Deprecated)</data>
+      <data key="d_type">Item</data>
+      <data key="d_group">Archives</data>
+      <data key="d_degree">3</data>
+      <data key="d_visual_value">14.09</data>
+      <data key="d_summary">Decision: Abandoned in favor of Jamstack + Vercel Serverless.</data>
+      <data key="d_confidence">1.0</data>
+    </node>
+    <node id="item:4bda912e-bfef-4e92-a7a4-28124013cba0">
+      <data key="d_label">Project: SecondSelf MVP Launch</data>
+      <data key="d_type">Item</data>
+      <data key="d_group">Projects</data>
+      <data key="d_degree">3</data>
+      <data key="d_visual_value">14.09</data>
+      <data key="d_summary">Deadline: End of Month</data>
+      <data key="d_confidence">1.0</data>
+    </node>
+    <node id="item:652217da-3cd6-454f-9161-c8965e243733">
+      <data key="d_label">First note on associative memory for SecondSelf quality gate</data>
+      <data key="d_type">Item</data>
+      <data key="d_group">Resources</data>
+      <data key="d_degree">3</data>
+      <data key="d_visual_value">14.09</data>
+      <data key="d_summary">First note on associative memory for SecondSelf quality gate</data>
+      <data key="d_confidence">0.25</data>
+    </node>
+    <node id="item:6d04d954-5b68-4ddc-b124-f29e60130e1a">
+      <data key="d_label">Semantic network - Wikipedia</data>
+      <data key="d_type">Item</data>
+      <data key="d_group">Archives</data>
+      <data key="d_degree">3</data>
+      <data key="d_visual_value">14.09</data>
+      <data key="d_summary">| Part of a series on | ||||</data>
+      <data key="d_confidence">1.0</data>
+    </node>
+    <node id="item:7ae9a914-818c-4221-a7bb-e818763a687c">
+      <data key="d_label">Area: Cognitive Energy &amp; Sleep Architecture</data>
+      <data key="d_type">Item</data>
+      <data key="d_group">Resources</data>
+      <data key="d_degree">3</data>
+      <data key="d_visual_value">14.09</data>
+      <data key="d_summary">Daily operational protocols:</data>
+      <data key="d_confidence">0.25</data>
+    </node>
+    <node id="item:89275e83-e2d8-455d-9fa9-68a4251e5654">
+      <data key="d_label">Resource: Metric Selection in High-Dimensional Vector Sear...</data>
+      <data key="d_type">Item</data>
+      <data key="d_group">Resources</data>
+      <data key="d_degree">3</data>
+      <data key="d_visual_value">14.09</data>
+      <data key="d_summary">- Cosine Similarity: Measures angle between vectors; invariant to vector magnitude. Best for normalized text embeddings where document length varies.</data>
+      <data key="d_confidence">0.25</data>
+    </node>
+    <node id="item:8ffd9480-2abd-45e9-a0d7-a50e4113840c">
+      <data key="d_label">Project: Groq Llama 3 Schema Reliability</data>
+      <data key="d_type">Item</data>
+      <data key="d_group">Resources</data>
+      <data key="d_degree">3</data>
+      <data key="d_visual_value">14.09</data>
+      <data key="d_summary">Objective: Enforce 100% Pydantic JSON compliance for classify.py.</data>
+      <data key="d_confidence">0.25</data>
+    </node>
+    <node id="item:94bedd4e-9719-4e38-b306-473ffd496d78">
+      <data key="d_label">Area: Personal Software Engineering Standards</data>
+      <data key="d_type">Item</data>
+      <data key="d_group">Resources</data>
+      <data key="d_degree">3</data>
+      <data key="d_visual_value">14.09</data>
+      <data key="d_summary">Principles to uphold across all projects:</data>
+      <data key="d_confidence">0.25</data>
+    </node>
+    <node id="item:9f5ff45f-32cf-448d-9690-b353712d42e1">
+      <data key="d_label">Force-directed graph drawing - Wikipedia</data>
+      <data key="d_type">Item</data>
+      <data key="d_group">Archives</data>
+      <data key="d_degree">3</data>
+      <data key="d_visual_value">14.09</data>
+      <data key="d_summary">Force-directed graph drawing</data>
+      <data key="d_confidence">0.8056</data>
+    </node>
+    <node id="item:a30cde12-f2ba-4b89-ba52-4433e4a73846">
+      <data key="d_label">Vector database - Wikipedia</data>
+      <data key="d_type">Item</data>
+      <data key="d_group">Projects</data>
+      <data key="d_degree">3</data>
+      <data key="d_visual_value">14.09</data>
+      <data key="d_summary">| Part of a series on |</data>
+      <data key="d_confidence">0.5</data>
+    </node>
+    <node id="item:ba529ac4-b1d3-4ac7-b540-ade1f9aeb548">
+      <data key="d_label">Area: Personal Asset Allocation Policy</data>
+      <data key="d_type">Item</data>
+      <data key="d_group">Resources</data>
+      <data key="d_degree">3</data>
+      <data key="d_visual_value">14.09</data>
+      <data key="d_summary">Rules for capital deployment:</data>
+      <data key="d_confidence">0.25</data>
+    </node>
+    <node id="item:bcb3f86d-b6c8-46a2-8f4b-b37ed95ad5df">
+      <data key="d_label">Personal knowledge management - Wikipedia</data>
+      <data key="d_type">Item</data>
+      <data key="d_group">Resources</data>
+      <data key="d_degree">3</data>
+      <data key="d_visual_value">14.09</data>
+      <data key="d_summary">Personal knowledge management</data>
+      <data key="d_confidence">0.25</data>
+    </node>
+    <node id="item:cefca2e6-8bfc-46cf-9eb3-8cb74a56d2a2">
+      <data key="d_label">Project: Canvas Physics Optimization</data>
+      <data key="d_type">Item</data>
+      <data key="d_group">Projects</data>
+      <data key="d_degree">3</data>
+      <data key="d_visual_value">14.09</data>
+      <data key="d_summary">Investigate vis-network Barnes-Hut parameters:</data>
+      <data key="d_confidence">1.0</data>
+    </node>
+    <node id="item:d15ef515-448b-45b0-b269-277f3ddd243a">
+      <data key="d_label">Resource: Tiago Forte's P.A.R.A. Framework</data>
+      <data key="d_type">Item</data>
+      <data key="d_group">Areas</data>
+      <data key="d_degree">3</data>
+      <data key="d_visual_value">14.09</data>
+      <data key="d_summary">Four distinct top-level categories based on actionability:</data>
+      <data key="d_confidence">0.6667</data>
+    </node>
+    <node id="item:d33c88c1-1f47-43f0-9878-8a1d63775d1d">
+      <data key="d_label">Barnes–Hut simulation - Wikipedia</data>
+      <data key="d_type">Item</data>
+      <data key="d_group">Projects</data>
+      <data key="d_degree">3</data>
+      <data key="d_visual_value">14.09</data>
+      <data key="d_summary">Barnes–Hut simulation</data>
+      <data key="d_confidence">1.0</data>
+    </node>
+    <node id="item:d3dfb23c-36a8-44fe-92ae-a394c1496377">
+      <data key="d_label">Cosine similarity - Wikipedia</data>
+      <data key="d_type">Item</data>
+      <data key="d_group">Resources</data>
+      <data key="d_degree">3</data>
+      <data key="d_visual_value">14.09</data>
+      <data key="d_summary">| Part of a series on |</data>
+      <data key="d_confidence">0.6923</data>
+    </node>
+    <node id="item:e5ec9c63-60dd-48f9-9249-e459cc718219">
+      <data key="d_label">Archive: 2025 Home Office Renovation</data>
+      <data key="d_type">Item</data>
+      <data key="d_group">Archives</data>
+      <data key="d_degree">3</data>
+      <data key="d_visual_value">14.09</data>
+      <data key="d_summary">Status: Completed &amp; Decommissioned</data>
+      <data key="d_confidence">1.0</data>
+    </node>
+    <node id="item:e9e3c923-b684-453b-beae-19fa2d697760">
+      <data key="d_label">SecondSelf — Engineering &amp; Code Conventions</data>
+      <data key="d_type">Item</data>
+      <data key="d_group">Archives</data>
+      <data key="d_degree">3</data>
+      <data key="d_visual_value">14.09</data>
+      <data key="d_summary">This document defines the strict engineering standards, coding guidelines, schema contracts, and repository conventions for the **SecondSelf** project. Every contributor and autonomous agent must adhe</data>
+      <data key="d_confidence">0.4173</data>
+    </node>
+    <node id="para:archives">
+      <data key="d_label">Archives</data>
+      <data key="d_type">PARA_Category</data>
+      <data key="d_group">PARA_Category</data>
+      <data key="d_degree">7</data>
+      <data key="d_visual_value">32.0</data>
+    </node>
+    <node id="para:areas">
+      <data key="d_label">Areas</data>
+      <data key="d_type">PARA_Category</data>
+      <data key="d_group">PARA_Category</data>
+      <data key="d_degree">1</data>
+      <data key="d_visual_value">32.0</data>
+    </node>
+    <node id="para:projects">
+      <data key="d_label">Projects</data>
+      <data key="d_type">PARA_Category</data>
+      <data key="d_group">PARA_Category</data>
+      <data key="d_degree">6</data>
+      <data key="d_visual_value">32.0</data>
+    </node>
+    <node id="para:resources">
+      <data key="d_label">Resources</data>
+      <data key="d_type">PARA_Category</data>
+      <data key="d_group">PARA_Category</data>
+      <data key="d_degree">10</data>
+      <data key="d_visual_value">32.0</data>
+    </node>
+    <node id="source:file">
+      <data key="d_label">FILE</data>
+      <data key="d_type">Source</data>
+      <data key="d_group">Source</data>
+      <data key="d_degree">1</data>
+      <data key="d_visual_value">16.0</data>
+    </node>
+    <node id="source:text">
+      <data key="d_label">TEXT</data>
+      <data key="d_type">Source</data>
+      <data key="d_group">Source</data>
+      <data key="d_degree">14</data>
+      <data key="d_visual_value">16.0</data>
+    </node>
+    <node id="source:url">
+      <data key="d_label">URL</data>
+      <data key="d_type">Source</data>
+      <data key="d_group">Source</data>
+      <data key="d_degree">9</data>
+      <data key="d_visual_value">16.0</data>
+    </node>
+    <node id="tag:capture">
+      <data key="d_label">#capture</data>
+      <data key="d_type">Tag</data>
+      <data key="d_group">Tag</data>
+      <data key="d_degree">24</data>
+      <data key="d_visual_value">14.0</data>
+    </node>
+    <edge id="e0" source="item:0bdc54f2-29a8-43d7-89b6-2d5f9507f1d3" target="para:resources">
+      <data key="e_type">BELONGS_TO</data>
+      <data key="e_method">rules</data>
+    </edge>
+    <edge id="e1" source="item:16ca778f-a02e-4bd1-bc45-315f305b280c" target="para:archives">
+      <data key="e_type">BELONGS_TO</data>
+      <data key="e_method">rules</data>
+    </edge>
+    <edge id="e2" source="item:1d6f5190-d72d-4e82-b0b7-eacb60d67008" target="para:archives">
+      <data key="e_type">BELONGS_TO</data>
+      <data key="e_method">rules</data>
+    </edge>
+    <edge id="e3" source="item:2358e341-52db-4166-98a7-c98dd2e10a69" target="para:projects">
+      <data key="e_type">BELONGS_TO</data>
+      <data key="e_method">rules</data>
+    </edge>
+    <edge id="e4" source="item:2b33db10-6a55-4442-913e-7e1e800ef722" target="para:projects">
+      <data key="e_type">BELONGS_TO</data>
+      <data key="e_method">rules</data>
+    </edge>
+    <edge id="e5" source="item:2dde477f-5cee-4310-8aa4-fd3731685cd3" target="para:resources">
+      <data key="e_type">BELONGS_TO</data>
+      <data key="e_method">rules</data>
+    </edge>
+    <edge id="e6" source="item:4ab10c64-5348-4d17-8b03-295014b9a63f" target="para:archives">
+      <data key="e_type">BELONGS_TO</data>
+      <data key="e_method">rules</data>
+    </edge>
+    <edge id="e7" source="item:4bda912e-bfef-4e92-a7a4-28124013cba0" target="para:projects">
+      <data key="e_type">BELONGS_TO</data>
+      <data key="e_method">rules</data>
+    </edge>
+    <edge id="e8" source="item:652217da-3cd6-454f-9161-c8965e243733" target="para:resources">
+      <data key="e_type">BELONGS_TO</data>
+      <data key="e_method">rules</data>
+    </edge>
+    <edge id="e9" source="item:6d04d954-5b68-4ddc-b124-f29e60130e1a" target="para:archives">
+      <data key="e_type">BELONGS_TO</data>
+      <data key="e_method">rules</data>
+    </edge>
+    <edge id="e10" source="item:7ae9a914-818c-4221-a7bb-e818763a687c" target="para:resources">
+      <data key="e_type">BELONGS_TO</data>
+      <data key="e_method">rules</data>
+    </edge>
+    <edge id="e11" source="item:89275e83-e2d8-455d-9fa9-68a4251e5654" target="para:resources">
+      <data key="e_type">BELONGS_TO</data>
+      <data key="e_method">rules</data>
+    </edge>
+    <edge id="e12" source="item:8ffd9480-2abd-45e9-a0d7-a50e4113840c" target="para:resources">
+      <data key="e_type">BELONGS_TO</data>
+      <data key="e_method">rules</data>
+    </edge>
+    <edge id="e13" source="item:94bedd4e-9719-4e38-b306-473ffd496d78" target="para:resources">
+      <data key="e_type">BELONGS_TO</data>
+      <data key="e_method">rules</data>
+    </edge>
+    <edge id="e14" source="item:9f5ff45f-32cf-448d-9690-b353712d42e1" target="para:archives">
+      <data key="e_type">BELONGS_TO</data>
+      <data key="e_method">rules</data>
+    </edge>
+    <edge id="e15" source="item:a30cde12-f2ba-4b89-ba52-4433e4a73846" target="para:projects">
+      <data key="e_type">BELONGS_TO</data>
+      <data key="e_method">rules</data>
+    </edge>
+    <edge id="e16" source="item:ba529ac4-b1d3-4ac7-b540-ade1f9aeb548" target="para:resources">
+      <data key="e_type">BELONGS_TO</data>
+      <data key="e_method">rules</data>
+    </edge>
+    <edge id="e17" source="item:bcb3f86d-b6c8-46a2-8f4b-b37ed95ad5df" target="para:resources">
+      <data key="e_type">BELONGS_TO</data>
+      <data key="e_method">rules</data>
+    </edge>
+    <edge id="e18" source="item:cefca2e6-8bfc-46cf-9eb3-8cb74a56d2a2" target="para:projects">
+      <data key="e_type">BELONGS_TO</data>
+      <data key="e_method">rules</data>
+    </edge>
+    <edge id="e19" source="item:d15ef515-448b-45b0-b269-277f3ddd243a" target="para:areas">
+      <data key="e_type">BELONGS_TO</data>
+      <data key="e_method">rules</data>
+    </edge>
+    <edge id="e20" source="item:d33c88c1-1f47-43f0-9878-8a1d63775d1d" target="para:projects">
+      <data key="e_type">BELONGS_TO</data>
+      <data key="e_method">rules</data>
+    </edge>
+    <edge id="e21" source="item:d3dfb23c-36a8-44fe-92ae-a394c1496377" target="para:resources">
+      <data key="e_type">BELONGS_TO</data>
+      <data key="e_method">rules</data>
+    </edge>
+    <edge id="e22" source="item:e5ec9c63-60dd-48f9-9249-e459cc718219" target="para:archives">
+      <data key="e_type">BELONGS_TO</data>
+      <data key="e_method">rules</data>
+    </edge>
+    <edge id="e23" source="item:e9e3c923-b684-453b-beae-19fa2d697760" target="para:archives">
+      <data key="e_type">BELONGS_TO</data>
+      <data key="e_method">rules</data>
+    </edge>
+    <edge id="e24" source="item:0bdc54f2-29a8-43d7-89b6-2d5f9507f1d3" target="source:text">
+      <data key="e_type">EXTRACTED_FROM</data>
+    </edge>
+    <edge id="e25" source="item:16ca778f-a02e-4bd1-bc45-315f305b280c" target="source:url">
+      <data key="e_type">EXTRACTED_FROM</data>
+    </edge>
+    <edge id="e26" source="item:1d6f5190-d72d-4e82-b0b7-eacb60d67008" target="source:url">
+      <data key="e_type">EXTRACTED_FROM</data>
+    </edge>
+    <edge id="e27" source="item:2358e341-52db-4166-98a7-c98dd2e10a69" target="source:url">
+      <data key="e_type">EXTRACTED_FROM</data>
+    </edge>
+    <edge id="e28" source="item:2b33db10-6a55-4442-913e-7e1e800ef722" target="source:text">
+      <data key="e_type">EXTRACTED_FROM</data>
+    </edge>
+    <edge id="e29" source="item:2dde477f-5cee-4310-8aa4-fd3731685cd3" target="source:text">
+      <data key="e_type">EXTRACTED_FROM</data>
+    </edge>
+    <edge id="e30" source="item:4ab10c64-5348-4d17-8b03-295014b9a63f" target="source:text">
+      <data key="e_type">EXTRACTED_FROM</data>
+    </edge>
+    <edge id="e31" source="item:4bda912e-bfef-4e92-a7a4-28124013cba0" target="source:text">
+      <data key="e_type">EXTRACTED_FROM</data>
+    </edge>
+    <edge id="e32" source="item:652217da-3cd6-454f-9161-c8965e243733" target="source:text">
+      <data key="e_type">EXTRACTED_FROM</data>
+    </edge>
+    <edge id="e33" source="item:6d04d954-5b68-4ddc-b124-f29e60130e1a" target="source:url">
+      <data key="e_type">EXTRACTED_FROM</data>
+    </edge>
+    <edge id="e34" source="item:7ae9a914-818c-4221-a7bb-e818763a687c" target="source:text">
+      <data key="e_type">EXTRACTED_FROM</data>
+    </edge>
+    <edge id="e35" source="item:89275e83-e2d8-455d-9fa9-68a4251e5654" target="source:text">
+      <data key="e_type">EXTRACTED_FROM</data>
+    </edge>
+    <edge id="e36" source="item:8ffd9480-2abd-45e9-a0d7-a50e4113840c" target="source:text">
+      <data key="e_type">EXTRACTED_FROM</data>
+    </edge>
+    <edge id="e37" source="item:94bedd4e-9719-4e38-b306-473ffd496d78" target="source:text">
+      <data key="e_type">EXTRACTED_FROM</data>
+    </edge>
+    <edge id="e38" source="item:9f5ff45f-32cf-448d-9690-b353712d42e1" target="source:url">
+      <data key="e_type">EXTRACTED_FROM</data>
+    </edge>
+    <edge id="e39" source="item:a30cde12-f2ba-4b89-ba52-4433e4a73846" target="source:url">
+      <data key="e_type">EXTRACTED_FROM</data>
+    </edge>
+    <edge id="e40" source="item:ba529ac4-b1d3-4ac7-b540-ade1f9aeb548" target="source:text">
+      <data key="e_type">EXTRACTED_FROM</data>
+    </edge>
+    <edge id="e41" source="item:bcb3f86d-b6c8-46a2-8f4b-b37ed95ad5df" target="source:url">
+      <data key="e_type">EXTRACTED_FROM</data>
+    </edge>
+    <edge id="e42" source="item:cefca2e6-8bfc-46cf-9eb3-8cb74a56d2a2" target="source:text">
+      <data key="e_type">EXTRACTED_FROM</data>
+    </edge>
+    <edge id="e43" source="item:d15ef515-448b-45b0-b269-277f3ddd243a" target="source:text">
+      <data key="e_type">EXTRACTED_FROM</data>
+    </edge>
+    <edge id="e44" source="item:d33c88c1-1f47-43f0-9878-8a1d63775d1d" target="source:url">
+      <data key="e_type">EXTRACTED_FROM</data>
+    </edge>
+    <edge id="e45" source="item:d3dfb23c-36a8-44fe-92ae-a394c1496377" target="source:url">
+      <data key="e_type">EXTRACTED_FROM</data>
+    </edge>
+    <edge id="e46" source="item:e5ec9c63-60dd-48f9-9249-e459cc718219" target="source:text">
+      <data key="e_type">EXTRACTED_FROM</data>
+    </edge>
+    <edge id="e47" source="item:e9e3c923-b684-453b-beae-19fa2d697760" target="source:file">
+      <data key="e_type">EXTRACTED_FROM</data>
+    </edge>
+    <edge id="e48" source="item:0bdc54f2-29a8-43d7-89b6-2d5f9507f1d3" target="tag:capture">
+      <data key="e_type">TAGGED_WITH</data>
+    </edge>
+    <edge id="e49" source="item:16ca778f-a02e-4bd1-bc45-315f305b280c" target="tag:capture">
+      <data key="e_type">TAGGED_WITH</data>
+    </edge>
+    <edge id="e50" source="item:1d6f5190-d72d-4e82-b0b7-eacb60d67008" target="tag:capture">
+      <data key="e_type">TAGGED_WITH</data>
+    </edge>
+    <edge id="e51" source="item:2358e341-52db-4166-98a7-c98dd2e10a69" target="tag:capture">
+      <data key="e_type">TAGGED_WITH</data>
+    </edge>
+    <edge id="e52" source="item:2b33db10-6a55-4442-913e-7e1e800ef722" target="tag:capture">
+      <data key="e_type">TAGGED_WITH</data>
+    </edge>
+    <edge id="e53" source="item:2dde477f-5cee-4310-8aa4-fd3731685cd3" target="tag:capture">
+      <data key="e_type">TAGGED_WITH</data>
+    </edge>
+    <edge id="e54" source="item:4ab10c64-5348-4d17-8b03-295014b9a63f" target="tag:capture">
+      <data key="e_type">TAGGED_WITH</data>
+    </edge>
+    <edge id="e55" source="item:4bda912e-bfef-4e92-a7a4-28124013cba0" target="tag:capture">
+      <data key="e_type">TAGGED_WITH</data>
+    </edge>
+    <edge id="e56" source="item:652217da-3cd6-454f-9161-c8965e243733" target="tag:capture">
+      <data key="e_type">TAGGED_WITH</data>
+    </edge>
+    <edge id="e57" source="item:6d04d954-5b68-4ddc-b124-f29e60130e1a" target="tag:capture">
+      <data key="e_type">TAGGED_WITH</data>
+    </edge>
+    <edge id="e58" source="item:7ae9a914-818c-4221-a7bb-e818763a687c" target="tag:capture">
+      <data key="e_type">TAGGED_WITH</data>
+    </edge>
+    <edge id="e59" source="item:89275e83-e2d8-455d-9fa9-68a4251e5654" target="tag:capture">
+      <data key="e_type">TAGGED_WITH</data>
+    </edge>
+    <edge id="e60" source="item:8ffd9480-2abd-45e9-a0d7-a50e4113840c" target="tag:capture">
+      <data key="e_type">TAGGED_WITH</data>
+    </edge>
+    <edge id="e61" source="item:94bedd4e-9719-4e38-b306-473ffd496d78" target="tag:capture">
+      <data key="e_type">TAGGED_WITH</data>
+    </edge>
+    <edge id="e62" source="item:9f5ff45f-32cf-448d-9690-b353712d42e1" target="tag:capture">
+      <data key="e_type">TAGGED_WITH</data>
+    </edge>
+    <edge id="e63" source="item:a30cde12-f2ba-4b89-ba52-4433e4a73846" target="tag:capture">
+      <data key="e_type">TAGGED_WITH</data>
+    </edge>
+    <edge id="e64" source="item:ba529ac4-b1d3-4ac7-b540-ade1f9aeb548" target="tag:capture">
+      <data key="e_type">TAGGED_WITH</data>
+    </edge>
+    <edge id="e65" source="item:bcb3f86d-b6c8-46a2-8f4b-b37ed95ad5df" target="tag:capture">
+      <data key="e_type">TAGGED_WITH</data>
+    </edge>
+    <edge id="e66" source="item:cefca2e6-8bfc-46cf-9eb3-8cb74a56d2a2" target="tag:capture">
+      <data key="e_type">TAGGED_WITH</data>
+    </edge>
+    <edge id="e67" source="item:d15ef515-448b-45b0-b269-277f3ddd243a" target="tag:capture">
+      <data key="e_type">TAGGED_WITH</data>
+    </edge>
+    <edge id="e68" source="item:d33c88c1-1f47-43f0-9878-8a1d63775d1d" target="tag:capture">
+      <data key="e_type">TAGGED_WITH</data>
+    </edge>
+    <edge id="e69" source="item:d3dfb23c-36a8-44fe-92ae-a394c1496377" target="tag:capture">
+      <data key="e_type">TAGGED_WITH</data>
+    </edge>
+    <edge id="e70" source="item:e5ec9c63-60dd-48f9-9249-e459cc718219" target="tag:capture">
+      <data key="e_type">TAGGED_WITH</data>
+    </edge>
+    <edge id="e71" source="item:e9e3c923-b684-453b-beae-19fa2d697760" target="tag:capture">
+      <data key="e_type">TAGGED_WITH</data>
+    </edge>
+  </graph>
+</graphml>

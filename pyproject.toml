@@ -1,0 +1,90 @@
+[build-system]
+requires = ["setuptools>=68.0.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "secondself"
+version = "0.1.0"
+description = "Autonomous, self-organizing personal AI second brain with dual-plane architecture"
+readme = "README.md"
+requires-python = ">=3.10"
+license = { text = "MIT" }
+authors = [{ name = "SecondSelf Contributor" }]
+dependencies = [
+    "groq>=0.11.0,<1.0.0",
+    "numpy>=1.24.0,<2.0.0",
+    "pydantic>=2.7.0,<3.0.0",
+    "pydantic-settings>=2.2.0,<3.0.0",
+    "requests>=2.31.0,<3.0.0",
+]
+
+[project.scripts]
+secondself-capture = "capture:main"
+secondself-validate = "validation.orchestrator:main"
+secondself-classify = "classify:main"
+secondself-link = "link:main"
+secondself-verify-phase2 = "evals.verify_phase2:main"
+secondself-build-graph = "build_graph:main"
+secondself-preview = "scripts.preview:main"
+secondself-verify-frontend = "scripts.verify_frontend:main"
+secondself-ask = "ask:main"
+
+[project.optional-dependencies]
+pipeline = [
+    "torch>=2.2.0,<2.5.0",
+    "sentence-transformers>=3.0.0,<4.0.0",
+    "trafilatura>=1.6.0,<2.0.0",
+    "beautifulsoup4>=4.12.0,<5.0.0",
+    "pypdf>=4.0.0,<5.0.0",
+    "python-dotenv>=1.0.0,<2.0.0",
+    "click>=8.1.0,<9.0.0",
+    "rich>=13.7.0,<14.0.0",
+]
+test = [
+    "pytest>=8.0.0,<9.0.0",
+    "pytest-cov>=5.0.0,<6.0.0",
+    "pytest-mock>=3.14.0,<4.0.0",
+    "hypothesis>=6.100.0,<7.0.0",
+]
+dev = [
+    "black>=24.4.0,<25.0.0",
+    "ruff>=0.4.0,<0.6.0",
+    "mypy>=1.10.0,<2.0.0",
+    "pre-commit>=3.7.0,<4.0.0",
+    "pip-tools>=7.4.0,<8.0.0",
+]
+security = [
+    "pip-audit>=2.7.0,<3.0.0",
+    "bandit>=1.7.8,<2.0.0",
+    "detect-secrets>=1.5.0",
+]
+optional = [
+    "fastembed>=0.3.0,<1.0.0",
+    "types-requests>=2.31.0",
+    "types-beautifulsoup4>=4.12.0",
+]
+all = [
+    "secondself[pipeline,test,dev,security,optional]",
+]
+
+[tool.black]
+line-length = 100
+target-version = ["py310"]
+include = '\.pyi?$'
+
+[tool.ruff]
+line-length = 100
+target-version = "py310"
+
+[tool.mypy]
+python_version = "3.10"
+warn_return_any = true
+warn_unused_configs = true
+disallow_untyped_defs = true
+ignore_missing_imports = true
+
+[tool.pytest.ini_options]
+minversion = "8.0"
+testpaths = ["tests"]
+addopts = "-v --strict-markers"
+python_files = "test_*.py"

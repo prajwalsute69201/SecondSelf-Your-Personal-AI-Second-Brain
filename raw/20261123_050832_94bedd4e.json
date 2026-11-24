@@ -1,0 +1,13 @@
+{
+  "id": "94bedd4e-9719-4e38-b306-473ffd496d78",
+  "timestamp": "2026-11-23T05:08:32.143990+00:00",
+  "source_type": "text",
+  "source_uri": null,
+  "raw_content": "# Area: Personal Software Engineering Standards\nPrinciples to uphold across all projects:\n1. Strict Twelve-Factor App compliance: Config in environment, never hardcode secrets.\n2. Dual-Plane Separation: Heavy ML dependencies belong strictly in requirements-dev.txt.\n3. GitOps truth: Knowledge files in Git are the primary database; cloud deployments are read-only projections.\n4. Comprehensive test coverage for core business logic.",
+  "metadata": {
+    "title": "Area: Personal Software Engineering Standards",
+    "char_count": 432,
+    "content_hash": "4cfb46a5652c62ce5656ddd3c4617985833b5a8bc58d7fc953cded8cddddab19",
+    "captured_at": "2026-11-23T05:08:32.143990+00:00"
+  }
+}

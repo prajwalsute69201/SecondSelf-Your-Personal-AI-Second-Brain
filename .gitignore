@@ -1,0 +1,47 @@
+﻿# ==============================================================================
+# SecondSelf — Version Control Exclusions (.gitignore)
+# Strict Twelve-Factor Secrets Hygiene & Artifact Exclusions
+# ==============================================================================
+
+# 1. Environment and Secrets (NEVER COMMIT REAL CREDENTIALS!)
+.env
+.env.*
+.env.local
+.env.staging
+.env.production
+!.env.example
+!.env.test
+!.env.*.example
+
+# 2. Python Virtual Environments & Packages
+.venv/
+env/
+venv/
+ENV/
+build/
+dist/
+*.egg-info/
+__pycache__/
+*.py[cod]
+*$py.class
+
+# 3. Testing & Coverage
+.pytest_cache/
+.coverage
+htmlcov/
+.mypy_cache/
+.ruff_cache/
+.hypothesis/
+
+# 4. Vercel & Deployment Artifacts
+.vercel/
+.vercel_build_output/
+
+# 5. Temporary & OS Files
+.DS_Store
+Thumbs.db
+raw/*.tmp
+raw/*.temp
+*.swp
+*.swo
+*~

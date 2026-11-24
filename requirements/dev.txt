@@ -1,0 +1,11 @@
+﻿# ==============================================================================
+# Layer 4: Development, Formatting & Linting
+# Used for: Code quality, formatting, linting, type-checking & lockfiles
+# ==============================================================================
+-r runtime.txt
+black>=24.4.0,<25.0.0
+ruff>=0.4.0,<0.6.0
+mypy>=1.10.0,<2.0.0
+pre-commit>=3.7.0,<4.0.0
+pip-tools>=7.4.0,<8.0.0
+

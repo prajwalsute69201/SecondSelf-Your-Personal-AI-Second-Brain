@@ -1,0 +1,8 @@
+﻿# ==============================================================================
+# Layer 5: Security Auditing & Vulnerability Scanning
+# Used for: Dependency CVE scanning, AST security checks & secret leakage guards
+# ==============================================================================
+pip-audit>=2.7.0,<3.0.0
+bandit>=1.7.8,<2.0.0
+detect-secrets>=1.5.0
+

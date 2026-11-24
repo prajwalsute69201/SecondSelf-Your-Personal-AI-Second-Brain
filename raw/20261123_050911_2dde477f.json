@@ -1,0 +1,13 @@
+{
+  "id": "2dde477f-5cee-4310-8aa4-fd3731685cd3",
+  "timestamp": "2026-11-23T05:09:11.523885+00:00",
+  "source_type": "text",
+  "source_uri": null,
+  "raw_content": "# Resource: Decoupled Serverless RAG Design\nHow to serve vector search in ephemeral Lambdas under 50 MB:\n1. Precompute all document embeddings locally during the build phase using sentence-transformers.\n2. Export the embedding matrix and metadata as a compact JSON lookup (public/index.json).\n3. In the serverless function (api/ask.py), vectorize the user query and run a vectorized dot-product using pure NumPy.\n4. Latency: < 15ms retrieval time, zero torch/CUDA dependencies.",
+  "metadata": {
+    "title": "Resource: Decoupled Serverless RAG Design",
+    "char_count": 477,
+    "content_hash": "68ac0caec9417d3e1e387e3d903cc297fa5e5bfd2253a9cb517bd716d8645c99",
+    "captured_at": "2026-11-23T05:09:11.523885+00:00"
+  }
+}

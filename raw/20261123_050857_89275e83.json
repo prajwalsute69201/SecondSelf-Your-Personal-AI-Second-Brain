@@ -1,0 +1,13 @@
+{
+  "id": "89275e83-e2d8-455d-9fa9-68a4251e5654",
+  "timestamp": "2026-11-23T05:08:57.456379+00:00",
+  "source_type": "text",
+  "source_uri": null,
+  "raw_content": "# Resource: Metric Selection in High-Dimensional Vector Search\nKey comparisons:\n- Cosine Similarity: Measures angle between vectors; invariant to vector magnitude. Best for normalized text embeddings where document length varies.\n- Dot Product: Measures angle and magnitude. Equal to cosine similarity when vectors are L2-normalized.\n- Euclidean (L2) Distance: Measures geometric distance; sensitive to token length without normalization.\nFor all-MiniLM-L6-v2 (384-d), always use normalized dot product for maximum speed.",
+  "metadata": {
+    "title": "Resource: Metric Selection in High-Dimensional Vector Sear...",
+    "char_count": 521,
+    "content_hash": "4ba84b6366e7087804ea54cec687c2939d8299eff4bf529bfc3326b48d1d9e2a",
+    "captured_at": "2026-11-23T05:08:57.456379+00:00"
+  }
+}

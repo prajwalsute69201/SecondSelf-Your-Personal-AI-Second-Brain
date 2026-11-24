@@ -1,0 +1,249 @@
+{
+  "profile": {
+    "dataset_name": "para_golden.json",
+    "dataset_hash": "b90d1607db8ed916f8c264240a0734dd7838ef572f4aa62cc79cda93a790d610",
+    "sample_size": 25,
+    "total_items_processed": 25,
+    "duration_seconds": 10.458,
+    "classifier_model": "llama-3.3-70b-versatile (Method=hybrid, weights rule=0.4/llm=0.6)",
+    "embedding_model": "sentence-transformers/all-MiniLM-L6-v2 (384d)",
+    "seed": 42,
+    "timestamp": "2026-11-23T08:53:54.191549+00:00"
+  },
+  "classification_metrics": {
+    "total_samples": 25,
+    "accuracy": 1.0,
+    "macro_precision": 1.0,
+    "macro_recall": 1.0,
+    "macro_f1": 1.0,
+    "weighted_f1": 1.0,
+    "per_category": {
+      "Projects": {
+        "category": "Projects",
+        "true_positive": 6,
+        "false_positive": 0,
+        "false_negative": 0,
+        "support": 6,
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1_score": 1.0
+      },
+      "Areas": {
+        "category": "Areas",
+        "true_positive": 6,
+        "false_positive": 0,
+        "false_negative": 0,
+        "support": 6,
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1_score": 1.0
+      },
+      "Resources": {
+        "category": "Resources",
+        "true_positive": 7,
+        "false_positive": 0,
+        "false_negative": 0,
+        "support": 7,
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1_score": 1.0
+      },
+      "Archives": {
+        "category": "Archives",
+        "true_positive": 6,
+        "false_positive": 0,
+        "false_negative": 0,
+        "support": 6,
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1_score": 1.0
+      }
+    },
+    "confusion_matrix": {
+      "Projects": {
+        "Projects": 6,
+        "Areas": 0,
+        "Resources": 0,
+        "Archives": 0
+      },
+      "Areas": {
+        "Projects": 0,
+        "Areas": 6,
+        "Resources": 0,
+        "Archives": 0
+      },
+      "Resources": {
+        "Projects": 0,
+        "Areas": 0,
+        "Resources": 7,
+        "Archives": 0
+      },
+      "Archives": {
+        "Projects": 0,
+        "Areas": 0,
+        "Resources": 0,
+        "Archives": 6
+      }
+    }
+  },
+  "graph_topology_metrics": {
+    "total_nodes": 25,
+    "total_edges": 2,
+    "avg_degree": 0.16,
+    "max_degree": 1,
+    "min_degree": 0,
+    "island_nodes_count": 23,
+    "island_ratio": 0.92,
+    "graph_density": 0.0067,
+    "link_precision_at_k": 1.0,
+    "score_distribution": {
+      "count": 2,
+      "mean": 0.7047,
+      "std_dev": 0.0,
+      "min_value": 0.7047,
+      "max_value": 0.7047,
+      "median": 0.7047,
+      "p25": 0.7047,
+      "p75": 0.7047
+    }
+  },
+  "robustness_metrics": {
+    "total_items": 25,
+    "failed_embeddings_count": 0,
+    "failed_embeddings_ratio": 0.0,
+    "low_confidence_count": 1,
+    "low_confidence_ratio": 0.04,
+    "needs_review_count": 1,
+    "needs_review_ratio": 0.04,
+    "error_count": 0,
+    "determinism_score": 1.0
+  },
+  "sanity_checks": [
+    {
+      "check_name": "Complete Item Coverage",
+      "passed": true,
+      "details": "Processed 25 of 25 items exactly once with zero dropped inputs."
+    },
+    {
+      "check_name": "Graph Edge Target Integrity",
+      "passed": true,
+      "details": "Zero dangling link targets detected."
+    },
+    {
+      "check_name": "Zero Self-Loops Enforcement",
+      "passed": true,
+      "details": "All discovered links strictly connect distinct nodes ($u \\neq v$)."
+    },
+    {
+      "check_name": "Deterministic Re-run Spot-Check",
+      "passed": true,
+      "details": "Subsequent pass on identical inputs produced 100% byte-identical categories and confidence scores."
+    },
+    {
+      "check_name": "Embedding Store Consistency",
+      "passed": true,
+      "details": "Store holds 25 vectors matching 25 input items."
+    }
+  ],
+  "misclassifications": [],
+  "graph_anomalies": [],
+  "case_studies": [
+    {
+      "item_id": "4bda912e-bfef-4e92-a7a4-28124013cba0",
+      "title": "Project: SecondSelf MVP Launch",
+      "scenario_type": "clear_success",
+      "expected_category": "Projects",
+      "predicted_category": "Projects",
+      "confidence": 1.0,
+      "needs_review": false,
+      "rationale": "[Rules Fallback — LLM Degraded] Confidently classified as 'Projects' (1.00 score). Supported by primary signals: Explicit deadline pattern detected: 'Deadline: End of Month'; Sprint or milestone marker identified: 'Milestone'; Goal-oriented execution verb: 'Launch'.",
+      "signals_matched": [
+        "Explicit deadline pattern detected: 'Deadline: End of Month'",
+        "Sprint or milestone marker identified: 'Milestone'",
+        "Goal-oriented execution verb: 'Launch'"
+      ],
+      "nearest_centroid": "Projects",
+      "centroid_score": 0.793840765953064,
+      "links_count": 0,
+      "top_link_titles": [],
+      "root_cause_analysis": "Definitive action items and calendar deadline detected; high signal certainty."
+    },
+    {
+      "item_id": "94bedd4e-9719-4e38-b306-473ffd496d78",
+      "title": "Area: Personal Software Engineering Standards",
+      "scenario_type": "clear_success",
+      "expected_category": "Areas",
+      "predicted_category": "Areas",
+      "confidence": 1.0,
+      "needs_review": false,
+      "rationale": "[Rules Fallback — LLM Degraded] Confidently classified as 'Areas' (1.00 score). Supported by primary signals: Standard operating procedure or standard of performance: 'Standard operating procedure'.",
+      "signals_matched": [
+        "Standard operating procedure or standard of performance: 'Standard operating procedure'"
+      ],
+      "nearest_centroid": "Areas",
+      "centroid_score": 0.7238600254058838,
+      "links_count": 0,
+      "top_link_titles": [],
+      "root_cause_analysis": "Recurring maintenance protocol and operating procedures accurately identified."
+    },
+    {
+      "item_id": "d3dfb23c-36a8-44fe-92ae-a394c1496377",
+      "title": "Cosine similarity - Wikipedia",
+      "scenario_type": "clear_success",
+      "expected_category": "Resources",
+      "predicted_category": "Resources",
+      "confidence": 1.0,
+      "needs_review": false,
+      "rationale": "[Rules Fallback — LLM Degraded] Confidently classified as 'Resources' (1.00 score). Supported by primary signals: External ingestion source (url) indicates reference material.",
+      "signals_matched": [
+        "External ingestion source (url) indicates reference material"
+      ],
+      "nearest_centroid": "Resources",
+      "centroid_score": 0.6189630031585693,
+      "links_count": 1,
+      "top_link_titles": [
+        "Resource: Metric Selection in High-Dimensional Vector Search"
+      ],
+      "root_cause_analysis": "Reference manual or conceptual technical documentation detected without active tasks."
+    },
+    {
+      "item_id": "4ab10c64-5348-4d17-8b03-295014b9a63f",
+      "title": "Archive: Streamlit Second Brain Prototype (Deprecated)",
+      "scenario_type": "stale_archive",
+      "expected_category": "Archives",
+      "predicted_category": "Archives",
+      "confidence": 1.0,
+      "needs_review": false,
+      "rationale": "[Rules Fallback — LLM Degraded] Confidently classified as 'Archives' (1.00 score). Supported by primary signals: Deprecated or historical legacy status: 'Deprecated'.",
+      "signals_matched": [
+        "Deprecated or historical legacy status: 'Deprecated'"
+      ],
+      "nearest_centroid": "Archives",
+      "centroid_score": 0.6187037229537964,
+      "links_count": 0,
+      "top_link_titles": [],
+      "root_cause_analysis": "Status marker 'DONE', deprecation notice, or post-mortem correctly archived."
+    },
+    {
+      "item_id": "d33c88c1-1f47-43f0-9878-8a1d63775d1d",
+      "title": "Barnes–Hut simulation - Wikipedia",
+      "scenario_type": "ambiguous_review",
+      "expected_category": "Projects",
+      "predicted_category": "Projects",
+      "confidence": 0.5882352941176471,
+      "needs_review": true,
+      "rationale": "[Rules Fallback — LLM Degraded] Classified as 'Projects' with marginal confidence (0.59) below threshold (0.60). Runner-up: 'Resources' (0.41). Signals used: Goal-oriented execution verb: 'Implement'.",
+      "signals_matched": [
+        "Goal-oriented execution verb: 'Implement'",
+        "External ingestion source (url) indicates reference material"
+      ],
+      "nearest_centroid": "Projects",
+      "centroid_score": 0.5611039400100708,
+      "links_count": 0,
+      "top_link_titles": [],
+      "root_cause_analysis": "Confidence below 0.60 threshold; safely flagged NEEDS_REVIEW rather than silently guessing."
+    }
+  ],
+  "overall_pass": true,
+  "summary": "Verification completed in 10.46s across 25 real corpus items. Classification accuracy reached 100.0% with Macro-F1 of 1.0000. Semantic auto-linking synthesized 2 valid connections with an average degree of 0.16 links/note. All 5 pipeline integrity checks passed."
+}

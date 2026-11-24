@@ -1,0 +1,177 @@
+{
+  "run_timestamp": "2026-11-24T04:57:31.198458+00:00",
+  "overall_status": "PASS",
+  "exit_code": 0,
+  "duration_ms": 54.09,
+  "server_url": "http://127.0.0.1:8000",
+  "environment": {
+    "python_version": "3.14.6",
+    "platform": "win32",
+    "public_dir": "D:\\Second-Self\\public"
+  },
+  "artifacts": {
+    "graph.json": {
+      "path": "D:\\Second-Self\\public\\graph.json",
+      "size_bytes": 94698,
+      "sha256": "6664b810a5de789001417e66230d9360d7830a6cba355a55824bd041a7c548b3"
+    }
+  },
+  "checks": {
+    "artifact_integrity": {
+      "name": "artifact_integrity",
+      "status": "PASS",
+      "description": "Artifact existence, JSON syntax, and topology counts",
+      "duration_ms": 1.4708000003338384,
+      "details": {
+        "artifacts": {
+          "graph.json": {
+            "path": "D:\\Second-Self\\public\\graph.json",
+            "size_bytes": 94698,
+            "sha256": "6664b810a5de789001417e66230d9360d7830a6cba355a55824bd041a7c548b3"
+          }
+        },
+        "nodes_count": 32,
+        "edges_count": 72,
+        "stats_nodes": 32,
+        "stats_edges": 72
+      },
+      "errors": [],
+      "warnings": []
+    },
+    "data_contract": {
+      "name": "data_contract",
+      "status": "PASS",
+      "description": "Field presence and PARA taxonomy adherence",
+      "duration_ms": 0.6348000001707987,
+      "details": {
+        "total_nodes": 32,
+        "total_edges": 72,
+        "categories": {
+          "Resources": 10,
+          "Archives": 7,
+          "Projects": 6,
+          "Areas": 1
+        },
+        "missing_required": [],
+        "missing_recommended": [],
+        "extra_fields": [
+          "color"
+        ]
+      },
+      "errors": [],
+      "warnings": []
+    },
+    "http_availability": {
+      "name": "http_availability",
+      "status": "PASS",
+      "description": "HTTP 200 status across all static assets and ES modules",
+      "duration_ms": 40.29399999990346,
+      "details": {
+        "server_url": "http://127.0.0.1:8000",
+        "routes_tested": 11,
+        "tested_routes": {
+          "/index.html": {
+            "status": 200,
+            "bytes": 15356,
+            "latency_ms": 1.38
+          },
+          "/css/main.css": {
+            "status": 200,
+            "bytes": 32866,
+            "latency_ms": 10.73
+          },
+          "/style.css": {
+            "status": 200,
+            "bytes": 84,
+            "latency_ms": 1.49
+          },
+          "/js/app.js": {
+            "status": 200,
+            "bytes": 8051,
+            "latency_ms": 1.22
+          },
+          "/js/dataLoader.js": {
+            "status": 200,
+            "bytes": 7138,
+            "latency_ms": 1.82
+          },
+          "/js/graph.js": {
+            "status": 200,
+            "bytes": 14123,
+            "latency_ms": 2.34
+          },
+          "/js/filters.js": {
+            "status": 200,
+            "bytes": 12442,
+            "latency_ms": 1.53
+          },
+          "/js/detailPanel.js": {
+            "status": 200,
+            "bytes": 11296,
+            "latency_ms": 1.48
+          },
+          "/data/graph.json": {
+            "status": 200,
+            "bytes": 94698,
+            "latency_ms": 1.95
+          },
+          "/graph.json": {
+            "status": 200,
+            "bytes": 94698,
+            "latency_ms": 2.43
+          },
+          "/README.md": {
+            "status": 200,
+            "bytes": 11555,
+            "latency_ms": 1.44
+          }
+        }
+      },
+      "errors": [],
+      "warnings": []
+    },
+    "page_smoke_test": {
+      "name": "page_smoke_test",
+      "status": "PASS",
+      "description": "Static DOM integrity & semantic layout verification",
+      "duration_ms": 2.3254999996424885,
+      "details": {
+        "mode": "DOM_INSPECTION_FALLBACK",
+        "dom_landmarks_verified": 8,
+        "total_landmarks_checked": 8
+      },
+      "errors": [],
+      "warnings": [
+        "Playwright not installed; degraded gracefully to HTML DOM smoke test. See Docs/frontend-qa-checklist.md for manual browser verification."
+      ]
+    },
+    "graceful_failure": {
+      "name": "graceful_failure",
+      "status": "PASS",
+      "description": "Error state fallback on missing or malformed graph data",
+      "duration_ms": 9.218599999712751,
+      "details": {
+        "missing_route_status": 404,
+        "error_overlay_verified": true
+      },
+      "errors": [],
+      "warnings": []
+    }
+  },
+  "evidence_files": [],
+  "contract_summary": {
+    "total_nodes": 32,
+    "total_edges": 72,
+    "categories": {
+      "Resources": 10,
+      "Archives": 7,
+      "Projects": 6,
+      "Areas": 1
+    },
+    "missing_required": [],
+    "missing_recommended": [],
+    "extra_fields": [
+      "color"
+    ]
+  }
+}

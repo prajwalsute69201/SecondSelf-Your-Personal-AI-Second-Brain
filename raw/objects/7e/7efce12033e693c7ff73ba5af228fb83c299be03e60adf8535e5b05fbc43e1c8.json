@@ -1,0 +1,23 @@
+{
+  "id": "652217da-3cd6-454f-9161-c8965e243733",
+  "metadata": {
+    "adapter_name": "text",
+    "byte_size": 60,
+    "char_count": 60,
+    "content_hash": "7efce12033e693c7ff73ba5af228fb83c299be03e60adf8535e5b05fbc43e1c8",
+    "content_type": "plain_text",
+    "created_at": "2026-11-23T05:32:40.961696+00:00",
+    "extra": {
+      "captured_at": "2026-11-23T05:32:40.959154+00:00",
+      "char_count": 60,
+      "content_hash": "7efce12033e693c7ff73ba5af228fb83c299be03e60adf8535e5b05fbc43e1c8",
+      "format": "plain_text",
+      "title": "First note on associative memory for SecondSelf quality gate",
+      "word_count": 9
+    },
+    "schema_version": "1.0.0",
+    "source_type": "text",
+    "source_uri": null
+  },
+  "raw_content": "First note on associative memory for SecondSelf quality gate"
+}
